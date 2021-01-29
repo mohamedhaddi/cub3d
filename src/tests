@@ -1,0 +1,101 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tests.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/26 20:20:55 by mhaddi            #+#    #+#             */
+/*   Updated: 2021/01/28 00:12:58 by mhaddi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+#include <mlx.h>
+#include <stdio.h>
+
+int key_hook(int keycode, void *p) {
+	(void)*p;
+	printf("You have pressed: %d!\n", keycode);
+	return 0;
+}
+
+int mouse_hook(int button, int x, int y, void *p) {
+	(void)*p;
+	(void)button;
+	printf("You have moved your mouse to: %d, %d!\n", x, y);
+	if (button) {
+		printf("You have pressed: %d!\n", button);
+	}
+	return 0;
+}
+
+int close_win(int keycode, t_mlx *mlx) {
+	if (keycode == 65307) {
+		mlx_destroy_window(mlx->ptr, mlx->win);
+	}
+	return 0;
+}
+
+int render_next_frame(t_mlx *mlx) {
+	int i,j;
+	int color[3] = {0x00FF0000, 0x0000FF00, 0x000000FF};
+	t_img_data	img;
+	static int k;
+
+	img.img = mlx_new_image(mlx->ptr, 640, 480);
+	img.addr = mlx_get_data_addr(
+		img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	for (i = 5; i < 100; i++)
+	{
+		for (j = 5; j < 100; j++)
+		{
+			ft_mlx_pixel_put(&img, i, j, color[k]);
+		}
+	}
+	mlx_put_image_to_window(mlx->ptr, mlx->win, img.img, 0, 0);
+
+	k = (k < 2) ? k + 1 : 0;
+
+	return 0;
+}
+
+int	main(void)
+{
+	t_mlx	mlx;
+
+	mlx.ptr = mlx_init();
+	mlx.win = mlx_new_window(mlx.ptr, 640, 480, "cub3d");
+	mlx_loop_hook(mlx.ptr, render_next_frame, &mlx);
+	mlx_loop(mlx.ptr);
+
+	//mlx_key_hook(mlx.win, key_hook, 0);
+	//mlx_mouse_hook(mlx.win, mouse_hook, 0);
+	//mlx_hook(mlx.win, MotionNotify, PointerMotionMask, mouse_hook, 0);
+	//mlx_hook(mlx.win, KeyPress, KeyPressMask, close_win, &mlx);
+	//mlx_loop(mlx.ptr);
+
+	/*
+	void	*mlx;
+	void	*mlx_win;
+	t_data	img;
+	int		i;
+	int		j;
+
+	mlx = mlx_init();
+	mlx_win = mlx_new_window(mlx, 500, 500, "cub3d");
+	img.img = mlx_new_image(mlx, 500, 500);
+	img.addr = mlx_get_data_addr(
+		img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	for (i = 5; i < 100; i++)
+	{
+		for (j = 5; j < 100; j++)
+		{
+			ft_mlx_pixel_put(&img, i, j, 0x00FF0000);
+		}
+	}
+	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+	mlx_loop(mlx);
+	// printf("%d\n", img.line_length);
+	*/
+}
