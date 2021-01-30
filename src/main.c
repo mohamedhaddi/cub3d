@@ -6,19 +6,17 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/01/29 01:09:41 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/01/30 00:20:23 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <mlx.h>
 
 #define mapWidth 24
 #define mapHeight 24
 #define screen_width 640
 #define screen_height 480
-
-t_mlx mlx;
-t_img_data img;
 
 int worldMap[mapWidth][mapHeight]=
 {
@@ -48,46 +46,10 @@ int worldMap[mapWidth][mapHeight]=
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-int read_keys(int keycode, t_player *player) {
-  //65361 is left (enum later), and then clockwise
-  //move forward if no wall in front of you
-  if (keycode == 65362)
-  {
-	if(worldMap[(int)(player->posX + player->dirX * player->moveSpeed)][(int)(player->posY)] == 0 /*0 enum*/) player->posX += player->dirX * player->moveSpeed;
-	if(worldMap[(int)(player->posX)][(int)(player->posY + player->dirY * player->moveSpeed)] == 0) player->posY += player->dirY * player->moveSpeed;
-  }
-  //move backwards if no wall behind you
-  if (keycode == 65364)
-  {
-	if(worldMap[(int)(player->posX - player->dirX * player->moveSpeed)][(int)(player->posY)] == 0) player->posX -= player->dirX * player->moveSpeed;
-	if(worldMap[(int)(player->posX)][(int)(player->posY - player->dirY * player->moveSpeed)] == 0) player->posY -= player->dirY * player->moveSpeed;
-  }
-  //rotate to the right
-  if (keycode == 65363)
-  {
-	//both camera direction and camera plane must be rotated
-	double oldDirX = player->dirX;
-	player->dirX = player->dirX * cos(-player->rotSpeed) - player->dirY * sin(-player->rotSpeed);
-	player->dirY = oldDirX * sin(-player->rotSpeed) + player->dirY * cos(-player->rotSpeed);
-	double oldPlaneX = player->planeX;
-	player->planeX = player->planeX * cos(-player->rotSpeed) - player->planeY * sin(-player->rotSpeed);
-	player->planeY = oldPlaneX * sin(-player->rotSpeed) + player->planeY * cos(-player->rotSpeed);
-  }
-  //rotate to the left
-  if (keycode == 65361)
-  {
-	//both camera direction and camera plane must be rotated
-	double oldDirX = player->dirX;
-	player->dirX = player->dirX * cos(player->rotSpeed) - player->dirY * sin(player->rotSpeed);
-	player->dirY = oldDirX * sin(player->rotSpeed) + player->dirY * cos(player->rotSpeed);
-	double oldPlaneX = player->planeX;
-	player->planeX = player->planeX * cos(player->rotSpeed) - player->planeY * sin(player->rotSpeed);
-	player->planeY = oldPlaneX * sin(player->rotSpeed) + player->planeY * cos(player->rotSpeed);
-  }
-  return 0;
-}
-
-int loop(t_player *player) {
+int loop(t_data *params) {
+    t_mlx *mlx = &params->mlx;
+    t_img_data *img = &params->img;
+    t_player *player = &params->player;
     //here starts the raycasting loop 
     for (int x = 0; x < screen_width; x++) {
       //calculate ray position and direction
@@ -190,47 +152,110 @@ int loop(t_player *player) {
       //draw the pixels of the stripe as a vertical line
       //verLine(x, drawStart, drawEnd, color);
       for (int y = drawStart; y <= drawEnd; y++) {
-        ft_mlx_pixel_put(&img, x, y, color);
+        ft_mlx_pixel_put(img, x, y, color);
       }
     }
-    mlx_put_image_to_window(mlx.ptr, mlx.win, img.img, 0, 0);
+   
+    mlx_put_image_to_window(mlx->ptr, mlx->win, img->img, 0, 0);
 
+    //clear
 	for (int x = 0; x <= screen_width; x++) {
       for (int y = 0; y <= screen_height; y++) {
-        ft_mlx_pixel_put(&img, x, y, 0x00000000);
+        ft_mlx_pixel_put(img, x, y, 0x00000000);
       }
 	}
-	//player->moveSpeed = 0.2; //frame_time * 5.0; // the constant value is squares / second
-	//player->rotSpeed = 0.03; //frame_time * 3.0; // the constant value is in radian / second
+
     return 0;
 }
 
+int read_keys(t_data *params) {
+  t_player *player = &params->player;
+  //65361 is left (enum later), and then clockwise
+  //move forward if no wall in front of you
+  if (params->keyboard[65362])
+  {
+    if(worldMap[(int)(player->posX + player->dirX * player->moveSpeed)][(int)(player->posY)] == 0 /*0 enum*/) player->posX += player->dirX * player->moveSpeed;
+    if(worldMap[(int)(player->posX)][(int)(player->posY + player->dirY * player->moveSpeed)] == 0) player->posY += player->dirY * player->moveSpeed;
+  }
+  //move backwards if no wall behind you
+  if (params->keyboard[65364])
+  {
+    if(worldMap[(int)(player->posX - player->dirX * player->moveSpeed)][(int)(player->posY)] == 0) player->posX -= player->dirX * player->moveSpeed;
+    if(worldMap[(int)(player->posX)][(int)(player->posY - player->dirY * player->moveSpeed)] == 0) player->posY -= player->dirY * player->moveSpeed;
+  }
+  //rotate to the right
+  if (params->keyboard[65363])
+  {
+    //both camera direction and camera plane must be rotated
+    double oldDirX = player->dirX;
+    player->dirX = player->dirX * cos(-player->rotSpeed) - player->dirY * sin(-player->rotSpeed);
+    player->dirY = oldDirX * sin(-player->rotSpeed) + player->dirY * cos(-player->rotSpeed);
+    double oldPlaneX = player->planeX;
+    player->planeX = player->planeX * cos(-player->rotSpeed) - player->planeY * sin(-player->rotSpeed);
+    player->planeY = oldPlaneX * sin(-player->rotSpeed) + player->planeY * cos(-player->rotSpeed);
+  }
+  //rotate to the left
+  if (params->keyboard[65361])
+  {
+    //both camera direction and camera plane must be rotated
+    double oldDirX = player->dirX;
+    player->dirX = player->dirX * cos(player->rotSpeed) - player->dirY * sin(player->rotSpeed);
+    player->dirY = oldDirX * sin(player->rotSpeed) + player->dirY * cos(player->rotSpeed);
+    double oldPlaneX = player->planeX;
+    player->planeX = player->planeX * cos(player->rotSpeed) - player->planeY * sin(player->rotSpeed);
+    player->planeY = oldPlaneX * sin(player->rotSpeed) + player->planeY * cos(player->rotSpeed);
+  }
+  loop(params);
+  return 0;
+}
+
+int key_press(int keycode, t_data *params)
+{
+  if (keycode == 65361 || keycode == 65362 || keycode == 65363 || keycode == 65364) {
+    params->keyboard[keycode] = 1;
+  }
+  return (0);
+}
+
+int key_release(int keycode, t_data *params)
+{
+  if (keycode == 65361 || keycode == 65362 || keycode == 65363 || keycode == 65364) {
+    params->keyboard[keycode] = 0;
+  }
+  return (0);
+}
+
 int main() {
-  //int done = 0;
+  t_data params;
+  t_mlx *mlx = &params.mlx;
+  t_img_data *img = &params.img;
+  t_player *player = &params.player;
+  //memset(params.keyboard, 0, 65365);
+  params.keyboard[65361] = 0;
+  params.keyboard[65362] = 0;
+  params.keyboard[65363] = 0;
+  params.keyboard[65364] = 0;
 
-  t_player player;
-  player.posX = 22, player.posY = 12;  //x and y start position of the player
-  player.dirX = -1, player.dirY = 0; //initial direction vector
-  player.planeX = 0, player.planeY = 0.66; //the 2d raycaster version of camera plane
-  player.moveSpeed = 0.2;
-  player.rotSpeed = 0.06;
+  player->posX = 22, player->posY = 12;  //x and y start position of the player
+  player->dirX = -1, player->dirY = 0; //initial direction vector
+  player->planeX = 0, player->planeY = 0.66; //the 2d raycaster version of camera plane
+  player->moveSpeed = 0.03;
+  player->rotSpeed = 0.01;
 
-  //double time = 0; //time of current frame
-  //double oldTime = 0; //time of previous frame
+  mlx->ptr = mlx_init();
+  mlx->win = mlx_new_window(mlx->ptr, screen_width, screen_height, "cub3d");
+  img->img = mlx_new_image(mlx->ptr, screen_width, screen_height);
+  img->addr = mlx_get_data_addr(
+      img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 
-  mlx.ptr = mlx_init();
-  mlx.win = mlx_new_window(mlx.ptr, screen_width, screen_height, "cub3d");
-  img.img = mlx_new_image(mlx.ptr, screen_width, screen_height);
-  img.addr = mlx_get_data_addr(
-      img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-
-  /***/
   //this is where the magic happens
   //this is the loop that draws a whole frame and reads the input every time
-  mlx_loop_hook(mlx.ptr, loop, &player);
-  /***/
-
-  mlx_key_hook(mlx.win, read_keys, &player);
-  mlx_loop(mlx.ptr);
+  loop(&params);
+  //mlx_key_hook(mlx->win, read_keys, &params);
+  mlx_hook(mlx->win, 2, 1L, key_press, &params);
+  mlx_hook(mlx->win, 3, 2L, key_release, &params);
+  mlx_loop_hook(mlx->ptr, read_keys, &params);
+  //mlx_do_key_autorepeaton(mlx->ptr);
+  mlx_loop(mlx->ptr);
 }
 
