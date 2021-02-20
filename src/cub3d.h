@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/01/29 23:46:38 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/02/01 23:39:04 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct	s_data {
 	t_img_data	img;
 	t_mlx		mlx;
 	t_player	player;
-	int			keyboard[65365];
+	int			keystroke[65365];
 }				t_data;
 
 void			ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);

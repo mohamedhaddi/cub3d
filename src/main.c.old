@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/02/21 00:34:21 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/02/01 23:39:08 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ int worldMap[mapWidth][mapHeight]=
   {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,4,4,4,4,4,0,0,4,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-int game_loop(t_data *params) {
+int loop(t_data *params) {
     t_mlx *mlx = &params->mlx;
     t_img_data *img = &params->img;
     t_player *player = &params->player;
@@ -147,7 +147,7 @@ int game_loop(t_data *params) {
       }
 
       //give x and y sides different brightness
-      //if (side == 1) {color = color / 2;}
+      if (side == 1) {color = color / 2;}
 
       //draw the pixels of the stripe as a vertical line
       //verLine(x, drawStart, drawEnd, color);
@@ -174,21 +174,18 @@ int read_keys(t_data *params) {
   //move forward if no wall in front of you
   if (params->keystroke[65362])
   {
-    printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n", player->posX, player->posY, player->dirX, player->dirY);
     if(worldMap[(int)(player->posX + player->dirX * player->moveSpeed)][(int)(player->posY)] == 0 /*0 enum*/) player->posX += player->dirX * player->moveSpeed;
     if(worldMap[(int)(player->posX)][(int)(player->posY + player->dirY * player->moveSpeed)] == 0) player->posY += player->dirY * player->moveSpeed;
   }
   //move backwards if no wall behind you
   if (params->keystroke[65364])
   {
-    printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n", player->posX, player->posY, player->dirX, player->dirY);
     if(worldMap[(int)(player->posX - player->dirX * player->moveSpeed)][(int)(player->posY)] == 0) player->posX -= player->dirX * player->moveSpeed;
     if(worldMap[(int)(player->posX)][(int)(player->posY - player->dirY * player->moveSpeed)] == 0) player->posY -= player->dirY * player->moveSpeed;
   }
   //rotate to the right
   if (params->keystroke[65363])
   {
-    printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n", player->posX, player->posY, player->dirX, player->dirY);
     //both camera direction and camera plane must be rotated
     double oldDirX = player->dirX;
     player->dirX = player->dirX * cos(-player->rotSpeed) - player->dirY * sin(-player->rotSpeed);
@@ -200,7 +197,6 @@ int read_keys(t_data *params) {
   //rotate to the left
   if (params->keystroke[65361])
   {
-    printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n", player->posX, player->posY, player->dirX, player->dirY);
     //both camera direction and camera plane must be rotated
     double oldDirX = player->dirX;
     player->dirX = player->dirX * cos(player->rotSpeed) - player->dirY * sin(player->rotSpeed);
@@ -209,7 +205,7 @@ int read_keys(t_data *params) {
     player->planeX = player->planeX * cos(player->rotSpeed) - player->planeY * sin(player->rotSpeed);
     player->planeY = oldPlaneX * sin(player->rotSpeed) + player->planeY * cos(player->rotSpeed);
   }
-  game_loop(params);
+  loop(params);
   return 0;
 }
 
@@ -252,14 +248,13 @@ int main() {
   img->addr = mlx_get_data_addr(
       img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 
-  //this is the game loop that draws a whole frame and reads the input every time
-  game_loop(&params);
-
+  //this is where the magic happens
+  //this is the loop that draws a whole frame and reads the input every time
+  loop(&params);
   //mlx_key_hook(mlx->win, read_keys, &params);
   mlx_hook(mlx->win, 2, 1L, key_press, &params);
   mlx_hook(mlx->win, 3, 2L, key_release, &params);
   mlx_loop_hook(mlx->ptr, read_keys, &params);
-
   //mlx_do_key_autorepeaton(mlx->ptr);
   mlx_loop(mlx->ptr);
 }
