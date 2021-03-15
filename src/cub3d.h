@@ -6,16 +6,16 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/02/01 23:39:04 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/15 17:47:03 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <mlx.h>
-# include <mlx_int.h>
+# include "mlx/mlx.h"
 # include <math.h>
+# include <stdio.h>
 # include <string.h>
 
 typedef struct	s_img_data
@@ -47,7 +47,7 @@ typedef struct	s_data {
 	t_img_data	img;
 	t_mlx		mlx;
 	t_player	player;
-	int			keystroke[65365];
+	int			keystroke[127];
 }				t_data;
 
 void			ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
