@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/16 16:39:46 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/16 17:02:06 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	worldMap[mapWidth][mapHeight] = {
 	{1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 4, 0, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
@@ -189,7 +189,22 @@ int	draw_frame(t_data *params)
 			ft_mlx_pixel_put(img, x, y, color);
 		}
 	}
+
 	mlx_put_image_to_window(mlx->ptr, mlx->win, img->img, 0, 0);
+
+	char *sPosX = (char*)malloc(20 * sizeof(char));
+	char *sPosY = (char*)malloc(20 * sizeof(char));
+	char *sDirX = (char*)malloc(20 * sizeof(char));
+	char *sDirY = (char*)malloc(20 * sizeof(char));
+	sprintf(sPosX, "posX: %f", player->posX);
+	sprintf(sPosY, "posY: %f", player->posY);
+	sprintf(sDirX, "dirX: %f", player->dirX);
+	sprintf(sDirY, "dirY: %f", player->dirY);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 0, 0x00FFFFFF, sPosX);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 20, 0x00FFFFFF, sPosY);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 40, 0x00FFFFFF, sDirX);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 60, 0x00FFFFFF, sDirY);
+
 	// clear
 	for (int x = 0; x <= screen_width; x++)
 	{
@@ -335,6 +350,7 @@ int	main()
 	img->img = mlx_new_image(mlx->ptr, screen_width, screen_height);
 	img->addr = mlx_get_data_addr(
 		img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
+
 	// this was the game loop that draws a whole frame and reads the input every time
 	draw_frame(&params);
 	// mlx_key_hook(mlx->win, read_keys, &params);
