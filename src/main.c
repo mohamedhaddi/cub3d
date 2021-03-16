@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/16 15:30:55 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/16 16:39:46 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ int	worldMap[mapWidth][mapHeight] = {
 	{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
+/**
+ * test
+ */
+
 int	draw_frame(t_data *params)
 {
 	t_mlx		*mlx;
@@ -62,6 +66,8 @@ int	draw_frame(t_data *params)
 	int			drawStart;
 	int			drawEnd;
 	int			color;
+	double		deltaDistX;
+	double		deltaDistY;
 
 	mlx = &params->mlx;
 	img = &params->img;
@@ -89,8 +95,8 @@ int	draw_frame(t_data *params)
 		double deltaDistY =
 			(rayDirX == 0) ? 0 : ((rayDirY == 0) ? 1 : fabs(1 / rayDirY));
 		*/
-		double deltaDistX = fabs(1 / rayDirX);
-		double deltaDistY = fabs(1 / rayDirY);
+		deltaDistX = fabs(1 / rayDirX);
+		deltaDistY = fabs(1 / rayDirY);
 		// what direction to step in x or y-direction (either +1 or -1)
 		int hit = 0; // was there a wall hit?
 		int side;    // was a NS or a EW wall hit?
@@ -171,8 +177,11 @@ int	draw_frame(t_data *params)
 			color = 0x0000FFFF;
 			break ; // yellow
 		}
-		// give x and y sides different brightness
-		// if (side == 1) {color = color / 2;}
+		// give x and y sides different brightness (if a y-side was hit, make the color darker)
+		if (side == 1)
+		{
+			color = color / 2;
+		}
 		// draw the pixels of the stripe as a vertical line
 		// verLine(x, drawStart, drawEnd, color);
 		for (int y = drawStart; y <= drawEnd; y++)
@@ -202,13 +211,16 @@ int	read_keys(t_data *params)
 	// move forward if no wall in front of you
 	if (params->keystroke[126])
 	{
+		/*
 		printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n",
 				player->posX,
 				player->posY,
 				player->dirX,
 				player->dirY);
+		*/
 		if (worldMap[(int)(player->posX + player->dirX * player->moveSpeed)]
 					[(int)(player->posY)] == 0 /*0 enum*/)
+			// collision detection: won't move if it ain't 0 (a wall)
 			player->posX += player->dirX * player->moveSpeed;
 		if (worldMap[(int)(player->posX)]
 					[(int)(player->posY + player->dirY * player->moveSpeed)] == 0)
@@ -217,11 +229,13 @@ int	read_keys(t_data *params)
 	// move backwards if no wall behind you
 	if (params->keystroke[125])
 	{
+		/*
 		printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n",
 				player->posX,
 				player->posY,
 				player->dirX,
 				player->dirY);
+		*/
 		if (worldMap[(int)(player->posX - player->dirX * player->moveSpeed)]
 					[(int)(player->posY)] == 0)
 			player->posX -= player->dirX * player->moveSpeed;
@@ -232,11 +246,13 @@ int	read_keys(t_data *params)
 	// rotate to the right
 	if (params->keystroke[124])
 	{
+		/*
 		printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n",
 				player->posX,
 				player->posY,
 				player->dirX,
 				player->dirY);
+		*/
 		// both camera direction and camera plane must be rotated
 		oldDirX = player->dirX;
 		player->dirX = player->dirX * cos(-player->rotSpeed) -
@@ -252,11 +268,13 @@ int	read_keys(t_data *params)
 	// rotate to the left
 	if (params->keystroke[123])
 	{
+		/*
 		printf("posX: %f\nposY: %f\ndirX: %f\ndirY: %f\n\n",
 				player->posX,
 				player->posY,
 				player->dirX,
 				player->dirY);
+		*/
 		// both camera direction and camera plane must be rotated
 		oldDirX = player->dirX;
 		player->dirX = player->dirX * cos(player->rotSpeed) -
