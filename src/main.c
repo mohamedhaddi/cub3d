@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/15 17:57:32 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/16 12:08:20 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	worldMap[mapWidth][mapHeight] = {
 	{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-int	game_loop(t_data *params)
+int	draw_frame(t_data *params)
 {
 	t_mlx		*mlx;
 	t_img_data	*img;
@@ -195,7 +195,6 @@ int	read_keys(t_data *params)
 	double		oldPlaneX;
 
 	player = &params->player;
-
 	// move forward if no wall in front of you
 	if (params->keystroke[126])
 	{
@@ -266,14 +265,13 @@ int	read_keys(t_data *params)
 		player->planeY = oldPlaneX * sin(player->rotSpeed) +
 			player->planeY * cos(player->rotSpeed);
 	}
-	game_loop(params);
+	draw_frame(params);
 	return (0);
 }
 
 int	key_press(int keycode, t_data *params)
 {
-	if (keycode == 123 || keycode == 124 || keycode == 125 ||
-		keycode == 126)
+	if (keycode == 123 || keycode == 124 || keycode == 125 || keycode == 126)
 	{
 		params->keystroke[keycode] = 1;
 	}
@@ -282,8 +280,7 @@ int	key_press(int keycode, t_data *params)
 
 int	key_release(int keycode, t_data *params)
 {
-	if (keycode == 123 || keycode == 124 || keycode == 125 ||
-		keycode == 126)
+	if (keycode == 123 || keycode == 124 || keycode == 125 || keycode == 126)
 	{
 		params->keystroke[keycode] = 0;
 	}
@@ -316,9 +313,8 @@ int	main()
 	img->img = mlx_new_image(mlx->ptr, screen_width, screen_height);
 	img->addr = mlx_get_data_addr(
 		img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
-	// this is the game loop that draws a whole frame and reads the input every
-	// time
-	game_loop(&params);
+	// this was the game loop that draws a whole frame and reads the input every time
+	draw_frame(&params);
 	// mlx_key_hook(mlx->win, read_keys, &params);
 	mlx_hook(mlx->win, 2, 0, key_press, &params);
 	mlx_hook(mlx->win, 3, 0, key_release, &params);
