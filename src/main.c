@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/16 12:08:20 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/16 15:30:55 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,14 @@ int	draw_frame(t_data *params)
 		// double deltaDistY = fabs(1 / rayDirY);
 		// Alternative code for deltaDist in case division through zero is not
 		// supported
+		/*
 		double deltaDistX =
 			(rayDirY == 0) ? 0 : ((rayDirX == 0) ? 1 : fabs(1 / rayDirX));
 		double deltaDistY =
 			(rayDirX == 0) ? 0 : ((rayDirY == 0) ? 1 : fabs(1 / rayDirY));
+		*/
+		double deltaDistX = fabs(1 / rayDirX);
+		double deltaDistY = fabs(1 / rayDirY);
 		// what direction to step in x or y-direction (either +1 or -1)
 		int hit = 0; // was there a wall hit?
 		int side;    // was a NS or a EW wall hit?
