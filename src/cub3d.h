@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/16 16:50:14 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/28 14:48:11 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@
 # include <stdio.h>
 # include <string.h>
 # include <stdlib.h>
+
+#define screenWidth 640
+#define screenHeight 480
+#define mapWidth 24
+#define mapHeight 24
+// width and height in texels of the textures
+#define texWidth 64
+#define texHeight 64
 
 typedef struct	s_img_data
 {
@@ -44,10 +52,17 @@ typedef struct	s_player {
 	double		rotSpeed;
 }				t_player;
 
+typedef struct	s_world {
+	int 		textures[8][texWidth * texHeight];
+	// int			*textures;
+  	uint32_t 	buffer[screenHeight][screenWidth]; // y-coordinate first because it works per scanline
+} t_world;
+
 typedef struct	s_data {
 	t_img_data	img;
 	t_mlx		mlx;
 	t_player	player;
+	t_world		world;
 	int			keystroke[127];
 }				t_data;
 
