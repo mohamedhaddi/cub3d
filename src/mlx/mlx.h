@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/29 19:47:22 by mhaddi            #+#    #+#             */
+/*   Updated: 2021/03/29 19:48:35 by mhaddi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
 ** mlx.h for MinilibX in 
 ** 
@@ -118,7 +130,7 @@ void	*mlx_xpm_to_image(void *mlx_ptr, char **xpm_data,
 			  int *width, int *height);
 void	*mlx_xpm_file_to_image(void *mlx_ptr, char *filename,
 			       int *width, int *height);
-void    *mlx_png_file_to_image(void *mlx_ptr, char *file, int *width, int *height);
+void    *mlx_png_file_to_image(void *mlx_ptr, char *filename, int *width, int *height);
 
 int	mlx_destroy_window(void *mlx_ptr, void *win_ptr);
 

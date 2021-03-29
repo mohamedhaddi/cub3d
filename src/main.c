@@ -6,12 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/29 15:08:22 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/29 19:51:18 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "mlx/mlx.h"
+#include <stdlib.h>
 
 int	worldMap[mapWidth][mapHeight] = {
 	{4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 7, 7, 7, 7, 7, 7, 7, 7},
@@ -42,6 +43,31 @@ int	worldMap[mapWidth][mapHeight] = {
 /**
  * test
  */
+
+t_texture loadImage(char *path, t_data *params)
+{
+	t_texture	texture_buffer;
+
+	texture_buffer.texture_img_data.img = mlx_xpm_file_to_image(params->mlx.ptr, path, &texture_buffer.width, &texture_buffer.height);
+
+	/*
+	free(path);
+	*/
+	if (texture_buffer.texture_img_data.img == NULL || texture_buffer.width != texSize || texture_buffer.height != texSize)
+	{
+		//ft_putstr_fd("Error\n Invalid texture", 2);
+		printf("Error: Invalid texture\n");
+		printf("texWidth: %d\n", texture_buffer.width);
+		printf("texHeight: %d\n", texture_buffer.height);
+		exit(0);
+	}
+
+	texture_buffer.texture_img_data.addr = mlx_get_data_addr(texture_buffer.texture_img_data.img,
+												&texture_buffer.texture_img_data.bits_per_pixel,
+												&texture_buffer.texture_img_data.line_length,
+												&texture_buffer.texture_img_data.endian);
+	return (texture_buffer);
+}
 
 int	draw_frame(t_data *params)
 {
@@ -191,7 +217,8 @@ int	draw_frame(t_data *params)
 			texY = (int)texPos & (texSize - 1);
 			texPos += step;
 
-			color = world->textures[texNum][texSize * texX + texY];
+			// color = world->textures[texNum][texSize * texX + texY];
+			color = world->textures[texNum].texture_img_data.addr[texSize * texX + texY];
 
 			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			if (side == 1)
@@ -326,9 +353,9 @@ int	main()
 	t_img_data	*img;
 	t_player	*player;
 	t_world		*world;
-	int			xorcolor;
-	int			ycolor;
-	int			xycolor;
+	//int			xorcolor;
+	//int			ycolor;
+	//int			xycolor;
     int         *keystrokes;
 
 	mlx = &params.mlx;
@@ -351,6 +378,7 @@ int	main()
 	mlx->win = mlx_new_window(mlx->ptr, screenWidth, screenHeight, "cub3d");
 
 	// generate some textures
+	/*
 	for (int x = 0; x < texSize; x++)
 	{
 		for (int y = 0; y < texSize; y++)
@@ -369,15 +397,25 @@ int	main()
 			world->textures[7][texSize * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
 		}
 	}
+	*/
+
+	world->textures[0] = loadImage("textures/eagle.xpm", &params);
+  	world->textures[1] = loadImage("textures/redbrick.xpm", &params);
+  	world->textures[2] = loadImage("textures/purplestone.xpm", &params);
+  	world->textures[3] = loadImage("textures/greystone.xpm", &params);
+  	world->textures[4] = loadImage("textures/bluestone.xpm", &params);
+  	world->textures[5] = loadImage("textures/mossy.xpm", &params);
+  	world->textures[6] = loadImage("textures/wood.xpm", &params);
+  	world->textures[7] = loadImage("textures/colorstone.xpm", &params);
 
 	//swap texture X/Y since they'll be used as vertical stripes
-	int swap;
+	char swap;
   	for(size_t i = 0; i < 8; i++)
   		for(size_t x = 0; x < texSize; x++)
   			for(size_t y = 0; y < x; y++) {
-				swap = world->textures[i][texSize * y + x];
-				world->textures[i][texSize * y + x] = world->textures[i][texSize * x + y];
-				world->textures[i][texSize * x + y] = swap;
+				swap = world->textures[i].texture_img_data.addr[texSize * y + x];
+				world->textures[i].texture_img_data.addr[texSize * y + x] = world->textures[i].texture_img_data.addr[texSize * x + y];
+				world->textures[i].texture_img_data.addr[texSize * x + y] = swap;
 			}
 
 	img->img = mlx_new_image(mlx->ptr, screenWidth, screenHeight);
