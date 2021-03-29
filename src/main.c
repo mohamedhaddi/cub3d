@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/28 19:11:49 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/29 15:08:22 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,26 +172,26 @@ int	draw_frame(t_data *params)
 		wallX -= floor((wallX));
 
 		// x coordinate on the texture
-        // texWidth and texHeight are width and height in texels of the textures
-		texX = (int)(wallX * (double)texWidth);
+        // texSize and texSize are width and height in texels of the textures
+		texX = (int)(wallX * (double)texSize);
 		if (side == 0 && rayDirX > 0)
-			texX = texWidth - texX - 1;
+			texX = texSize - texX - 1;
 		if (side == 1 && rayDirY < 0)
-			texX = texWidth - texX - 1;
+			texX = texSize - texX - 1;
 
 		// How much to increase the texture coordinate per screen pixel
-		step = 1.0 * texHeight / lineHeight;
+		step = 1.0 * texSize / lineHeight;
 
 		// Starting texture coordinate
 		double texPos = ((double)drawStart - (double)screenHeight / 2 + (double)lineHeight / 2) * step;
 
 		for (int y = drawStart; y < drawEnd; y++)
 		{
-			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-			texY = (int)texPos & (texHeight - 1);
+			// Cast the texture coordinate to integer, and mask with (texSize - 1) in case of overflow
+			texY = (int)texPos & (texSize - 1);
 			texPos += step;
 
-			color = world->textures[texNum][texHeight * texY + texX];
+			color = world->textures[texNum][texSize * texX + texY];
 
 			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			if (side == 1)
@@ -338,13 +338,12 @@ int	main()
 
     // initiliaze keystrokes values with 0
     keystrokes = &params.keystrokes[0];
-    for (int i = 0; i < 127; i++)
+    for (int i = 123; i < 127; i++)
       keystrokes[i] = 0;
 
 	player->posX = 22, player->posY = 12; // x and y start position of the player
 	player->dirX = -1, player->dirY = 0;  // initial direction vector
-	player->planeX = 0,
-	player->planeY = 0.66; // the 2d raycaster version of camera plane
+	player->planeX = 0, player->planeY = 0.66; // the 2d raycaster version of camera plane
 	player->moveSpeed = 0.07;
 	player->rotSpeed = 0.03;
 
@@ -352,24 +351,34 @@ int	main()
 	mlx->win = mlx_new_window(mlx->ptr, screenWidth, screenHeight, "cub3d");
 
 	// generate some textures
-	for (int x = 0; x < texWidth; x++)
+	for (int x = 0; x < texSize; x++)
 	{
-		for (int y = 0; y < texHeight; y++)
+		for (int y = 0; y < texSize; y++)
 		{
-			xorcolor = (x * 256 / texWidth) ^ (y * 256 / texHeight);
-			// int xcolor = x * 256 / texWidth;
-			ycolor = y * 256 / texHeight;
-			xycolor = y * 128 / texHeight + x * 128 / texWidth;
-			world->textures[0][texWidth * y + x] = 65536 * 254 * (x != y && x != texWidth - y); // flat red texture with black cross
-			world->textures[1][texWidth * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; // sloped greyscale
-			world->textures[2][texWidth * y + x] = 256 * xycolor + 65536 * xycolor; // sloped yellow gradient
-			world->textures[3][texWidth * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; // xor greyscale
-			world->textures[4][texWidth * y + x] = 256 * xorcolor; // xor green
-			world->textures[5][texWidth * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
-			world->textures[6][texWidth * y + x] = 65536 * ycolor; // red gradient
-			world->textures[7][texWidth * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
+			xorcolor = (x * 256 / texSize) ^ (y * 256 / texSize);
+			// int xcolor = x * 256 / texSize;
+			ycolor = y * 256 / texSize;
+			xycolor = y * 128 / texSize + x * 128 / texSize;
+			world->textures[0][texSize * y + x] = 65536 * 254 * (x != y && x != texSize - y); // flat red texture with black cross
+			world->textures[1][texSize * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; // sloped greyscale
+			world->textures[2][texSize * y + x] = 256 * xycolor + 65536 * xycolor; // sloped yellow gradient
+			world->textures[3][texSize * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; // xor greyscale
+			world->textures[4][texSize * y + x] = 256 * xorcolor; // xor green
+			world->textures[5][texSize * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
+			world->textures[6][texSize * y + x] = 65536 * ycolor; // red gradient
+			world->textures[7][texSize * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
 		}
 	}
+
+	//swap texture X/Y since they'll be used as vertical stripes
+	int swap;
+  	for(size_t i = 0; i < 8; i++)
+  		for(size_t x = 0; x < texSize; x++)
+  			for(size_t y = 0; y < x; y++) {
+				swap = world->textures[i][texSize * y + x];
+				world->textures[i][texSize * y + x] = world->textures[i][texSize * x + y];
+				world->textures[i][texSize * x + y] = swap;
+			}
 
 	img->img = mlx_new_image(mlx->ptr, screenWidth, screenHeight);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);

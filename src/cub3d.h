@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/28 19:05:49 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/29 16:05:38 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@
 # define screenHeight 480
 # define mapWidth 24
 # define mapHeight 24
-# define texWidth 64
-# define texHeight 64
+# define texSize 64
 
 typedef struct	s_img_data
 {
@@ -55,7 +54,7 @@ typedef struct	s_player
 
 typedef struct	s_world
 {
-	int			textures[8][texWidth * texHeight];
+	int			textures[8][texSize * texSize];
 	uint32_t	buffer[screenHeight][screenWidth];
 }				t_world;
 
