@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/30 17:09:22 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/30 18:50:03 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ t_texture loadImage(char *path, t_data *params)
 												&texture_buffer.texture_img_data.bits_per_pixel,
 												&texture_buffer.texture_img_data.line_length,
 												&texture_buffer.texture_img_data.endian);
-	// the address we getting ain't right
 	return (texture_buffer);
 }
 
@@ -223,16 +222,9 @@ int	draw_frame(t_data *params)
 			texY = (int)texPos & (texSize - 1);
 			texPos += step;
 
-			// color = world->textures[texNum][texSize * texX + texY];
 			color = world->textures[texNum].texture_img_data.addr[texSize * texY + texX];
-			// printf("%p\n", world->textures[texNum].texture_img_data.addr);
-			// printf("%x\n", color);
 
 			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-			/*
-			if (side == 1)
-				color /= 2;
-			*/
 			if (side == 1)
 				color = (color >> 1) & 8355711;
 
@@ -360,9 +352,6 @@ int	main()
 	t_img_data	*img;
 	t_player	*player;
 	t_world		*world;
-	//int			xorcolor;
-	//int			ycolor;
-	//int			xycolor;
     int         *keystrokes;
 
 	mlx = &params.mlx;
@@ -385,27 +374,6 @@ int	main()
 	mlx->win = mlx_new_window(mlx->ptr, screenWidth, screenHeight, "cub3d");
 
 	// generate some textures
-	/*
-	for (int x = 0; x < texSize; x++)
-	{
-		for (int y = 0; y < texSize; y++)
-		{
-			xorcolor = (x * 256 / texSize) ^ (y * 256 / texSize);
-			// int xcolor = x * 256 / texSize;
-			ycolor = y * 256 / texSize;
-			xycolor = y * 128 / texSize + x * 128 / texSize;
-			world->textures[0][texSize * y + x] = 65536 * 254 * (x != y && x != texSize - y); // flat red texture with black cross
-			world->textures[1][texSize * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; // sloped greyscale
-			world->textures[2][texSize * y + x] = 256 * xycolor + 65536 * xycolor; // sloped yellow gradient
-			world->textures[3][texSize * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; // xor greyscale
-			world->textures[4][texSize * y + x] = 256 * xorcolor; // xor green
-			world->textures[5][texSize * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
-			world->textures[6][texSize * y + x] = 65536 * ycolor; // red gradient
-			world->textures[7][texSize * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
-		}
-	}
-	*/
-
 	world->textures[0] = loadImage("../assets/textures/eagle.xpm", &params);
   	world->textures[1] = loadImage("../assets/textures/redbrick.xpm", &params);
   	world->textures[2] = loadImage("../assets/textures/purplestone.xpm", &params);
@@ -414,18 +382,6 @@ int	main()
   	world->textures[5] = loadImage("../assets/textures/mossy.xpm", &params);
   	world->textures[6] = loadImage("../assets/textures/wood.xpm", &params);
   	world->textures[7] = loadImage("../assets/textures/colorstone.xpm", &params);
-
-	//swap texture X/Y since they'll be used as vertical stripes
-	/*
-	char swap;
-  	for(size_t i = 0; i < 8; i++)
-  		for(size_t x = 0; x < texSize; x++)
-  			for(size_t y = 0; y < x; y++) {
-				swap = world->textures[i].texture_img_data.addr[texSize * y + x];
-				world->textures[i].texture_img_data.addr[texSize * y + x] = world->textures[i].texture_img_data.addr[texSize * x + y];
-				world->textures[i].texture_img_data.addr[texSize * x + y] = swap;
-			}
-	*/
 
 	img->img = mlx_new_image(mlx->ptr, screenWidth, screenHeight);
 	img->addr = (int *)mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
