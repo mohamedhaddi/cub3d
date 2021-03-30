@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 00:44:50 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/30 10:42:17 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/30 17:11:40 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,6 @@ void	ft_mlx_pixel_put(t_img_data *img, int x, int y, int color)
 {
 	char	*pixel;
 
-	pixel = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	*(unsigned int *)pixel = color;
+	pixel = (char *)img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	*(int *)pixel = color;
 }

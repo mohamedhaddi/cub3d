@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/30 10:44:56 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/30 17:09:22 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ int	worldMap[mapWidth][mapHeight] = {
 t_texture loadImage(char *path, t_data *params)
 {
 	t_texture	texture_buffer;
+	t_mlx 		*mlx;
 
-	texture_buffer.texture_img_data.img = mlx_xpm_file_to_image(params->mlx.ptr, path, &texture_buffer.width, &texture_buffer.height);
+	mlx = &params->mlx;
 
-	/*
-	free(path);
-	*/
+	texture_buffer.texture_img_data.img = mlx_xpm_file_to_image(mlx->ptr, path, &texture_buffer.width, &texture_buffer.height);
+
 	if (texture_buffer.texture_img_data.img == NULL || texture_buffer.width != texSize || texture_buffer.height != texSize)
 	{
 		//ft_putstr_fd("Error\n Invalid texture", 2);
@@ -62,10 +62,11 @@ t_texture loadImage(char *path, t_data *params)
 		exit(0);
 	}
 
-	texture_buffer.texture_img_data.addr = mlx_get_data_addr(texture_buffer.texture_img_data.img,
+	texture_buffer.texture_img_data.addr = (int *)mlx_get_data_addr(texture_buffer.texture_img_data.img,
 												&texture_buffer.texture_img_data.bits_per_pixel,
 												&texture_buffer.texture_img_data.line_length,
 												&texture_buffer.texture_img_data.endian);
+	// the address we getting ain't right
 	return (texture_buffer);
 }
 
@@ -104,6 +105,11 @@ int	draw_frame(t_data *params)
 	img = &params->img;
 	player = &params->player;
 	world = &params->world;
+
+	// clear buffer
+	for (int x = 0; x < screenWidth; x++)
+		for (int y = 0; y < screenHeight; y++)
+			world->buffer[y][x] = 0x00000000;
 
 	// here starts the raycasting loop
 	for (int x = 0; x < screenWidth; x++)
@@ -218,15 +224,17 @@ int	draw_frame(t_data *params)
 			texPos += step;
 
 			// color = world->textures[texNum][texSize * texX + texY];
-			color = world->textures[texNum].texture_img_data.addr[texSize * texX + texY];
+			color = world->textures[texNum].texture_img_data.addr[texSize * texY + texX];
+			// printf("%p\n", world->textures[texNum].texture_img_data.addr);
+			// printf("%x\n", color);
 
 			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			/*
 			if (side == 1)
-				color = (color >> 1) & 8355711;
+				color /= 2;
 			*/
 			if (side == 1)
-				color /= 2;
+				color = (color >> 1) & 8355711;
 
 			world->buffer[y][x] = color; // y-coordinate first because it works per scanline
 		}
@@ -265,11 +273,6 @@ int	draw_frame(t_data *params)
 	mlx_string_put(mlx->ptr, mlx->win, 0, 100, 0x00FFFFFF, outputKeystrokesB);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 120, 0x00FFFFFF, outputKeystrokesR);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 140, 0x00FFFFFF, outputKeystrokesL);
-
-	// clear buffer
-	for (int x = 0; x < screenWidth; x++)
-		for (int y = 0; y < screenHeight; y++)
-			world->buffer[y][x] = 0;
 
 	return (0);
 }
@@ -413,6 +416,7 @@ int	main()
   	world->textures[7] = loadImage("../assets/textures/colorstone.xpm", &params);
 
 	//swap texture X/Y since they'll be used as vertical stripes
+	/*
 	char swap;
   	for(size_t i = 0; i < 8; i++)
   		for(size_t x = 0; x < texSize; x++)
@@ -421,9 +425,10 @@ int	main()
 				world->textures[i].texture_img_data.addr[texSize * y + x] = world->textures[i].texture_img_data.addr[texSize * x + y];
 				world->textures[i].texture_img_data.addr[texSize * x + y] = swap;
 			}
+	*/
 
 	img->img = mlx_new_image(mlx->ptr, screenWidth, screenHeight);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
+	img->addr = (int *)mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 
 	// this was the game loop that draws a whole frame and reads the input every time
 	draw_frame(&params);

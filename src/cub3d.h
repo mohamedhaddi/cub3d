@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/30 10:42:47 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/30 17:09:14 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 typedef struct	s_img_data
 {
 	void		*img;
-	char		*addr;
+	int			*addr;
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
