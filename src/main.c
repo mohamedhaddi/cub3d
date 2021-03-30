@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/29 19:51:18 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/30 10:44:56 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	draw_frame(t_data *params)
 	int			texX;
 	double		step;
 	int			texY;
-	uint32_t	color;
+	int			color;
 	char		*outputPosX;
 	char		*outputPosY;
 	char		*outputDirX;
@@ -195,7 +195,7 @@ int	draw_frame(t_data *params)
 			wallX = player->posY + perpWallDist * rayDirY;
 		else
 			wallX = player->posX + perpWallDist * rayDirX;
-		wallX -= floor((wallX));
+		wallX -= floor(wallX);
 
 		// x coordinate on the texture
         // texSize and texSize are width and height in texels of the textures
@@ -209,7 +209,7 @@ int	draw_frame(t_data *params)
 		step = 1.0 * texSize / lineHeight;
 
 		// Starting texture coordinate
-		double texPos = ((double)drawStart - (double)screenHeight / 2 + (double)lineHeight / 2) * step;
+		double texPos = (drawStart - screenHeight / 2.0 + lineHeight / 2.0) * step;
 
 		for (int y = drawStart; y < drawEnd; y++)
 		{
@@ -221,8 +221,12 @@ int	draw_frame(t_data *params)
 			color = world->textures[texNum].texture_img_data.addr[texSize * texX + texY];
 
 			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+			/*
 			if (side == 1)
 				color = (color >> 1) & 8355711;
+			*/
+			if (side == 1)
+				color /= 2;
 
 			world->buffer[y][x] = color; // y-coordinate first because it works per scanline
 		}
@@ -399,14 +403,14 @@ int	main()
 	}
 	*/
 
-	world->textures[0] = loadImage("textures/eagle.xpm", &params);
-  	world->textures[1] = loadImage("textures/redbrick.xpm", &params);
-  	world->textures[2] = loadImage("textures/purplestone.xpm", &params);
-  	world->textures[3] = loadImage("textures/greystone.xpm", &params);
-  	world->textures[4] = loadImage("textures/bluestone.xpm", &params);
-  	world->textures[5] = loadImage("textures/mossy.xpm", &params);
-  	world->textures[6] = loadImage("textures/wood.xpm", &params);
-  	world->textures[7] = loadImage("textures/colorstone.xpm", &params);
+	world->textures[0] = loadImage("../assets/textures/eagle.xpm", &params);
+  	world->textures[1] = loadImage("../assets/textures/redbrick.xpm", &params);
+  	world->textures[2] = loadImage("../assets/textures/purplestone.xpm", &params);
+  	world->textures[3] = loadImage("../assets/textures/greystone.xpm", &params);
+  	world->textures[4] = loadImage("../assets/textures/bluestone.xpm", &params);
+  	world->textures[5] = loadImage("../assets/textures/mossy.xpm", &params);
+  	world->textures[6] = loadImage("../assets/textures/wood.xpm", &params);
+  	world->textures[7] = loadImage("../assets/textures/colorstone.xpm", &params);
 
 	//swap texture X/Y since they'll be used as vertical stripes
 	char swap;

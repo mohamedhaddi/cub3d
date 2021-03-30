@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/29 19:02:04 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/30 10:42:47 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct	s_player
 typedef struct	s_world
 {
 	t_texture	textures[8];
-	uint32_t	buffer[screenHeight][screenWidth];
+	int			buffer[screenHeight][screenWidth];
 }				t_world;
 
 typedef struct	s_data
