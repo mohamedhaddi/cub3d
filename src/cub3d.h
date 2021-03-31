@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/30 17:09:14 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/31 17:00:54 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define mapWidth 24
 # define mapHeight 24
 # define texSize 64
+# define numSprites 19
 
 typedef struct	s_img_data
 {
@@ -58,10 +59,23 @@ typedef struct	s_player
 	double		rotSpeed;
 }				t_player;
 
+typedef struct	s_sprite
+{
+  double		x;
+  double 		y;
+  int 			texture;
+}				t_sprite;
+
 typedef struct	s_world
 {
 	t_texture	textures[8];
 	int			buffer[screenHeight][screenWidth];
+	// t_sprite	sprites[numSprites];
+	//1D Zbuffer
+	double		ZBuffer[screenWidth];
+	//arrays used to sort the sprites
+	int			spriteOrder[numSprites];
+	double		spriteDistance[numSprites];
 }				t_world;
 
 typedef struct	s_data
@@ -74,5 +88,8 @@ typedef struct	s_data
 }				t_data;
 
 void			ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
+
+//function used to sort the sprites
+void			sortSprites(int* order, double* dist, int amount);
 
 #endif
