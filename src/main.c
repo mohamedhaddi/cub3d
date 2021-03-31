@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/31 14:44:25 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/31 15:22:26 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ int			worldMap[mapWidth][mapHeight] = {
 /**
  * test
  */
+
+int isInteger(double val)
+{
+    int truncated = (int)val;
+    return (val == truncated);
+}
 
 t_texture	loadImage(char *path, t_data *params)
 {
@@ -139,9 +145,20 @@ int			draw_frame(t_data *params)
 		rayDirX = player->dirX + player->planeX * cameraX;
 		rayDirY = player->dirY + player->planeY * cameraX;
 
+		// if the player's position is integer, it might intersect with the
+		// corner of a wall with may cause a problem in displaying it,
+		// so we make it a bit further away by 0.1 from the corner
+		if (isInteger(player->posX)) {
+			player->posX -= 0.1;
+		}
+		if (isInteger(player->posY)) {
+			player->posY -= 0.1;
+		}
+
 		// which box of the map we're in
 		mapX = (int)player->posX;
 		mapY = (int)player->posY;
+
 
 		// length of ray from current position to next x or y-side
 		deltaDistX = fabs(1 / rayDirX);
