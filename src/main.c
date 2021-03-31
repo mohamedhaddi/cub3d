@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/31 17:20:41 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/03/31 19:33:41 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,37 @@ int worldMap[mapWidth][mapHeight] =
 	{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,1,0,1,0,1,0,1,0,1},
 	{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,1,0,1,0,0,0,1,1},
 	{2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,1,1,1,1,1,1,1,1,1}
+};
+
+// define the positions and texture of each sprite
+t_sprite sprites[numSprites] =
+{
+	//green light in front of playerstart
+	{20.5, 11.5, 10}, 
+
+	//green lights in every room
+	{18.5,4.5, 10},
+	{10.0,4.5, 10},
+	{10.0,12.5,10},
+	{3.5, 6.5, 10},
+	{3.5, 20.5,10},
+	{3.5, 14.5,10},
+	{14.5,20.5,10},
+
+	//row of pillars in front of wall: fisheye test
+	{18.5, 10.5, 9},
+	{18.5, 11.5, 9},
+	{18.5, 12.5, 9},
+
+	//some barrels around the map
+	{21.5, 1.5, 8},
+	{15.5, 1.5, 8},
+	{16.0, 1.8, 8},
+	{16.2, 1.2, 8},
+	{3.5,  2.5, 8},
+	{9.5, 15.5, 8},
+	{10.0, 15.1,8},
+	{10.5, 15.8,8},
 };
 
 /**
@@ -138,7 +169,7 @@ int			draw_frame(t_data *params)
 		}
 	}
 
-	// here starts the raycasting loop
+	// here starts the wall raycasting loop
 	for (int x = 0; x < screenWidth; x++)
 	{
 		// calculate ray position and direction
@@ -278,6 +309,40 @@ int			draw_frame(t_data *params)
 			world->buffer[y][x] =
 				color; // y-coordinate first because it works per scanline
 		}
+
+		//SPRITE CASTING
+
+		//SET THE ZBUFFER FOR THE SPRITE CASTING
+      	world->ZBuffer[x] = perpWallDist; //perpendicular distance is used
+
+		//sort sprites from far to close
+		for(int i = 0; i < numSprites; i++)
+		{
+			world->spriteOrder[i] = i;
+			world->spriteDistance[i] = ((player->posX - sprites[i].x) * (player->posX - sprites[i].x) + 
+										(player->posY - sprites[i].y) * (player->posY - sprites[i].y)); //sqrt not taken, unneeded
+		}
+		sortSprites(world->spriteOrder, world->spriteDistance, numSprites);
+
+		//after sorting the sprites, do the projection and draw them
+		double spriteX, spriteY;
+		for (int i = 0; i < numSprites; i++)
+		{
+			//translate sprite position to relative to camera
+			spriteX = sprites[world->spriteOrder[i]].x - player->posX;
+			spriteY = sprites[world->spriteOrder[i]].y - player->posY;
+		}
+
+		//transform sprite with the inverse camera matrix
+		// [ planeX   dirX ] -1                                       [ dirY      -dirX ]
+		// [               ]       =  1/(planeX*dirY-dirX*planeY) *   [                 ]
+		// [ planeY   dirY ]                                          [ -planeY  planeX ]
+		double invDet = 1.0 / (player->planeX * player->dirY - player->dirX * player->planeY); //required for correct matrix multiplication
+		double transformX = invDet * (player->dirY * spriteX - player->dirX * spriteY);
+      	double transformY =
+			invDet *
+			(-player->planeY * spriteX + player->planeX * spriteY); //this is actually the depth inside the screen, that what Z is in 3D
+      	int spriteScreenX = (int)(((double)screenWidth / 2) * (1 + transformX / transformY));
 	}
 
 	for (int x = 0; x < screenWidth; x++)
@@ -418,39 +483,6 @@ int			main()
 	keystrokes = &params.keystrokes[0];
 	for (int i = 123; i < 127; i++)
 		keystrokes[i] = 0;
-
-	// define the positions and texture of each sprite
-	/*
-	t_sprite sprites[numSprites] =
-	{
-		//green light in front of playerstart
-		{20.5, 11.5, 10}, 
-
-		//green lights in every room
-		{18.5,4.5, 10},
-		{10.0,4.5, 10},
-		{10.0,12.5,10},
-		{3.5, 6.5, 10},
-		{3.5, 20.5,10},
-		{3.5, 14.5,10},
-		{14.5,20.5,10},
-
-		//row of pillars in front of wall: fisheye test
-		{18.5, 10.5, 9},
-		{18.5, 11.5, 9},
-		{18.5, 12.5, 9},
-
-		//some barrels around the map
-		{21.5, 1.5, 8},
-		{15.5, 1.5, 8},
-		{16.0, 1.8, 8},
-		{16.2, 1.2, 8},
-		{3.5,  2.5, 8},
-		{9.5, 15.5, 8},
-		{10.0, 15.1,8},
-		{10.5, 15.8,8},
-	};
-	*/
 
 	player->posX = 22, player->posY = 12; // x and y start position of the player
 	player->dirX = -1, player->dirY = 0;  // initial direction vector
