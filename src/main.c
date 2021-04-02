@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/31 19:33:41 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/02 15:53:51 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,31 @@ int worldMap[mapWidth][mapHeight] =
 t_sprite sprites[numSprites] =
 {
 	//green light in front of playerstart
-	{20.5, 11.5, 10}, 
+	{20.5, 11.5, 6}, 
 
 	//green lights in every room
-	{18.5,4.5, 10},
-	{10.0,4.5, 10},
-	{10.0,12.5,10},
-	{3.5, 6.5, 10},
-	{3.5, 20.5,10},
-	{3.5, 14.5,10},
-	{14.5,20.5,10},
+	{18.5,4.5, 6},
+	{10.0,4.5, 6},
+	{10.0,12.5,6},
+	{3.5, 6.5, 6},
+	{3.5, 20.5,6},
+	{3.5, 14.5,6},
+	{14.5,20.5,6},
 
 	//row of pillars in front of wall: fisheye test
-	{18.5, 10.5, 9},
-	{18.5, 11.5, 9},
-	{18.5, 12.5, 9},
+	{18.5, 10.5, 5},
+	{18.5, 11.5, 5},
+	{18.5, 12.5, 5},
 
 	//some barrels around the map
-	{21.5, 1.5, 8},
-	{15.5, 1.5, 8},
-	{16.0, 1.8, 8},
-	{16.2, 1.2, 8},
-	{3.5,  2.5, 8},
-	{9.5, 15.5, 8},
-	{10.0, 15.1,8},
-	{10.5, 15.8,8},
+	{21.5, 1.5, 4},
+	{15.5, 1.5, 4},
+	{16.0, 1.8, 4},
+	{16.2, 1.2, 4},
+	{3.5,  2.5, 4},
+	{9.5, 15.5, 4},
+	{10.0, 15.1,4},
+	{10.5, 15.8,4},
 };
 
 /**
@@ -310,28 +310,28 @@ int			draw_frame(t_data *params)
 				color; // y-coordinate first because it works per scanline
 		}
 
-		//SPRITE CASTING
-
 		//SET THE ZBUFFER FOR THE SPRITE CASTING
-      	world->ZBuffer[x] = perpWallDist; //perpendicular distance is used
+		world->ZBuffer[x] = perpWallDist; //perpendicular distance is used
+	}
 
-		//sort sprites from far to close
-		for(int i = 0; i < numSprites; i++)
-		{
-			world->spriteOrder[i] = i;
-			world->spriteDistance[i] = ((player->posX - sprites[i].x) * (player->posX - sprites[i].x) + 
-										(player->posY - sprites[i].y) * (player->posY - sprites[i].y)); //sqrt not taken, unneeded
-		}
-		sortSprites(world->spriteOrder, world->spriteDistance, numSprites);
+	//SPRITE CASTING
 
-		//after sorting the sprites, do the projection and draw them
-		double spriteX, spriteY;
-		for (int i = 0; i < numSprites; i++)
-		{
-			//translate sprite position to relative to camera
-			spriteX = sprites[world->spriteOrder[i]].x - player->posX;
-			spriteY = sprites[world->spriteOrder[i]].y - player->posY;
-		}
+	//sort sprites from far to close
+	for(int i = 0; i < numSprites; i++)
+	{
+		world->spriteOrder[i] = i;
+		world->spriteDistance[i] = ((player->posX - sprites[i].x) * (player->posX - sprites[i].x) + 
+				(player->posY - sprites[i].y) * (player->posY - sprites[i].y)); //sqrt not taken, unneeded
+	}
+	sort_sprites(world->spriteOrder, world->spriteDistance, numSprites);
+
+	//after sorting the sprites, do the projection and draw them
+	double spriteX, spriteY;
+	for (int i = 0; i < numSprites; i++)
+	{
+		//translate sprite position to relative to camera
+		spriteX = sprites[world->spriteOrder[i]].x - player->posX;
+		spriteY = sprites[world->spriteOrder[i]].y - player->posY;
 
 		//transform sprite with the inverse camera matrix
 		// [ planeX   dirX ] -1                                       [ dirY      -dirX ]
@@ -339,10 +339,49 @@ int			draw_frame(t_data *params)
 		// [ planeY   dirY ]                                          [ -planeY  planeX ]
 		double invDet = 1.0 / (player->planeX * player->dirY - player->dirX * player->planeY); //required for correct matrix multiplication
 		double transformX = invDet * (player->dirY * spriteX - player->dirX * spriteY);
-      	double transformY =
+		double transformY =
 			invDet *
 			(-player->planeY * spriteX + player->planeX * spriteY); //this is actually the depth inside the screen, that what Z is in 3D
-      	int spriteScreenX = (int)(((double)screenWidth / 2) * (1 + transformX / transformY));
+		int spriteScreenX = (int)(((double)screenWidth / 2) * (1 + transformX / transformY));
+
+		//calculate height of the sprite on screen
+		int spriteHeight = abs((int)(screenHeight / transformY)); //using 'transformY' instead of the real distance prevents fisheye
+
+		//calculate lowest and highest pixel to fill in current stripe
+		int drawStartY = -spriteHeight / 2 + screenHeight / 2;
+		if(drawStartY < 0) drawStartY = 0;
+		int drawEndY = spriteHeight / 2 + screenHeight / 2;
+		if(drawEndY >= screenHeight) drawEndY = screenHeight - 1;
+
+		//calculate width of the sprite
+		int spriteWidth = abs((int)(screenHeight / transformY));
+		int drawStartX = -spriteWidth / 2 + spriteScreenX;
+		if(drawStartX < 0) drawStartX = 0;
+		int drawEndX = spriteWidth / 2 + spriteScreenX;
+		if(drawEndX >= screenWidth) drawEndX = screenWidth - 1;
+
+		//loop through every vertical stripe of the sprite on screen
+		for(int stripe = drawStartX; stripe < drawEndX; stripe++)
+		{
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * texSize / spriteWidth) / 256;
+			//the conditions in the if are:
+			//1) it's in front of camera plane so you don't see things behind you
+			//2) it's on the screen (left)
+			//3) it's on the screen (right)
+			//4) ZBuffer, with perpendicular distance
+			if(transformY > 0 && stripe > 0 && stripe < screenWidth && transformY < world->ZBuffer[stripe])
+			{
+				for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
+				{
+					int d = (y) * 256 - screenHeight * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
+					int texY = ((d * texSize) / spriteHeight) / 256;
+					uint32_t color = world->textures[sprites[world->spriteOrder[i]].texture]
+						.texture_img_data.addr[texSize * texY + texX]; //get current color from the texture
+					if((color & 0x00FFFFFF) != 0)
+						world->buffer[y][stripe] = color; //paint pixel if it isn't black, black is the invisible color
+				}
+			}
+		}
 	}
 
 	for (int x = 0; x < screenWidth; x++)
@@ -499,9 +538,9 @@ int			main()
 	world->textures[1] = loadImage("../assets/textures/grass.xpm", &params);
 	world->textures[2] = loadImage("../assets/textures/water.xpm", &params);
 	world->textures[3] = loadImage("../assets/textures/iron.xpm", &params);
-	world->textures[4] = loadImage("../assets/textures/barrel.xpm", &params);
-	world->textures[5] = loadImage("../assets/textures/pillar.xpm", &params);
-	world->textures[6] = loadImage("../assets/textures/greenlight.xpm", &params);
+	world->textures[4] = loadImage("../assets/textures/sprite-1.xpm", &params);
+	world->textures[5] = loadImage("../assets/textures/sprite-2.xpm", &params);
+	world->textures[6] = loadImage("../assets/textures/sprite-3.xpm", &params);
 
 	img->img = mlx_new_image(mlx->ptr, screenWidth, screenHeight);
 	img->addr = (int *)mlx_get_data_addr(

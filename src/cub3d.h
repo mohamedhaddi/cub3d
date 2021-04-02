@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/03/31 17:00:54 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/02 15:08:12 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ typedef struct	s_data
 
 void			ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
 
-//function used to sort the sprites
-void			sortSprites(int* order, double* dist, int amount);
+void			sort_sprites(int *order, double *dist, int amount);
 
 #endif
