@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/02 15:53:51 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/02 16:02:33 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,11 +303,12 @@ int			draw_frame(t_data *params)
 			// make color darker for y-sides: R, G and B byte each divided
 			// through two with a "shift" and an "and"
 			// (only non-transparent colors: positive ints)
-			if (side == 1 && color >= 0)
+			if (side == 1)
 				color = (color >> 1) & 8355711;
 
-			world->buffer[y][x] =
-				color; // y-coordinate first because it works per scanline
+			if((color & 0x00FFFFFF) != 0)
+				world->buffer[y][x] =
+					color; // y-coordinate first because it works per scanline
 		}
 
 		//SET THE ZBUFFER FOR THE SPRITE CASTING
