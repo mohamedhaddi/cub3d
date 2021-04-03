@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/03 16:05:10 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/03 16:36:29 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,14 +413,18 @@ int			draw_frame(t_data *params)
 	outputKeystrokesB = (char *)malloc(20 * sizeof(char));
 	outputKeystrokesR = (char *)malloc(20 * sizeof(char));
 	outputKeystrokesL = (char *)malloc(20 * sizeof(char));
+	char *outputKeystrokesD = (char *)malloc(20 * sizeof(char));
+	char *outputKeystrokesA = (char *)malloc(20 * sizeof(char));
 	sprintf(outputPosX, "posX: %f", player->posX);
 	sprintf(outputPosY, "posY: %f", player->posY);
 	sprintf(outputDirX, "dirX: %f", player->dirX);
 	sprintf(outputDirY, "dirY: %f", player->dirY);
-	sprintf(outputKeystrokesF, "keyF: %d", params->keystrokes[126]);
-	sprintf(outputKeystrokesB, "keyB: %d", params->keystrokes[125]);
+	sprintf(outputKeystrokesF, "keyF(W): %d", params->keystrokes[13]);
+	sprintf(outputKeystrokesB, "keyB(S): %d", params->keystrokes[1]);
 	sprintf(outputKeystrokesR, "keyR: %d", params->keystrokes[124]);
 	sprintf(outputKeystrokesL, "keyL: %d", params->keystrokes[123]);
+	sprintf(outputKeystrokesD, "keyD: %d", params->keystrokes[2]);
+	sprintf(outputKeystrokesA, "keyA: %d", params->keystrokes[0]);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 0, 0x00FFFFFF, outputPosX);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 20, 0x00FFFFFF, outputPosY);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 40, 0x00FFFFFF, outputDirX);
@@ -429,6 +433,8 @@ int			draw_frame(t_data *params)
 	mlx_string_put(mlx->ptr, mlx->win, 0, 100, 0x00FFFFFF, outputKeystrokesB);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 120, 0x00FFFFFF, outputKeystrokesR);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 140, 0x00FFFFFF, outputKeystrokesL);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 160, 0x00FFFFFF, outputKeystrokesD);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 180, 0x00FFFFFF, outputKeystrokesA);
 
 	return (0);
 }
@@ -442,7 +448,7 @@ int			read_keys(t_data *params)
 	player = &params->player;
 
 	// move forward if no wall in front of you
-	if (params->keystrokes[126])
+	if (params->keystrokes[13]) // Key W
 	{
 		if (worldMap[(int)(player->posX + player->dirX * player->moveSpeed)]
 					[(int)(player->posY)] == 0 /*0 enum*/)
@@ -454,7 +460,7 @@ int			read_keys(t_data *params)
 	}
 
 	// move backwards if no wall behind you
-	if (params->keystrokes[125])
+	if (params->keystrokes[1]) // Key S
 	{
 		if (worldMap[(int)(player->posX - player->dirX * player->moveSpeed)]
 					[(int)(player->posY)] == 0)
@@ -464,8 +470,30 @@ int			read_keys(t_data *params)
 			player->posY -= player->dirY * player->moveSpeed;
 	}
 
+	// move to the right if no wall is on the right
+	if (params->keystrokes[2]) // Key D
+	{
+		if (worldMap[(int)(player->posX + player->planeX * player->moveSpeed)]
+					[(int)(player->posY)] == 0 /*0 enum*/)
+			player->posX += player->planeX * player->moveSpeed;
+		if (worldMap[(int)(player->posX)]
+					[(int)(player->posY + player->planeY * player->moveSpeed)] == 0)
+			player->posY += player->planeY * player->moveSpeed;
+	}
+
+	// move to the left if no wall is on the left
+	if (params->keystrokes[0]) // Key A
+	{
+		if (worldMap[(int)(player->posX - player->planeX * player->moveSpeed)]
+					[(int)(player->posY)] == 0 /*0 enum*/)
+			player->posX -= player->planeX * player->moveSpeed;
+		if (worldMap[(int)(player->posX)]
+					[(int)(player->posY - player->planeY * player->moveSpeed)] == 0)
+			player->posY -= player->planeY * player->moveSpeed;
+	}
+
 	// rotate to the right
-	if (params->keystrokes[124])
+	if (params->keystrokes[124]) // Key arrow right
 	{
 		// both camera direction and camera plane must be rotated
 		oldDirX = player->dirX;
@@ -481,7 +509,7 @@ int			read_keys(t_data *params)
 	}
 
 	// rotate to the left
-	if (params->keystrokes[123])
+	if (params->keystrokes[123]) // Key arrow left
 	{
 		// both camera direction and camera plane must be rotated
 		oldDirX = player->dirX;
@@ -502,7 +530,7 @@ int			read_keys(t_data *params)
 
 int			key_press(int keycode, t_data *params)
 {
-	if (keycode == 123 || keycode == 124 || keycode == 125 || keycode == 126)
+	if (keycode == 123 || keycode == 124 || keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2)
 	{
 		params->keystrokes[keycode] = 1;
 	}
@@ -511,7 +539,7 @@ int			key_press(int keycode, t_data *params)
 
 int			key_release(int keycode, t_data *params)
 {
-	if (keycode == 123 || keycode == 124 || keycode == 125 || keycode == 126)
+	if (keycode == 123 || keycode == 124 || keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2)
 	{
 		params->keystrokes[keycode] = 0;
 	}
