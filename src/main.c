@@ -6,13 +6,15 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/02 16:02:33 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/03 16:05:10 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "mlx/mlx.h"
 #include <stdlib.h>
+
+enum directions {NO, EA, SO, WE};
 
 int worldMap[mapWidth][mapHeight] =
 {
@@ -232,13 +234,19 @@ int			draw_frame(t_data *params)
 			{
 				sideDistX += deltaDistX;
 				mapX += stepX;
-				side = 0;
+				if (rayDirX > 0)
+					side = SO;
+				else
+					side = NO;
 			}
 			else
 			{
 				sideDistY += deltaDistY;
 				mapY += stepY;
-				side = 1;
+				if (rayDirY > 0)
+					side = EA;
+				else
+					side = WE;
 			}
 
 			// Check if ray has hit a wall
@@ -246,8 +254,10 @@ int			draw_frame(t_data *params)
 				hit = 1;
 		}
 
+		texNum = side;
+
 		// Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-		if (side == 0)
+		if (side % 2 == 0)
 			perpWallDist = (mapX - player->posX + (1.0 - stepX) / 2) / rayDirX;
 		else
 			perpWallDist = (mapY - player->posY + (1.0 - stepY) / 2) / rayDirY;
@@ -264,12 +274,14 @@ int			draw_frame(t_data *params)
 			drawEnd = screenHeight - 1;
 
 		// texturing calculations
+		/*
 		texNum =
 			worldMap[mapX][mapY] - 1; 	// 1 subtracted from it so that
 										// texture 0 can be used!
+		*/
 
 		// calculate value of wallX (where exactly the wall was hit)
-		if (side == 0)
+		if (side % 2 == 0)
 			wallX = player->posY + perpWallDist * rayDirY;
 		else
 			wallX = player->posX + perpWallDist * rayDirX;
@@ -278,9 +290,9 @@ int			draw_frame(t_data *params)
 		// x coordinate on the texture
 		// texSize and texSize are width and height in texels of the textures
 		texX = (int)(wallX * (double)texSize);
-		if (side == 0 && rayDirX > 0)
+		if (side % 2 == 0 && rayDirX > 0)
 			texX = texSize - texX - 1;
-		if (side == 1 && rayDirY < 0)
+		if (side % 2 == 1 && rayDirY < 0)
 			texX = texSize - texX - 1;
 
 		// How much to increase the texture coordinate per screen pixel
@@ -302,9 +314,10 @@ int			draw_frame(t_data *params)
 
 			// make color darker for y-sides: R, G and B byte each divided
 			// through two with a "shift" and an "and"
-			// (only non-transparent colors: positive ints)
-			if (side == 1)
+			/*
+			if (side % 2 == 1)
 				color = (color >> 1) & 8355711;
+			*/
 
 			if((color & 0x00FFFFFF) != 0)
 				world->buffer[y][x] =
@@ -535,10 +548,16 @@ int			main()
 	mlx->win = mlx_new_window(mlx->ptr, screenWidth, screenHeight, "cub3d");
 
 	// generate some textures
-	world->textures[0] = loadImage("../assets/textures/gold.xpm", &params);
-	world->textures[1] = loadImage("../assets/textures/grass.xpm", &params);
-	world->textures[2] = loadImage("../assets/textures/water.xpm", &params);
-	world->textures[3] = loadImage("../assets/textures/iron.xpm", &params);
+	char *wallsFacingNorth = "../assets/textures/iron.xpm";
+	char *wallsFacingSouth = "../assets/textures/grass.xpm";
+	char *wallsFacingEast =	"../assets/textures/water.xpm";
+	char *wallsFacingWest = "../assets/textures/gold.xpm";
+
+	world->textures[NO] = loadImage(wallsFacingSouth, &params);
+	world->textures[SO] = loadImage(wallsFacingNorth, &params);
+	world->textures[EA] = loadImage(wallsFacingWest, &params);
+	world->textures[WE] = loadImage(wallsFacingEast, &params);
+
 	world->textures[4] = loadImage("../assets/textures/sprite-1.xpm", &params);
 	world->textures[5] = loadImage("../assets/textures/sprite-2.xpm", &params);
 	world->textures[6] = loadImage("../assets/textures/sprite-3.xpm", &params);
