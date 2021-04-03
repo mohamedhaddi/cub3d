@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/02 15:08:12 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/03 16:44:51 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct	s_sprite
 
 typedef struct	s_world
 {
-	t_texture	textures[8];
+	t_texture	textures[7];
 	int			buffer[screenHeight][screenWidth];
 	// t_sprite	sprites[numSprites];
 	//1D Zbuffer

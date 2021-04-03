@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/03 16:36:29 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/03 16:52:55 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,31 @@ t_sprite sprites[numSprites] =
 /**
  * test
  */
+
+void			exit_game(t_data *params, int status)
+{
+	int	i;
+	/*
+
+	i = 0;
+	while (game->world_map[i])
+	{
+		free(game->world_map[i]);
+		i++;
+	}
+	free(game->world_map);
+	*/
+	i = 0;
+	while (i < 7)
+	{
+		if (params->world.textures[i].texture_img_data.img)
+			mlx_destroy_image(params->mlx.ptr, params->world.textures[i].texture_img_data.img);
+		i++;
+	}
+	mlx_destroy_image(params->mlx.ptr, params->img.img);
+	mlx_destroy_window(params->mlx.ptr, params->mlx.win);
+	exit(status);
+}
 
 int isInteger(double val)
 {
@@ -524,13 +549,19 @@ int			read_keys(t_data *params)
 			player->planeY * cos(player->rotSpeed);
 	}
 
+	// exit game
+	if (params->keystrokes[53]) // ESC key
+	{
+		exit_game(params, EXIT_SUCCESS);
+	}
+
 	draw_frame(params);
 	return (0);
 }
 
 int			key_press(int keycode, t_data *params)
 {
-	if (keycode == 123 || keycode == 124 || keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2)
+	if (keycode == 123 || keycode == 124 || keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2 || keycode == 53)
 	{
 		params->keystrokes[keycode] = 1;
 	}
@@ -539,7 +570,7 @@ int			key_press(int keycode, t_data *params)
 
 int			key_release(int keycode, t_data *params)
 {
-	if (keycode == 123 || keycode == 124 || keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2)
+	if (keycode == 123 || keycode == 124 || keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2 || keycode == 53)
 	{
 		params->keystrokes[keycode] = 0;
 	}
