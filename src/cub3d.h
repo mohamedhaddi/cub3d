@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/03 16:44:51 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/06 15:01:06 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # define mapWidth 24
 # define mapHeight 24
 # define texSize 64
-# define numSprites 19
 
 typedef struct	s_img_data
 {
@@ -63,19 +62,17 @@ typedef struct	s_sprite
 {
   double		x;
   double 		y;
-  int 			texture;
 }				t_sprite;
 
 typedef struct	s_world
 {
 	t_texture	textures[7];
 	int			buffer[screenHeight][screenWidth];
-	// t_sprite	sprites[numSprites];
-	//1D Zbuffer
-	double		ZBuffer[screenWidth];
-	//arrays used to sort the sprites
-	int			spriteOrder[numSprites];
-	double		spriteDistance[numSprites];
+	t_sprite	*sprites;
+	int			numSprites;
+	double		ZBuffer[screenWidth]; //1D Zbuffer
+	int			*spriteOrder;
+	double		*spriteDistance; //arrays used to sort the sprites
 }				t_world;
 
 typedef struct	s_data

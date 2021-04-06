@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/03 16:52:55 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/06 15:21:06 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,61 +18,30 @@ enum directions {NO, EA, SO, WE};
 
 int worldMap[mapWidth][mapHeight] =
 {
-	{4,4,4,4,4,4,4,4,4,4,4,4,4,2,4,4,2,4,2,4,4,4,2,4},
-	{4,0,0,0,0,0,0,0,0,0,4,4,0,0,0,0,0,0,0,0,0,0,0,4},
-	{4,0,3,3,0,0,0,0,0,4,4,4,0,0,0,0,0,0,0,0,0,0,0,2},
-	{4,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
-	{4,0,3,3,0,0,0,0,0,4,4,4,0,0,0,0,0,0,0,0,0,0,0,4},
-	{4,0,0,0,0,0,0,0,0,0,4,4,0,0,0,0,0,2,2,2,0,2,4,2},
-	{4,4,4,4,0,4,4,4,4,4,4,4,4,4,4,4,4,2,0,0,0,0,0,2},
-	{3,3,3,3,0,3,3,3,3,0,4,0,4,0,4,0,4,4,0,4,0,2,0,2},
-	{3,3,0,0,0,0,0,0,3,4,0,4,0,4,0,4,4,2,0,0,0,0,0,2},
-	{3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,2,0,0,0,0,0,4},
-	{3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,2,0,2,0,2,0,2},
-	{3,3,0,0,0,0,0,0,3,4,0,4,0,4,0,4,4,2,4,2,0,2,2,2},
-	{3,3,3,3,0,3,3,3,3,4,4,4,0,2,4,4,4,3,3,3,0,3,3,3},
-	{2,2,2,2,0,2,2,2,2,4,2,4,0,0,2,0,2,3,0,0,0,0,0,3},
-	{2,2,0,0,0,0,0,2,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
-	{2,0,0,0,0,0,0,0,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
-	{1,0,0,0,0,0,0,0,1,4,4,4,4,4,2,0,2,3,3,0,0,0,3,3},
-	{2,0,0,0,0,0,0,0,2,2,2,1,2,2,2,2,2,0,0,1,0,1,0,1},
-	{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,1,0,1,0,0,0,1,1},
-	{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,1,0,1,0,1,0,1,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,1,0,1,0,1,0,1,0,1},
-	{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,1,0,1,0,0,0,1,1},
-	{2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,1,1,1,1,1,1,1,1,1}
-};
-
-// define the positions and texture of each sprite
-t_sprite sprites[numSprites] =
-{
-	//green light in front of playerstart
-	{20.5, 11.5, 6}, 
-
-	//green lights in every room
-	{18.5,4.5, 6},
-	{10.0,4.5, 6},
-	{10.0,12.5,6},
-	{3.5, 6.5, 6},
-	{3.5, 20.5,6},
-	{3.5, 14.5,6},
-	{14.5,20.5,6},
-
-	//row of pillars in front of wall: fisheye test
-	{18.5, 10.5, 5},
-	{18.5, 11.5, 5},
-	{18.5, 12.5, 5},
-
-	//some barrels around the map
-	{21.5, 1.5, 4},
-	{15.5, 1.5, 4},
-	{16.0, 1.8, 4},
-	{16.2, 1.2, 4},
-	{3.5,  2.5, 4},
-	{9.5, 15.5, 4},
-	{10.0, 15.1,4},
-	{10.5, 15.8,4},
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,0,0,0,0,2,0,0,0,0,1,1,0,0,0,0,0,0,2,0,0,0,0,1},
+	{1,0,1,1,2,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,1,0,2,0,0,0,0,0,0,2,0,0,2,0,2,0,0,0,0,0,1},
+	{1,0,1,1,0,0,2,2,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,2,0,0,1,1,0,0,0,0,0,1,1,1,0,1,1,1},
+	{1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1},
+	{1,1,1,1,0,1,1,1,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1},
+	{1,1,0,2,0,0,2,0,1,1,0,1,0,1,2,1,1,1,0,0,0,0,0,1},
+	{1,0,0,0,0,0,2,2,0,2,0,0,0,0,2,0,1,1,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1,1,0,1,0,1,0,1},
+	{1,1,0,2,0,0,0,0,1,1,0,1,0,1,0,1,1,1,1,1,0,1,1,1},
+	{1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1},
+	{1,1,1,1,0,1,1,1,1,1,1,1,0,0,1,0,1,1,0,0,0,0,0,1},
+	{1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,2,0,0,0,0,1},
+	{1,0,2,0,0,0,0,2,1,1,0,0,0,2,2,0,1,1,0,0,0,2,0,1},
+	{1,0,0,0,2,0,0,0,1,1,1,1,1,1,1,0,1,1,1,0,0,0,1,1},
+	{1,0,0,0,2,0,0,2,1,1,1,1,1,1,1,1,1,0,0,1,0,1,0,1},
+	{1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,1,0,1,0,0,0,1,1},
+	{1,0,0,0,0,0,0,0,1,0,0,0,2,2,1,1,0,1,0,1,0,1,0,1},
+	{1,0,2,2,2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,0,1,0,1,0,1},
+	{1,1,2,0,0,0,0,1,1,1,0,'E',2,1,1,0,1,0,1,0,0,0,1,1},
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
 /**
@@ -102,6 +71,11 @@ void			exit_game(t_data *params, int status)
 	mlx_destroy_image(params->mlx.ptr, params->img.img);
 	mlx_destroy_window(params->mlx.ptr, params->mlx.win);
 	exit(status);
+}
+
+int	red_cross_press(t_data *params) {
+	exit_game(params, EXIT_SUCCESS);
+	return (0);
 }
 
 int isInteger(double val)
@@ -356,21 +330,21 @@ int			draw_frame(t_data *params)
 	//SPRITE CASTING
 
 	//sort sprites from far to close
-	for(int i = 0; i < numSprites; i++)
+	for(int i = 0; i < world->numSprites; i++)
 	{
 		world->spriteOrder[i] = i;
-		world->spriteDistance[i] = ((player->posX - sprites[i].x) * (player->posX - sprites[i].x) + 
-				(player->posY - sprites[i].y) * (player->posY - sprites[i].y)); //sqrt not taken, unneeded
+		world->spriteDistance[i] = ((player->posX - world->sprites[i].x) * (player->posX - world->sprites[i].x) + 
+				(player->posY - world->sprites[i].y) * (player->posY - world->sprites[i].y)); //sqrt not taken, unneeded
 	}
-	sort_sprites(world->spriteOrder, world->spriteDistance, numSprites);
+	sort_sprites(world->spriteOrder, world->spriteDistance, world->numSprites);
 
 	//after sorting the sprites, do the projection and draw them
 	double spriteX, spriteY;
-	for (int i = 0; i < numSprites; i++)
+	for (int i = 0; i < world->numSprites; i++)
 	{
 		//translate sprite position to relative to camera
-		spriteX = sprites[world->spriteOrder[i]].x - player->posX;
-		spriteY = sprites[world->spriteOrder[i]].y - player->posY;
+		spriteX = world->sprites[world->spriteOrder[i]].x - player->posX;
+		spriteY = world->sprites[world->spriteOrder[i]].y - player->posY;
 
 		//transform sprite with the inverse camera matrix
 		// [ planeX   dirX ] -1                                       [ dirY      -dirX ]
@@ -414,8 +388,7 @@ int			draw_frame(t_data *params)
 				{
 					int d = (y) * 256 - screenHeight * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
 					int texY = ((d * texSize) / spriteHeight) / 256;
-					uint32_t color = world->textures[sprites[world->spriteOrder[i]].texture]
-						.texture_img_data.addr[texSize * texY + texX]; //get current color from the texture
+					uint32_t color = world->textures[4].texture_img_data.addr[texSize * texY + texX]; //get current color from the sprite texture
 					if((color & 0x00FFFFFF) != 0)
 						world->buffer[y][stripe] = color; //paint pixel if it isn't black, black is the invisible color
 				}
@@ -596,10 +569,69 @@ int			main()
 	for (int i = 123; i < 127; i++)
 		keystrokes[i] = 0;
 
+	// get player's position and spawning orientation from map
+	// and define the position of each sprite
+	world->numSprites = 0;
+	world->sprites = malloc(sizeof(*world->sprites) * world->numSprites);
+
+	for (int i = 0; i < mapWidth; i++)
+		for (int j = 0; j < mapHeight; j++)
+		{
+			int curPos = worldMap[i][j];
+			if (curPos == 'N')
+			{
+				player->posX = i - 0.5;
+				player->posY = j - 0.5;
+				player->dirX = -1;
+				player->dirY = 0;
+				player->planeX = 0,
+				player->planeY = 0.66; 
+			}
+			else if (curPos == 'S')
+			{
+				player->posX = i - 0.5;
+				player->posY = j - 0.5;
+				player->dirX = 1;
+				player->dirY = 0;
+				player->planeX = 0,
+				player->planeY = -0.66; 
+			}
+			else if (curPos == 'E')
+			{
+				player->posX = i - 0.5;
+				player->posY = j - 0.5;
+				player->dirX = 0;
+				player->dirY = 1;
+				player->planeX = 0.66,
+				player->planeY = 0; 
+			}
+			else if (curPos == 'W')
+			{
+				player->posX = i - 0.5;
+				player->posY = j - 0.5;
+				player->dirX = 0;
+				player->dirY = -1;
+				player->planeX = -0.66,
+				player->planeY = 0; 
+			}
+			else if (curPos == 2)
+			{
+				world->numSprites += 1;
+				world->sprites = realloc(world->sprites, world->numSprites * sizeof(*world->sprites));
+				world->sprites[world->numSprites - 1].x = i - 0.5;
+				world->sprites[world->numSprites - 1].y = j - 0.5;
+			}
+		}
+
+	world->spriteOrder = malloc(sizeof(*world->spriteOrder) * world->numSprites);
+	world->spriteDistance = malloc(sizeof(*world->spriteDistance) * world->numSprites);
+
+	/*
 	player->posX = 22, player->posY = 12; // x and y start position of the player
 	player->dirX = -1, player->dirY = 0;  // initial direction vector
 	player->planeX = 0,
 	player->planeY = 0.66; // the 2d raycaster version of camera plane
+	*/
 	player->moveSpeed = 0.07;
 	player->rotSpeed = 0.03;
 
@@ -617,9 +649,11 @@ int			main()
 	world->textures[EA] = loadImage(wallsFacingWest, &params);
 	world->textures[WE] = loadImage(wallsFacingEast, &params);
 
-	world->textures[4] = loadImage("../assets/textures/sprite-1.xpm", &params);
+	world->textures[4] = loadImage("../assets/textures/sprite-3.xpm", &params);
+	/*
 	world->textures[5] = loadImage("../assets/textures/sprite-2.xpm", &params);
 	world->textures[6] = loadImage("../assets/textures/sprite-3.xpm", &params);
+	*/
 
 	img->img = mlx_new_image(mlx->ptr, screenWidth, screenHeight);
 	img->addr = (int *)mlx_get_data_addr(
@@ -631,6 +665,7 @@ int			main()
 	// mlx_key_hook(mlx->win, read_keys, &params);
 	mlx_hook(mlx->win, 2, 0, key_press, &params);
 	mlx_hook(mlx->win, 3, 0, key_release, &params);
+	mlx_hook(mlx->win, 17, 0, red_cross_press, &params);
 	mlx_loop_hook(mlx->ptr, read_keys, &params);
 	mlx_loop(mlx->ptr);
 }
