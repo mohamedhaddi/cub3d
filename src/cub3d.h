@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/06 15:43:36 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/06 17:53:07 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,20 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 
-# define screenWidth 640
-# define screenHeight 480
-# define mapWidth 24
-# define mapHeight 24
-# define texSize 64
+# define screen_width 640
+# define screen_height 480
+# define map_width 24
+# define map_height 24
+# define tex_size 64
+
+enum			e_directions
+{
+	NO,
+	EA,
+	SO,
+	WE
+};
 
 typedef struct	s_img_data
 {
@@ -34,7 +41,8 @@ typedef struct	s_img_data
 	int			endian;
 }				t_img_data;
 
-typedef struct	s_texture {
+typedef struct	s_texture
+{
 	t_img_data	texture_img_data;
 	int			width;
 	int			height;
@@ -48,31 +56,37 @@ typedef struct	s_mlx
 
 typedef struct	s_player
 {
-	double		dirX;
-	double		dirY;
-	double		posX;
-	double		posY;
-	double		planeX;
-	double		planeY;
-	double		moveSpeed;
-	double		rotSpeed;
+	double		dir_x;
+	double		dir_y;
+	double		pos_x;
+	double		pos_y;
+	double		plane_x;
+	double		plane_y;
+	double		move_speed;
+	double		rot_speed;
 }				t_player;
 
 typedef struct	s_sprite
 {
-  double		x;
-  double 		y;
+	double		x;
+	double		y;
 }				t_sprite;
+
+typedef struct	s_pair
+{
+	double		first;
+	int			second;
+}				t_pair;
 
 typedef struct	s_world
 {
 	t_texture	textures[7];
-	int			buffer[screenHeight][screenWidth];
+	int			buffer[screen_height][screen_width];
 	t_sprite	*sprites;
-	int			numSprites;
-	double		ZBuffer[screenWidth]; //1D Zbuffer
-	int			*spriteOrder;
-	double		*spriteDistance; //arrays used to sort the sprites
+	int			num_sprites;
+	double		z_buffer[screen_width];
+	int			*sprite_order;
+	double		*sprite_distance;
 }				t_world;
 
 typedef struct	s_data

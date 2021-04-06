@@ -6,17 +6,11 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 15:05:38 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/02 15:06:58 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/06 17:46:09 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-typedef struct		s_pair
-{
-	double	first;
-	int		second;
-}					t_pair;
 
 static void	swap(t_pair *xp, t_pair *yp)
 {
