@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/06 15:21:06 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/06 15:42:59 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -566,7 +566,7 @@ int			main()
 
 	// initiliaze keystrokes values with 0
 	keystrokes = &params.keystrokes[0];
-	for (int i = 123; i < 127; i++)
+	for (int i = 0; i < 127; i++)
 		keystrokes[i] = 0;
 
 	// get player's position and spawning orientation from map
