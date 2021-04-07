@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/06 17:53:07 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/07 19:30:46 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,10 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 
-# define screen_width 640
-# define screen_height 480
-# define map_width 24
-# define map_height 24
-# define tex_size 64
+# define TEX_SIZE 64
+# define SPRITE_INDEX 4
 
 enum			e_directions
 {
@@ -31,6 +29,27 @@ enum			e_directions
 	SO,
 	WE
 };
+
+enum			e_keycodes
+{
+	W_KEY = 13,
+	S_KEY = 1,
+	D_KEY = 2,
+	A_KEY = 0,
+	RIGHT_KEY = 124,
+	LEFT_KEY = 123,
+	ESC_KEY = 53
+};
+
+typedef struct	s_resolution {
+	int			width = 640;
+	int			height = 480;
+} 				t_resolution;
+
+typedef struct	e_map_size {
+	int			width = 24;
+	int			height = 24;
+}				t_map_size;
 
 typedef struct	s_img_data
 {
@@ -54,22 +73,37 @@ typedef struct	s_mlx
 	void		*win;
 }				t_mlx;
 
-typedef struct	s_player
-{
-	double		dir_x;
-	double		dir_y;
-	double		pos_x;
-	double		pos_y;
-	double		plane_x;
-	double		plane_y;
+typedef	struct	s_pos {
+	double		x;
+	double		y;
+}				t_pos;
+
+typedef	struct	s_dir {
+	double		x;
+	double		y;
+}				t_dir;
+
+typedef	struct	s_plane {
+	double		x;
+	double		y;
+}				t_plane;
+
+typedef	struct	s_speed {
 	double		move_speed;
 	double		rot_speed;
+}				t_speed;
+
+typedef struct	s_player
+{
+	t_pos		pos;
+	t_dir		dir;
+	t_plane		plane;
+	t_speed		speed;
 }				t_player;
 
 typedef struct	s_sprite
 {
-	double		x;
-	double		y;
+	t_pos		pos;
 }				t_sprite;
 
 typedef struct	s_pair
@@ -78,15 +112,28 @@ typedef struct	s_pair
 	int			second;
 }				t_pair;
 
+typedef	struct	s_texture_paths
+{
+	char		*walls_facing_north;
+	char		*walls_facing_south;
+	char		*walls_facing_east;
+	char		*walls_facing_west;
+	char		*sprite;
+}				t_texture_paths;
+
 typedef struct	s_world
 {
-	t_texture	textures[7];
-	int			buffer[screen_height][screen_width];
-	t_sprite	*sprites;
-	int			num_sprites;
-	double		z_buffer[screen_width];
-	int			*sprite_order;
-	double		*sprite_distance;
+	int				**map;
+	t_texture		textures[7];
+	int				**buffer;
+	//int				buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+	t_texture_paths texture_paths;
+	t_sprite		*sprites;
+	int				num_sprites;
+	//double			z_buffer[SCREEN_WIDTH];
+	double			*z_buffer;
+	int				*sprite_order;
+	double			*sprite_distance;
 }				t_world;
 
 typedef struct	s_data
@@ -95,11 +142,13 @@ typedef struct	s_data
 	t_mlx		mlx;
 	t_player	player;
 	t_world		world;
+	t_resolution	resolution;
+	t_map_size	map_size;
 	int			keystrokes[127];
 }				t_data;
 
 void			ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
-
 void			sort_sprites(int *order, double *dist, int amount);
+void			ft_putstr_fd(char *s, int fd);
 
 #endif
