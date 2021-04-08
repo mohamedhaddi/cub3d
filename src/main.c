@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/08 16:38:43 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/08 19:02:17 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,8 +365,8 @@ int			draw_frame(t_data *params)
 	sprintf(output_pos_y, "pos_y: %f", player->pos.y);
 	sprintf(output_dir_x, "dir_x: %f", player->dir.x);
 	sprintf(output_dir_y, "dir_y: %f", player->dir.y);
-	sprintf(output_keystrokes_f, "key_f(w): %d", params->keystrokes[13]);
-	sprintf(output_keystrokes_b, "key_b(s): %d", params->keystrokes[1]);
+	sprintf(output_keystrokes_f, "key_w: %d", params->keystrokes[13]);
+	sprintf(output_keystrokes_b, "key_s: %d", params->keystrokes[1]);
 	sprintf(output_keystrokes_r, "key_r: %d", params->keystrokes[124]);
 	sprintf(output_keystrokes_l, "key_l: %d", params->keystrokes[123]);
 	sprintf(output_keystrokes_d, "key_d: %d", params->keystrokes[2]);
@@ -394,7 +394,7 @@ int			read_keys(t_data *params)
 	player = &params->player;
 	world = &params->world;
 	// move forward if no wall in front of you
-	if (params->keystrokes[13]) // Key W
+	if (params->keystrokes[W_KEY]) // Key W
 	{
 		if (world->map[(int)(player->pos.x + player->dir.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0 /*0 enum*/)
@@ -405,7 +405,7 @@ int			read_keys(t_data *params)
 			player->pos.y += player->dir.y * player->speed.move_speed;
 	}
 	// move backwards if no wall behind you
-	if (params->keystrokes[1]) // Key S
+	if (params->keystrokes[S_KEY]) // Key S
 	{
 		if (world->map[(int)(player->pos.x - player->dir.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0)
@@ -415,7 +415,7 @@ int			read_keys(t_data *params)
 			player->pos.y -= player->dir.y * player->speed.move_speed;
 	}
 	// move to the right if no wall is on the right
-	if (params->keystrokes[2]) // Key D
+	if (params->keystrokes[D_KEY]) // Key D
 	{
 		if (world->map[(int)(player->pos.x + player->plane.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0 /*0 enum*/)
@@ -425,7 +425,7 @@ int			read_keys(t_data *params)
 			player->pos.y += player->plane.y * player->speed.move_speed;
 	}
 	// move to the left if no wall is on the left
-	if (params->keystrokes[0]) // Key A
+	if (params->keystrokes[A_KEY]) // Key A
 	{
 		if (world->map[(int)(player->pos.x - player->plane.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0 /*0 enum*/)
@@ -435,7 +435,7 @@ int			read_keys(t_data *params)
 			player->pos.y -= player->plane.y * player->speed.move_speed;
 	}
 	// rotate to the right
-	if (params->keystrokes[124]) // Key arrow right
+	if (params->keystrokes[RIGHT_KEY]) // Key arrow right
 	{
 		// both camera direction and camera plane must be rotated
 		old_dir_x = player->dir.x;
@@ -450,7 +450,7 @@ int			read_keys(t_data *params)
 			player->plane.y * cos(-player->speed.rot_speed);
 	}
 	// rotate to the left
-	if (params->keystrokes[123]) // Key arrow left
+	if (params->keystrokes[LEFT_KEY]) // Key arrow left
 	{
 		// both camera direction and camera plane must be rotated
 		old_dir_x = player->dir.x;
@@ -465,7 +465,7 @@ int			read_keys(t_data *params)
 			player->plane.y * cos(player->speed.rot_speed);
 	}
 	// exit game
-	if (params->keystrokes[53]) // ESC key
+	if (params->keystrokes[ESC_KEY]) // ESC key
 	{
 		exit_game(params, EXIT_SUCCESS);
 	}
@@ -489,8 +489,7 @@ int			key_press(int keycode, t_data *params)
 
 int			key_release(int keycode, t_data *params)
 {
-	if (keycode == LEFT_KEY || keycode == RIGHT_KEY || keycode == W_KEY || keycode == S_KEY ||
-			keycode == A_KEY || keycode == D_KEY || keycode == ESC_KEY)
+	if (is_control_key(keycode))
 	{
 		params->keystrokes[keycode] = 0;
 	}
@@ -652,14 +651,14 @@ void load_mlx(t_data *params) {
 /**
  * temporary function before parsing the map
  */
+/*
 void generate_world_map(t_data *params) {
 	t_world *world;
 	
 	world = &params->world;
 	world->map = malloc(sizeof(world->map) * params->map_size.width);
-	/**
-	 * populate walls and items and player randomly and check edges
-	 */
+
+	// generate random map, while making sure it's surrounded by walls
 	for (int i = 0; i < params->map_size.width; i++)
 	{
 		world->map[i] = malloc(sizeof(*world->map) * params->map_size.height);
@@ -679,17 +678,87 @@ void generate_world_map(t_data *params) {
 			}
 		}
 	}
-	int new_x_pos = rand() % (params->map_size.width - 1) + 1;
-	int new_y_pos = rand() % (params->map_size.height - 1) + 1;
+
+	// spawn player randomly
 	char dirs[4] = {'N', 'S', 'E', 'W'};
 	int new_dir = rand() % 4;
+	int new_x_pos = rand() % (params->map_size.width - 1) + 1;
+	int new_y_pos = rand() % (params->map_size.height - 1) + 1;
+	int new_pos = world->map[new_x_pos][new_y_pos];
+	while (new_pos > 0) {
+		new_x_pos = rand() % (params->map_size.width - 1) + 1;
+		new_y_pos = rand() % (params->map_size.height - 1) + 1;
+		new_pos = world->map[new_x_pos][new_y_pos];
+	}
 	world->map[new_x_pos][new_y_pos] = dirs[new_dir];
+
+	// print map in stdout
+	for (int i = 0; i < params->map_size.width; i++)
+	{
+		printf("\x1B[37m\"");
+		for (int j = 0; j < params->map_size.height; j++)
+		{
+			if (world->map[i][j] > 2)
+				printf("\x1B[31m%c, ", world->map[i][j]);
+			else
+				printf("\x1B[37m%d, ", world->map[i][j]);
+		}
+		printf("\b\b\"\n");
+	}
+}
+*/
+void generate_world_map(t_data *params) {
+	t_world *world;
+	
+	world = &params->world;
+	world->map = malloc(sizeof(world->map) * params->map_size.width);
+
+	int map_buffer[24][24] = {
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{1, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 2, 2, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1},
+		{1, 0, 1, 2, 2, 0, 2, 2, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 1},
+		{1, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 1},
+		{1, 0, 0, 2, 0, 0, 2, 0, 1, 0, 0, 2, 0, 0, 2, 2, 1, 0, 0, 'S', 0, 1, 0, 1},
+		{1, 0, 1, 2, 1, 0, 2, 0, 1, 0, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 2, 0, 2, 1},
+		{1, 2, 2, 0, 0, 1, 0, 2, 0, 1, 0, 2, 2, 2, 2, 0, 1, 2, 0, 0, 2, 0, 0, 1},
+		{1, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 1, 2, 2, 0, 1, 1, 0, 0, 1},
+		{1, 1, 1, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 1},
+		{1, 2, 2, 0, 2, 0, 2, 1, 1, 2, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1},
+		{1, 0, 0, 2, 0, 0, 2, 2, 0, 2, 0, 1, 0, 0, 0, 2, 0, 1, 0, 2, 2, 0, 1, 1},
+		{1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1},
+		{1, 0, 1, 2, 0, 0, 2, 2, 0, 2, 0, 2, 1, 0, 0, 1, 0, 2, 0, 0, 2, 1, 0, 1},
+		{1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 1, 2, 2, 0, 0, 1, 0, 1, 0, 0, 0, 1},
+		{1, 1, 0, 2, 2, 1, 2, 0, 2, 0, 0, 0, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 1, 1},
+		{1, 2, 0, 0, 2, 0, 0, 1, 1, 0, 2, 1, 0, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 1},
+		{1, 0, 0, 2, 0, 0, 0, 2, 0, 0, 1, 2, 2, 2, 2, 0, 0, 1, 0, 0, 0, 0, 2, 1},
+		{1, 0, 0, 2, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 0, 0, 2, 2, 2, 0, 1, 0, 2, 1},
+		{1, 1, 0, 1, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 0, 2, 2, 0, 1, 1, 0, 1, 1},
+		{1, 0, 0, 2, 1, 0, 1, 2, 0, 0, 2, 1, 0, 2, 0, 0, 2, 0, 0, 1, 2, 2, 0, 1},
+		{1, 2, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 2, 2, 0, 0, 0, 0, 1, 1},
+		{1, 0, 0, 2, 1, 0, 2, 0, 1, 0, 0, 2, 2, 0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 1},
+		{1, 0, 0, 2, 0, 2, 0, 2, 1, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 0, 1, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	};
 
 	for (int i = 0; i < params->map_size.width; i++)
 	{
+		world->map[i] = malloc(sizeof(*world->map) * params->map_size.height);
 		for (int j = 0; j < params->map_size.height; j++)
-			printf("%d, ", world->map[i][j]);
-		printf("\n");
+			world->map[i][j] = map_buffer[i][j];
+	}
+
+	// print map in stdout
+	for (int i = 0; i < params->map_size.width; i++)
+	{
+		printf("\x1B[37m\"");
+		for (int j = 0; j < params->map_size.height; j++)
+		{
+			if (world->map[i][j] > 2)
+				printf("\x1B[31m%c, ", world->map[i][j]);
+			else
+				printf("\x1B[37m%d, ", world->map[i][j]);
+		}
+		printf("\b\b\"\n");
 	}
 }
 
@@ -719,9 +788,9 @@ int			main()
 	load_mlx(&params);
 	load_game(&params);
 	draw_frame(&params);
-	mlx_hook(mlx->win, 17, 0, red_cross_press, &params);
+	mlx_loop_hook(mlx->ptr, read_keys, &params);
 	mlx_hook(mlx->win, 2, 0, key_press, &params);
 	mlx_hook(mlx->win, 3, 0, key_release, &params);
-	mlx_loop_hook(mlx->ptr, read_keys, &params);
+	mlx_hook(mlx->win, 17, 0, red_cross_press, &params);
 	mlx_loop(mlx->ptr);
 }
