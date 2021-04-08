@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/08 19:22:03 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/08 19:33:40 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -609,14 +609,16 @@ void set_player_pos_and_dir(t_data *params) {
 		for (int y = 0; y < params->map_size.height; y++)
 		{
 			cur_pos = world->map[x][y];
+			if (cur_pos == 'N' || cur_pos == 'S' || cur_pos == 'E' || cur_pos == 'W')
+				world->map[x][y] = 0;
 			if (cur_pos == 'N')
-				set_player_position(player, (t_pos){x - 0.5, y - 0.5}, (t_dir){-1, 0}, (t_plane){0, 0.66});
+				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){-1, 0}, (t_plane){0, 0.66});
 			else if (cur_pos == 'S')
-				set_player_position(player, (t_pos){x - 0.5, y - 0.5}, (t_dir){1, 0}, (t_plane){0, -0.66});
+				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){1, 0}, (t_plane){0, -0.66});
 			else if (cur_pos == 'E')
-				set_player_position(player, (t_pos){x - 0.5, y - 0.5}, (t_dir){0, 1}, (t_plane){0.66, 0});
+				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, 1}, (t_plane){0.66, 0});
 			else if (cur_pos == 'W')
-				set_player_position(player, (t_pos){x - 0.5, y - 0.5}, (t_dir){0, -1}, (t_plane){-0.66, 0});
+				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, -1}, (t_plane){-0.66, 0});
 		}
 }
 
