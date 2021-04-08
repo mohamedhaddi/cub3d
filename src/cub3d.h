@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/07 19:30:46 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/08 16:13:15 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ enum			e_keycodes
 };
 
 typedef struct	s_resolution {
-	int			width = 640;
-	int			height = 480;
+	int			width;
+	int			height;
 } 				t_resolution;
 
 typedef struct	e_map_size {
-	int			width = 24;
-	int			height = 24;
+	int			width;
+	int			height;
 }				t_map_size;
 
 typedef struct	s_img_data
@@ -126,15 +126,13 @@ typedef struct	s_world
 	int				**map;
 	t_texture		textures[7];
 	int				**buffer;
-	//int				buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 	t_texture_paths texture_paths;
 	t_sprite		*sprites;
 	int				num_sprites;
-	//double			z_buffer[SCREEN_WIDTH];
 	double			*z_buffer;
 	int				*sprite_order;
 	double			*sprite_distance;
-}				t_world;
+}					t_world;
 
 typedef struct	s_data
 {

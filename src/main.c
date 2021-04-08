@@ -6,37 +6,12 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/07 19:39:33 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/08 16:38:43 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <time.h>
 #include "cub3d.h"
-
-int			world_map[MAP_WIDTH][MAP_HEIGHT] = {
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	{1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1},
-	{1, 0, 1, 1, 2, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 1},
-	{1, 0, 1, 1, 0, 0, 2, 2, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1},
-	{1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1},
-	{1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1},
-	{1, 1, 0, 2, 0, 0, 2, 0, 1, 1, 0, 1, 0, 1, 2, 1, 1, 1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 2, 0, 1, 1, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 1, 0, 1, 0, 1, 0, 1},
-	{1, 1, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1},
-	{1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1},
-	{1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1},
-	{1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 0, 1},
-	{1, 0, 2, 0, 0, 0, 0, 2, 1, 1, 0, 0, 0, 2, 2, 0, 1, 1, 0, 0, 0, 2, 0, 1},
-	{1, 0, 0, 0, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1},
-	{1, 0, 0, 0, 2, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1},
-	{1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 2, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-	{1, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1},
-	{1, 1, 2, 0, 0, 0, 0, 1, 1, 1, 0, 'E', 2, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1},
-	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
 /**
  * test
@@ -48,12 +23,12 @@ void		exit_game(t_data *params, int status)
 
 	/*
 	i = 0;
-	while (game->world_map[i])
+	while (game->world->map[i])
 	{
-		free(game->world_map[i]);
+		free(game->world->map[i]);
 		i++;
 	}
-	free(game->world_map);
+	free(game->world->map);
 	*/
 	i = 0;
 	while (i < 7)
@@ -128,31 +103,33 @@ int			draw_frame(t_data *params)
 	int			draw_end_x;
 	char		*output_keystrokes_d;
 	char		*output_keystrokes_a;
+	t_resolution *resolution;
 
 	mlx = &params->mlx;
 	img = &params->img;
 	player = &params->player;
 	world = &params->world;
+	resolution = &params->resolution;
 	ceiling_color = 0xD1F1F2;
 	floor_color = 0xF7EDD9;
 	// clear buffer (by setting floor and ceiling colors)
-	for (int x = 0; x < SCREEN_WIDTH; x++)
+	for (int x = 0; x < resolution->width; x++)
 	{
-		for (int y = 0; y < SCREEN_HEIGHT; y++)
+		for (int y = 0; y < resolution->height; y++)
 		{
 			// world->buffer[y][x] = 0x00000000;
-			if (y < SCREEN_HEIGHT / 2)
+			if (y < resolution->height / 2)
 				world->buffer[y][x] = ceiling_color;
 			else
 				world->buffer[y][x] = floor_color;
 		}
 	}
 	// here starts the wall raycasting loop
-	for (int x = 0; x < SCREEN_WIDTH; x++)
+	for (int x = 0; x < resolution->width; x++)
 	{
 		// calculate ray position and direction
 		double camera_x =
-			2 * x / (double)SCREEN_WIDTH - 1; // x-coordinate in camera space
+			2 * x / (double)resolution->width - 1; // x-coordinate in camera space
 		ray_dir_x = player->dir.x + player->plane.x * camera_x;
 		ray_dir_y = player->dir.y + player->plane.y * camera_x;
 		// if the player's position is integer, it might intersect with the
@@ -220,7 +197,7 @@ int			draw_frame(t_data *params)
 					side = WE;
 			}
 			// Check if ray has hit a wall
-			if (world_map[map_x][map_y] > 0)
+			if (world->map[map_x][map_y] > 0)
 				hit = 1;
 		}
 		tex_num = side;
@@ -230,18 +207,18 @@ int			draw_frame(t_data *params)
 		else
 			perp_wall_dist = (map_y - player->pos.y + (1.0 - step_y) / 2) / ray_dir_y;
 		// Calculate height of line to draw on screen
-		line_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
+		line_height = (int)(resolution->height / perp_wall_dist);
 		// calculate lowest and highest pixel to fill in current stripe
-		draw_start = -line_height / 2 + SCREEN_HEIGHT / 2;
+		draw_start = -line_height / 2 + resolution->height / 2;
 		if (draw_start < 0)
 			draw_start = 0;
-		draw_end = line_height / 2 + SCREEN_HEIGHT / 2;
-		if (draw_end >= SCREEN_HEIGHT)
-			draw_end = SCREEN_HEIGHT - 1;
+		draw_end = line_height / 2 + resolution->height / 2;
+		if (draw_end >= resolution->height)
+			draw_end = resolution->height - 1;
 		// texturing calculations
 		/*
 		tex_num =
-			world_map[map_x][map_y] - 1; 	// 1 subtracted from it so that
+			world->map[map_x][map_y] - 1; 	// 1 subtracted from it so that
 										// texture 0 can be used!
 		*/
 		// calculate value of wall_x (where exactly the wall was hit)
@@ -261,7 +238,7 @@ int			draw_frame(t_data *params)
 		step = 1.0 * TEX_SIZE / line_height;
 		// starting texture coordinate
 		double tex_pos =
-			(draw_start - SCREEN_HEIGHT / 2.0 + line_height / 2.0) * step;
+			(draw_start - resolution->height / 2.0 + line_height / 2.0) * step;
 		for (int y = draw_start; y <= draw_end; y++)
 		{
 			// Cast the texture coordinate to integer, and mask with (TEX_SIZE - 1) in case of overflow
@@ -317,26 +294,26 @@ int			draw_frame(t_data *params)
 				player->plane.x *
 					sprite_y); // this is actually the depth inside the screen, that what z is in 3D
 		int sprite_screen_x =
-			(int)(((double)SCREEN_WIDTH / 2) * (1 + transform_x / transform_y));
+			(int)(((double)resolution->width / 2) * (1 + transform_x / transform_y));
 		// calculate height of the sprite on screen
 		int sprite_height = abs(
-			(int)(SCREEN_HEIGHT / transform_y)); // using 'transform_y' instead of
+			(int)(resolution->height / transform_y)); // using 'transform_y' instead of
 												// the real distance prevents fisheye
 		// calculate lowest and highest pixel to fill in current stripe
-		draw_start_y = -sprite_height / 2 + SCREEN_HEIGHT / 2;
+		draw_start_y = -sprite_height / 2 + resolution->height / 2;
 		if (draw_start_y < 0)
 			draw_start_y = 0;
-		draw_end_y = sprite_height / 2 + SCREEN_HEIGHT / 2;
-		if (draw_end_y >= SCREEN_HEIGHT)
-			draw_end_y = SCREEN_HEIGHT - 1;
+		draw_end_y = sprite_height / 2 + resolution->height / 2;
+		if (draw_end_y >= resolution->height)
+			draw_end_y = resolution->height - 1;
 		// calculate width of the sprite
-		sprite_width = abs((int)(SCREEN_HEIGHT / transform_y));
+		sprite_width = abs((int)(resolution->height / transform_y));
 		draw_start_x = -sprite_width / 2 + sprite_screen_x;
 		if (draw_start_x < 0)
 			draw_start_x = 0;
 		draw_end_x = sprite_width / 2 + sprite_screen_x;
-		if (draw_end_x >= SCREEN_WIDTH)
-			draw_end_x = SCREEN_WIDTH - 1;
+		if (draw_end_x >= resolution->width)
+			draw_end_x = resolution->width - 1;
 		// loop through every vertical stripe of the sprite on screen
 		for (int stripe = draw_start_x; stripe < draw_end_x; stripe++)
 		{
@@ -348,13 +325,13 @@ int			draw_frame(t_data *params)
 			// 2) it's on the screen (left)
 			// 3) it's on the screen (right)
 			// 4) z_buffer, with perpendicular distance
-			if (transform_y > 0 && stripe > 0 && stripe < SCREEN_WIDTH &&
+			if (transform_y > 0 && stripe > 0 && stripe < resolution->width &&
 				transform_y < world->z_buffer[stripe])
 			{
 				for (int y = draw_start_y; y < draw_end_y;
 						y++) // for every pixel of the current stripe
 				{
-					int d = (y)*256 - SCREEN_HEIGHT * 128 +
+					int d = (y)*256 - resolution->height * 128 +
 						sprite_height * 128; // 256 and 128 factors to avoid floats
 					tex_y = ((d * TEX_SIZE) / sprite_height) / 256;
 					uint32_t color =
@@ -369,8 +346,8 @@ int			draw_frame(t_data *params)
 			}
 		}
 	}
-	for (int x = 0; x < SCREEN_WIDTH; x++)
-		for (int y = 0; y < SCREEN_HEIGHT; y++)
+	for (int x = 0; x < resolution->width; x++)
+		for (int y = 0; y < resolution->height; y++)
 			ft_mlx_pixel_put(img, x, y, world->buffer[y][x]);
 	mlx_put_image_to_window(mlx->ptr, mlx->win, img->img, 0, 0);
 	// show real-time values for cetain variables on screen
@@ -412,46 +389,48 @@ int			read_keys(t_data *params)
 	t_player	*player;
 	double		old_dir_x;
 	double		old_plane_x;
+	t_world		*world;
 
 	player = &params->player;
+	world = &params->world;
 	// move forward if no wall in front of you
 	if (params->keystrokes[13]) // Key W
 	{
-		if (world_map[(int)(player->pos.x + player->dir.x * player->speed.move_speed)]
+		if (world->map[(int)(player->pos.x + player->dir.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0 /*0 enum*/)
 			// collision detection: won't move if it ain't 0 (a wall)
 			player->pos.x += player->dir.x * player->speed.move_speed;
-		if (world_map[(int)(player->pos.x)]
+		if (world->map[(int)(player->pos.x)]
 					[(int)(player->pos.y + player->dir.y * player->speed.move_speed)] == 0)
 			player->pos.y += player->dir.y * player->speed.move_speed;
 	}
 	// move backwards if no wall behind you
 	if (params->keystrokes[1]) // Key S
 	{
-		if (world_map[(int)(player->pos.x - player->dir.x * player->speed.move_speed)]
+		if (world->map[(int)(player->pos.x - player->dir.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0)
 			player->pos.x -= player->dir.x * player->speed.move_speed;
-		if (world_map[(int)(player->pos.x)]
+		if (world->map[(int)(player->pos.x)]
 					[(int)(player->pos.y - player->dir.y * player->speed.move_speed)] == 0)
 			player->pos.y -= player->dir.y * player->speed.move_speed;
 	}
 	// move to the right if no wall is on the right
 	if (params->keystrokes[2]) // Key D
 	{
-		if (world_map[(int)(player->pos.x + player->plane.x * player->speed.move_speed)]
+		if (world->map[(int)(player->pos.x + player->plane.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0 /*0 enum*/)
 			player->pos.x += player->plane.x * player->speed.move_speed;
-		if (world_map[(int)(player->pos.x)][(
+		if (world->map[(int)(player->pos.x)][(
 				int)(player->pos.y + player->plane.y * player->speed.move_speed)] == 0)
 			player->pos.y += player->plane.y * player->speed.move_speed;
 	}
 	// move to the left if no wall is on the left
 	if (params->keystrokes[0]) // Key A
 	{
-		if (world_map[(int)(player->pos.x - player->plane.x * player->speed.move_speed)]
+		if (world->map[(int)(player->pos.x - player->plane.x * player->speed.move_speed)]
 					[(int)(player->pos.y)] == 0 /*0 enum*/)
 			player->pos.x -= player->plane.x * player->speed.move_speed;
-		if (world_map[(int)(player->pos.x)][(
+		if (world->map[(int)(player->pos.x)][(
 				int)(player->pos.y - player->plane.y * player->speed.move_speed)] == 0)
 			player->pos.y -= player->plane.y * player->speed.move_speed;
 	}
@@ -495,7 +474,8 @@ int			read_keys(t_data *params)
 }
 
 int is_control_key(int keycode) {
-	return (keycode == RT_LEF || keycode == 124 || keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2 || keycode == 53);
+	return (keycode == LEFT_KEY || keycode == RIGHT_KEY || keycode == W_KEY || keycode == S_KEY ||
+			keycode == A_KEY || keycode == D_KEY || keycode == ESC_KEY);
 }
 
 int			key_press(int keycode, t_data *params)
@@ -509,8 +489,8 @@ int			key_press(int keycode, t_data *params)
 
 int			key_release(int keycode, t_data *params)
 {
-	if (keycode == 123 || keycode == 124 || keycode == 13 || keycode == 1 ||
-		keycode == 0 || keycode == 2 || keycode == 53)
+	if (keycode == LEFT_KEY || keycode == RIGHT_KEY || keycode == W_KEY || keycode == S_KEY ||
+			keycode == A_KEY || keycode == D_KEY || keycode == ESC_KEY)
 	{
 		params->keystrokes[keycode] = 0;
 	}
@@ -571,12 +551,15 @@ void set_sprite_position(t_world *world, t_pos pos) {
  * and their positions
  * and allocates the sorting arrays
  */
-void setup_sprites(t_world *world) {
+void setup_sprites(t_data *params) {
+	t_world *world;
+
+	world = &params->world;
 	world->num_sprites = 0;
 	world->sprites = malloc(sizeof(*world->sprites));
-	for (int x = 0; x < MAP_WIDTH; x++)
-		for (int y = 0; y < MAP_HEIGHT; y++)
-			if (world_map[x][y] == 2)
+	for (int x = 0; x < params->map_size.width; x++)
+		for (int y = 0; y < params->map_size.height; y++)
+			if (world->map[x][y] == 2)
 				set_sprite_position(world, (t_pos){x - 0.5, y - 0.5});
 	world->sprite_order = malloc(sizeof(*world->sprite_order) * world->num_sprites);
 	world->sprite_distance =
@@ -588,9 +571,9 @@ void setup_buffers(t_data *params) {
 
 	world = &params->world;
 	world->buffer = malloc(sizeof(*world->buffer) * params->resolution.height);
-	for (int i = 0; i < resolution.height; i++)
-		world->buffer[i] = malloc(sizeof(*world->buffer) * params->resolution.width);
-	world->buffer = malloc(sizeof(*world->buffer) * params->resolution.width);
+	for (int i = 0; i < params->resolution.height; i++)
+		world->buffer[i] = malloc(sizeof(*world->buffer[i]) * params->resolution.width);
+	world->z_buffer = malloc(sizeof(*world->z_buffer) * params->resolution.width);
 }
 
 void set_texture_paths(t_world *world) {
@@ -616,13 +599,17 @@ void set_player_position(t_player *player, t_pos pos, t_dir dir, t_plane plane) 
  * set player's position and spawning orientation in map
  * set the position of each sprite
  */
-void set_player_pos_and_dir(t_player *player) {
+void set_player_pos_and_dir(t_data *params) {
+	t_player *player;
+	t_world	*world;
 	int	cur_pos;
 
-	for (int x = 0; x < MAP_WIDTH; x++)
-		for (int y = 0; y < MAP_HEIGHT; y++)
+	player = &params->player;
+	world = &params->world;
+	for (int x = 0; x < params->map_size.width; x++)
+		for (int y = 0; y < params->map_size.height; y++)
 		{
-			cur_pos = world_map[x][y];
+			cur_pos = world->map[x][y];
 			if (cur_pos == 'N')
 				set_player_position(player, (t_pos){x - 0.5, y - 0.5}, (t_dir){-1, 0}, (t_plane){0, 0.66});
 			else if (cur_pos == 'S')
@@ -640,19 +627,24 @@ void load_game(t_data *params) {
 
 	player = &params->player;
 	world = &params->world;
-	set_player_pos_and_dir(player);
+	set_player_pos_and_dir(params);
 	set_player_speed(player);
 	set_texture_paths(world);
 	setup_buffers(params);
-	setup_sprites(world);
+	setup_sprites(params);
 	load_textures(params);
 	initiliaze_keystrokes(&params->keystrokes[0]);
 }
 
-void load_mlx(t_mlx *mlx, t_img_data *img) {
+void load_mlx(t_data *params) {
+	t_mlx *mlx;
+	t_img_data *img;
+
+	mlx = &params->mlx;
+	img = &params->img;
 	mlx->ptr = mlx_init();
-	mlx->win = mlx_new_window(mlx->ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d");
-	img->img = mlx_new_image(mlx->ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
+	mlx->win = mlx_new_window(mlx->ptr, params->resolution.width, params->resolution.height, "cub3d");
+	img->img = mlx_new_image(mlx->ptr, params->resolution.width, params->resolution.height);
 	img->addr = (int *)mlx_get_data_addr(
 		img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 }
@@ -665,14 +657,50 @@ void generate_world_map(t_data *params) {
 	
 	world = &params->world;
 	world->map = malloc(sizeof(world->map) * params->map_size.width);
-	/*
+	/**
 	 * populate walls and items and player randomly and check edges
+	 */
 	for (int i = 0; i < params->map_size.width; i++)
 	{
 		world->map[i] = malloc(sizeof(*world->map) * params->map_size.height);
-		if (world->map[i][0])
+		for (int j = 0; j < params->map_size.height; j++) {
+			if ((i == 0) ||
+				(j == 0) ||
+				(i == params->map_size.width - 1) ||
+				(j == params->map_size.height - 1))
+			{
+				world->map[i][j] = 1;
+			}
+			else
+			{
+				world->map[i][j] = rand() % 5;
+				if (world->map[i][j] == 3 || world->map[i][j] == 4)
+					world->map[i][j] = 0;
+			}
+		}
 	}
-	*/
+	int new_x_pos = rand() % (params->map_size.width - 1) + 1;
+	int new_y_pos = rand() % (params->map_size.height - 1) + 1;
+	char dirs[4] = {'N', 'S', 'E', 'W'};
+	int new_dir = rand() % 4;
+	world->map[new_x_pos][new_y_pos] = dirs[new_dir];
+
+	for (int i = 0; i < params->map_size.width; i++)
+	{
+		for (int j = 0; j < params->map_size.height; j++)
+			printf("%d, ", world->map[i][j]);
+		printf("\n");
+	}
+}
+
+void set_map_size(t_data *params) {
+	params->map_size.width = 24;
+	params->map_size.height = 24;
+}
+
+void set_screen_resolution(t_data *params) {
+	params->resolution.width = 640;
+	params->resolution.height = 480;
 }
 
 int			main()
@@ -684,7 +712,11 @@ int			main()
 	mlx = &params.mlx;
 	img = &params.img;
 
-	load_mlx(mlx, img);
+	srand(time(NULL));
+	set_screen_resolution(&params);
+	set_map_size(&params);
+	generate_world_map(&params);
+	load_mlx(&params);
 	load_game(&params);
 	draw_frame(&params);
 	mlx_hook(mlx->win, 17, 0, red_cross_press, &params);
