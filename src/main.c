@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/08 19:33:40 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/08 19:36:40 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -653,7 +653,6 @@ void load_mlx(t_data *params) {
 /**
  * temporary function before parsing the map
  */
-/*
 void generate_world_map(t_data *params) {
 	t_world *world;
 	
@@ -708,7 +707,8 @@ void generate_world_map(t_data *params) {
 		printf("\b\b\"\n");
 	}
 }
-*/
+
+/*
 void generate_world_map(t_data *params) {
 	t_world *world;
 	
@@ -763,6 +763,7 @@ void generate_world_map(t_data *params) {
 		printf("\b\b\"\n");
 	}
 }
+*/
 
 void set_map_size(t_data *params) {
 	params->map_size.width = 24;
