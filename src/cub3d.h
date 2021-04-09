@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/08 16:13:15 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/09 17:20:10 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,29 @@ typedef	struct	s_plane {
 	double		y;
 }				t_plane;
 
+typedef	struct	s_delta_dist {
+	double		x;
+	double		y;
+}				t_delta_dist;
+
+typedef struct	s_side_dist {
+	double		x;
+	double		y;
+}				t_side_dist;
+
+typedef struct	s_step {
+	t_dir		dir;
+}				t_step;
+
 typedef	struct	s_speed {
 	double		move_speed;
 	double		rot_speed;
 }				t_speed;
+
+typedef struct	s_box {
+	int			x;
+	int			y;
+}				t_box;
 
 typedef struct	s_player
 {
@@ -100,6 +119,12 @@ typedef struct	s_player
 	t_plane		plane;
 	t_speed		speed;
 }				t_player;
+
+typedef struct	s_ray
+{
+	t_dir		dir;
+	t_box		box;
+}				t_ray;
 
 typedef struct	s_sprite
 {
@@ -132,6 +157,8 @@ typedef struct	s_world
 	double			*z_buffer;
 	int				*sprite_order;
 	double			*sprite_distance;
+	int				ceiling_color;
+	int				floor_color;
 }					t_world;
 
 typedef struct	s_data

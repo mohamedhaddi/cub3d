@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/08 19:36:40 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/09 17:20:40 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,86 @@ int			red_cross_press(t_data *params)
 	return (0);
 }
 
-int			is_integer(double val)
-{
-	int	truncated;
+// calculate ray position and direction
+t_dir calculate_ray_dir(int x, t_data *params) {
+	t_resolution *resolution;
+	t_player *player;
+	double camera_x;
+	t_ray ray;
 
-	truncated = (int)val;
-	return (val == truncated);
+	resolution = &params->resolution;
+	player = &params->player;
+	camera_x = ((2 * x) / (double)resolution->width) - 1; // x-coordinate in camera space
+	ray.dir.x = player->dir.x + player->plane.x * camera_x;
+	ray.dir.y = player->dir.y + player->plane.y * camera_x;
+
+	return (ray.dir);
+}
+
+// clear buffer (by setting floor and ceiling colors)
+void draw_background(t_data *params) {
+	t_world *world;
+	t_resolution *resolution;
+
+	world = &params->world;
+	resolution = &params->resolution;
+	for (int x = 0; x < resolution->width; x++)
+	{
+		for (int y = 0; y < resolution->height; y++)
+		{
+			if (y < resolution->height / 2)
+				world->buffer[y][x] = world->ceiling_color;
+			else
+				world->buffer[y][x] = world->floor_color;
+		}
+	}
+}
+
+// what direction to step in x or y-direction (either +1 or -1)
+t_dir get_step_dir(t_ray ray) {
+	t_step step;
+
+	if (ray.dir.x < 0)
+		step.dir.x = -1;
+	else
+		step.dir.x = 1;
+	if (ray.dir.y < 0)
+		step.dir.y = -1;
+	else
+		step.dir.y = 1;
+
+	return step.dir;
+}
+
+// calculate initial side_dist
+t_side_dist calc_side_dist(t_ray ray, t_delta_dist delta_dist, t_player *player) {
+	t_side_dist side_dist;
+
+	if (ray.dir.x < 0)
+		side_dist.x = (player->pos.x - ray.box.x) * delta_dist.x;
+	else
+		side_dist.x = (ray.box.x + 1.0 - player->pos.x) * delta_dist.x;
+	if (ray.dir.y < 0)
+		side_dist.y = (player->pos.y - ray.box.y) * delta_dist.y;
+	else
+		side_dist.y = (ray.box.y + 1.0 - player->pos.y) * delta_dist.y;
+
+	return side_dist;
+}
+
+// length of ray from current position to next x or y-side
+t_delta_dist calc_delta_dist(t_ray ray) {
+	t_delta_dist delta_dist;
+
+	delta_dist.x = fabs(1 / ray.dir.x);
+	delta_dist.y = fabs(1 / ray.dir.y);
+
+	return delta_dist;
+}
+
+// which box of the map we're in
+t_box get_ray_current_box(t_player *player) {
+	return (t_box){(int)player->pos.x, (int)player->pos.y};
 }
 
 /**
@@ -66,22 +140,16 @@ int			draw_frame(t_data *params)
 	t_img_data	*img;
 	t_player	*player;
 	t_world		*world;
-	double		ray_dir_x;
-	double		ray_dir_y;
-	int			map_x;
-	int			map_y;
-	double		side_dist_x;
-	double		side_dist_y;
+	t_ray		ray;
+	t_delta_dist delta_dist;
+	t_step step;
+	t_side_dist	side_dist;
 	double		perp_wall_dist;
-	int			step_x;
-	int			step_y;
 	int			line_height;
 	int			draw_start;
 	int			draw_end;
-	double		delta_dist_x;
-	double		delta_dist_y;
 	int			tex_x;
-	double		step;
+	double		tex_step;
 	int			tex_y;
 	int			color;
 	char		*output_pos_x;
@@ -90,8 +158,6 @@ int			draw_frame(t_data *params)
 	char		*output_dir_y;
 	int			tex_num;
 	double		wall_x;
-	int			ceiling_color;
-	int			floor_color;
 	char		*output_keystrokes_f;
 	char		*output_keystrokes_b;
 	char		*output_keystrokes_r;
@@ -110,102 +176,53 @@ int			draw_frame(t_data *params)
 	player = &params->player;
 	world = &params->world;
 	resolution = &params->resolution;
-	ceiling_color = 0xD1F1F2;
-	floor_color = 0xF7EDD9;
-	// clear buffer (by setting floor and ceiling colors)
-	for (int x = 0; x < resolution->width; x++)
-	{
-		for (int y = 0; y < resolution->height; y++)
-		{
-			// world->buffer[y][x] = 0x00000000;
-			if (y < resolution->height / 2)
-				world->buffer[y][x] = ceiling_color;
-			else
-				world->buffer[y][x] = floor_color;
-		}
-	}
+
+	draw_background(params);
+
 	// here starts the wall raycasting loop
 	for (int x = 0; x < resolution->width; x++)
 	{
-		// calculate ray position and direction
-		double camera_x =
-			2 * x / (double)resolution->width - 1; // x-coordinate in camera space
-		ray_dir_x = player->dir.x + player->plane.x * camera_x;
-		ray_dir_y = player->dir.y + player->plane.y * camera_x;
-		// if the player's position is integer, it might intersect with the
-		// corner of a wall with may cause a problem in displaying it,
-		// so we make it a bit further away by 0.1 from the corner
-		if (is_integer(player->pos.x))
-		{
-			player->pos.x -= 0.1;
-		}
-		if (is_integer(player->pos.y))
-		{
-			player->pos.y -= 0.1;
-		}
-		// which box of the map we're in
-		map_x = (int)player->pos.x;
-		map_y = (int)player->pos.y;
-		// length of ray from current position to next x or y-side
-		delta_dist_x = fabs(1 / ray_dir_x);
-		delta_dist_y = fabs(1 / ray_dir_y);
-		// what direction to step in x or y-direction (either +1 or -1)
-		int hit = 0; // was there a wall hit?
-		int side;    // was a NS or a EW wall hit?
-		// calculate step and initial side_dist
-		if (ray_dir_x < 0)
-		{
-			step_x = -1;
-			side_dist_x = (player->pos.x - map_x) * delta_dist_x;
-		}
-		else
-		{
-			step_x = 1;
-			side_dist_x = (map_x + 1.0 - player->pos.x) * delta_dist_x;
-		}
-		if (ray_dir_y < 0)
-		{
-			step_y = -1;
-			side_dist_y = (player->pos.y - map_y) * delta_dist_y;
-		}
-		else
-		{
-			step_y = 1;
-			side_dist_y = (map_y + 1.0 - player->pos.y) * delta_dist_y;
-		}
+		ray.dir = calculate_ray_dir(x, params);
+		ray.box = get_ray_current_box(player);
+		delta_dist = calc_delta_dist(ray);
+		step.dir = get_step_dir(ray);
+		side_dist = calc_side_dist(ray, delta_dist, player);
+
 		// perform DDA
 		// a loop that increments the ray with 1 square every time until a wall is hit
+		int side;    // was a NS or a EW wall hit?
+		int hit = 0; // was there a wall hit?
 		while (hit == 0)
 		{
 			// jump to next map square, OR in x-direction, OR in y-direction
-			if (side_dist_x < side_dist_y)
+			if (side_dist.x < side_dist.y)
 			{
-				side_dist_x += delta_dist_x;
-				map_x += step_x;
-				if (ray_dir_x > 0)
+				side_dist.x += delta_dist.x;
+				ray.box.x += step.dir.x;
+				if (ray.dir.x > 0)
 					side = SO;
 				else
 					side = NO;
 			}
 			else
 			{
-				side_dist_y += delta_dist_y;
-				map_y += step_y;
-				if (ray_dir_y > 0)
+				side_dist.y += delta_dist.y;
+				ray.box.y += step.dir.y;
+				if (ray.dir.y > 0)
 					side = EA;
 				else
 					side = WE;
 			}
 			// Check if ray has hit a wall
-			if (world->map[map_x][map_y] > 0)
+			if (world->map[ray.box.x][ray.box.y] == 1)
 				hit = 1;
 		}
 		tex_num = side;
 		// Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
 		if (side % 2 == 0)
-			perp_wall_dist = (map_x - player->pos.x + (1.0 - step_x) / 2) / ray_dir_x;
+			perp_wall_dist = (ray.box.x - player->pos.x + (1.0 - step.dir.x) / 2) / ray.dir.x;
 		else
-			perp_wall_dist = (map_y - player->pos.y + (1.0 - step_y) / 2) / ray_dir_y;
+			perp_wall_dist = (ray.box.y - player->pos.y + (1.0 - step.dir.y) / 2) / ray.dir.y;
 		// Calculate height of line to draw on screen
 		line_height = (int)(resolution->height / perp_wall_dist);
 		// calculate lowest and highest pixel to fill in current stripe
@@ -218,32 +235,32 @@ int			draw_frame(t_data *params)
 		// texturing calculations
 		/*
 		tex_num =
-			world->map[map_x][map_y] - 1; 	// 1 subtracted from it so that
+			world->map[ray.box.x][ray.box.y] - 1; 	// 1 subtracted from it so that
 										// texture 0 can be used!
 		*/
 		// calculate value of wall_x (where exactly the wall was hit)
 		if (side % 2 == 0)
-			wall_x = player->pos.y + perp_wall_dist * ray_dir_y;
+			wall_x = player->pos.y + perp_wall_dist * ray.dir.y;
 		else
-			wall_x = player->pos.x + perp_wall_dist * ray_dir_x;
+			wall_x = player->pos.x + perp_wall_dist * ray.dir.x;
 		wall_x -= floor(wall_x);
 		// x coordinate on the texture
 		// TEX_SIZE and TEX_SIZE are width and height in texels of the textures
 		tex_x = (int)(wall_x * (double)TEX_SIZE);
-		if (side % 2 == 0 && ray_dir_x > 0)
+		if (side % 2 == 0 && ray.dir.x > 0)
 			tex_x = TEX_SIZE - tex_x - 1;
-		if (side % 2 == 1 && ray_dir_y < 0)
+		if (side % 2 == 1 && ray.dir.y < 0)
 			tex_x = TEX_SIZE - tex_x - 1;
 		// how much to increase the texture coordinate per screen pixel
-		step = 1.0 * TEX_SIZE / line_height;
+		tex_step = 1.0 * TEX_SIZE / line_height;
 		// starting texture coordinate
 		double tex_pos =
-			(draw_start - resolution->height / 2.0 + line_height / 2.0) * step;
+			(draw_start - resolution->height / 2.0 + line_height / 2.0) * tex_step;
 		for (int y = draw_start; y <= draw_end; y++)
 		{
 			// Cast the texture coordinate to integer, and mask with (TEX_SIZE - 1) in case of overflow
 			tex_y = (int)tex_pos & (TEX_SIZE - 1);
-			tex_pos += step;
+			tex_pos += tex_step;
 			color =
 				world->textures[tex_num].texture_img_data.addr[TEX_SIZE * tex_y + tex_x];
 			// make color darker for y-sides: R, G and B byte each divided
@@ -557,9 +574,11 @@ void setup_sprites(t_data *params) {
 	world->num_sprites = 0;
 	world->sprites = malloc(sizeof(*world->sprites));
 	for (int x = 0; x < params->map_size.width; x++)
+	{
 		for (int y = 0; y < params->map_size.height; y++)
 			if (world->map[x][y] == 2)
-				set_sprite_position(world, (t_pos){x - 0.5, y - 0.5});
+				set_sprite_position(world, (t_pos){x + 0.5, y + 0.5});
+	}
 	world->sprite_order = malloc(sizeof(*world->sprite_order) * world->num_sprites);
 	world->sprite_distance =
 		malloc(sizeof(*world->sprite_distance) * world->num_sprites);
@@ -575,6 +594,11 @@ void setup_buffers(t_data *params) {
 	world->z_buffer = malloc(sizeof(*world->z_buffer) * params->resolution.width);
 }
 
+void set_background_colors(t_world *world) {
+	world->ceiling_color = 0xD1F1F2;
+	world->floor_color = 0xF7EDD9;
+}
+
 void set_texture_paths(t_world *world) {
 	world->texture_paths.walls_facing_north = "../assets/textures/iron.xpm";
 	world->texture_paths.walls_facing_south = "../assets/textures/grass.xpm";
@@ -588,7 +612,7 @@ void set_player_speed(t_player *player) {
 	player->speed.rot_speed = 0.03;
 }
 
-void set_player_position(t_player *player, t_pos pos, t_dir dir, t_plane plane) {
+void set_player_init_position(t_player *player, t_pos pos, t_dir dir, t_plane plane) {
 	player->pos = pos;
 	player->dir = dir;
 	player->plane = plane;
@@ -598,7 +622,7 @@ void set_player_position(t_player *player, t_pos pos, t_dir dir, t_plane plane) 
  * set player's position and spawning orientation in map
  * set the position of each sprite
  */
-void set_player_pos_and_dir(t_data *params) {
+void spawn_player(t_data *params) {
 	t_player *player;
 	t_world	*world;
 	int	cur_pos;
@@ -612,13 +636,13 @@ void set_player_pos_and_dir(t_data *params) {
 			if (cur_pos == 'N' || cur_pos == 'S' || cur_pos == 'E' || cur_pos == 'W')
 				world->map[x][y] = 0;
 			if (cur_pos == 'N')
-				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){-1, 0}, (t_plane){0, 0.66});
+				set_player_init_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){-1, 0}, (t_plane){0, 0.66});
 			else if (cur_pos == 'S')
-				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){1, 0}, (t_plane){0, -0.66});
+				set_player_init_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){1, 0}, (t_plane){0, -0.66});
 			else if (cur_pos == 'E')
-				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, 1}, (t_plane){0.66, 0});
+				set_player_init_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, 1}, (t_plane){0.66, 0});
 			else if (cur_pos == 'W')
-				set_player_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, -1}, (t_plane){-0.66, 0});
+				set_player_init_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, -1}, (t_plane){-0.66, 0});
 		}
 }
 
@@ -628,9 +652,10 @@ void load_game(t_data *params) {
 
 	player = &params->player;
 	world = &params->world;
-	set_player_pos_and_dir(params);
+	spawn_player(params);
 	set_player_speed(player);
 	set_texture_paths(world);
+	set_background_colors(world);
 	setup_buffers(params);
 	setup_sprites(params);
 	load_textures(params);
@@ -659,7 +684,6 @@ void generate_world_map(t_data *params) {
 	world = &params->world;
 	world->map = malloc(sizeof(world->map) * params->map_size.width);
 
-	// generate random map, while making sure it's surrounded by walls
 	for (int i = 0; i < params->map_size.width; i++)
 	{
 		world->map[i] = malloc(sizeof(*world->map) * params->map_size.height);
@@ -673,14 +697,15 @@ void generate_world_map(t_data *params) {
 			}
 			else
 			{
-				world->map[i][j] = rand() % 5;
-				if (world->map[i][j] == 3 || world->map[i][j] == 4)
+				world->map[i][j] = rand() % 6;
+				if (world->map[i][j] == 4 || world->map[i][j] == 5)
 					world->map[i][j] = 0;
+				if (world->map[i][j] == 3)
+					world->map[i][j] = 1;
 			}
 		}
 	}
 
-	// spawn player randomly
 	char dirs[4] = {'N', 'S', 'E', 'W'};
 	int new_dir = rand() % 4;
 	int new_x_pos = rand() % (params->map_size.width - 1) + 1;
@@ -693,7 +718,6 @@ void generate_world_map(t_data *params) {
 	}
 	world->map[new_x_pos][new_y_pos] = dirs[new_dir];
 
-	// print map in stdout
 	for (int i = 0; i < params->map_size.width; i++)
 	{
 		printf("\x1B[37m\"");
@@ -764,6 +788,7 @@ void generate_world_map(t_data *params) {
 	}
 }
 */
+
 
 void set_map_size(t_data *params) {
 	params->map_size.width = 24;
