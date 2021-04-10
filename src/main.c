@@ -6,12 +6,58 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/09 17:20:40 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/10 17:52:54 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <time.h>
 #include "cub3d.h"
+
+void print_info(t_player *player, t_data *params) {
+	char		*output_pos_x;
+	char		*output_pos_y;
+	char		*output_dir_x;
+	char		*output_dir_y;
+	char		*output_keystrokes_f;
+	char		*output_keystrokes_b;
+	char		*output_keystrokes_r;
+	char		*output_keystrokes_l;
+	char		*output_keystrokes_d;
+	char		*output_keystrokes_a;
+
+	t_mlx *mlx = &params->mlx;
+	// show real-time values for cetain variables on screen
+	output_pos_x = (char *)malloc(20 * sizeof(char));
+	output_pos_y = (char *)malloc(20 * sizeof(char));
+	output_dir_x = (char *)malloc(20 * sizeof(char));
+	output_dir_y = (char *)malloc(20 * sizeof(char));
+	output_keystrokes_f = (char *)malloc(20 * sizeof(char));
+	output_keystrokes_b = (char *)malloc(20 * sizeof(char));
+	output_keystrokes_r = (char *)malloc(20 * sizeof(char));
+	output_keystrokes_l = (char *)malloc(20 * sizeof(char));
+	output_keystrokes_d = (char *)malloc(20 * sizeof(char));
+	output_keystrokes_a = (char *)malloc(20 * sizeof(char));
+	sprintf(output_pos_x, "pos_x: %f", player->pos.x);
+	sprintf(output_pos_y, "pos_y: %f", player->pos.y);
+	sprintf(output_dir_x, "dir_x: %f", player->dir.x);
+	sprintf(output_dir_y, "dir_y: %f", player->dir.y);
+	sprintf(output_keystrokes_f, "key_w: %d", params->keystrokes[13]);
+	sprintf(output_keystrokes_b, "key_s: %d", params->keystrokes[1]);
+	sprintf(output_keystrokes_r, "key_r: %d", params->keystrokes[124]);
+	sprintf(output_keystrokes_l, "key_l: %d", params->keystrokes[123]);
+	sprintf(output_keystrokes_d, "key_d: %d", params->keystrokes[2]);
+	sprintf(output_keystrokes_a, "key_a: %d", params->keystrokes[0]);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 0, 0x00FFFFFF, output_pos_x);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 20, 0x00FFFFFF, output_pos_y);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 40, 0x00FFFFFF, output_dir_x);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 60, 0x00FFFFFF, output_dir_y);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 80, 0x00FFFFFF, output_keystrokes_f);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 100, 0x00FFFFFF, output_keystrokes_b);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 120, 0x00FFFFFF, output_keystrokes_r);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 140, 0x00FFFFFF, output_keystrokes_l);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 160, 0x00FFFFFF, output_keystrokes_d);
+	mlx_string_put(mlx->ptr, mlx->win, 0, 180, 0x00FFFFFF, output_keystrokes_a);
+}
 
 /**
  * test
@@ -33,9 +79,9 @@ void		exit_game(t_data *params, int status)
 	i = 0;
 	while (i < 7)
 	{
-		if (params->world.textures[i].texture_img_data.img)
+		if (params->world.textures[i].img)
 			mlx_destroy_image(params->mlx.ptr,
-								params->world.textures[i].texture_img_data.img);
+								params->world.textures[i].img);
 		i++;
 	}
 	mlx_destroy_image(params->mlx.ptr, params->img.img);
@@ -50,19 +96,16 @@ int			red_cross_press(t_data *params)
 }
 
 // calculate ray position and direction
-t_dir calculate_ray_dir(int x, t_data *params) {
+void set_ray_dir(int x, t_ray *ray, t_data *params) {
 	t_resolution *resolution;
 	t_player *player;
 	double camera_x;
-	t_ray ray;
 
 	resolution = &params->resolution;
 	player = &params->player;
 	camera_x = ((2 * x) / (double)resolution->width) - 1; // x-coordinate in camera space
-	ray.dir.x = player->dir.x + player->plane.x * camera_x;
-	ray.dir.y = player->dir.y + player->plane.y * camera_x;
-
-	return (ray.dir);
+	ray->dir.x = player->dir.x + player->plane.x * camera_x;
+	ray->dir.y = player->dir.y + player->plane.y * camera_x;
 }
 
 // clear buffer (by setting floor and ceiling colors)
@@ -85,50 +128,146 @@ void draw_background(t_data *params) {
 }
 
 // what direction to step in x or y-direction (either +1 or -1)
-t_dir get_step_dir(t_ray ray) {
-	t_step step;
-
-	if (ray.dir.x < 0)
-		step.dir.x = -1;
+void set_step_dir(t_ray *ray) {
+	if (ray->dir.x < 0)
+		ray->step.dir.x = -1;
 	else
-		step.dir.x = 1;
-	if (ray.dir.y < 0)
-		step.dir.y = -1;
+		ray->step.dir.x = 1;
+	if (ray->dir.y < 0)
+		ray->step.dir.y = -1;
 	else
-		step.dir.y = 1;
-
-	return step.dir;
+		ray->step.dir.y = 1;
 }
 
 // calculate initial side_dist
-t_side_dist calc_side_dist(t_ray ray, t_delta_dist delta_dist, t_player *player) {
-	t_side_dist side_dist;
-
-	if (ray.dir.x < 0)
-		side_dist.x = (player->pos.x - ray.box.x) * delta_dist.x;
+void set_side_dist(t_ray *ray, t_player *player) {
+	if (ray->dir.x < 0)
+		ray->side_dist.x = (player->pos.x - ray->box.x) * ray->delta_dist.x;
 	else
-		side_dist.x = (ray.box.x + 1.0 - player->pos.x) * delta_dist.x;
-	if (ray.dir.y < 0)
-		side_dist.y = (player->pos.y - ray.box.y) * delta_dist.y;
+		ray->side_dist.x = (ray->box.x + 1.0 - player->pos.x) * ray->delta_dist.x;
+	if (ray->dir.y < 0)
+		ray->side_dist.y = (player->pos.y - ray->box.y) * ray->delta_dist.y;
 	else
-		side_dist.y = (ray.box.y + 1.0 - player->pos.y) * delta_dist.y;
-
-	return side_dist;
+		ray->side_dist.y = (ray->box.y + 1.0 - player->pos.y) * ray->delta_dist.y;
 }
 
 // length of ray from current position to next x or y-side
-t_delta_dist calc_delta_dist(t_ray ray) {
-	t_delta_dist delta_dist;
-
-	delta_dist.x = fabs(1 / ray.dir.x);
-	delta_dist.y = fabs(1 / ray.dir.y);
-
-	return delta_dist;
+void set_delta_dist(t_ray *ray) {
+	ray->delta_dist.x = fabs(1 / ray->dir.x);
+	ray->delta_dist.y = fabs(1 / ray->dir.y);
 }
 
 // which box of the map we're in
-t_box get_ray_current_box(t_player *player) {
-	return (t_box){(int)player->pos.x, (int)player->pos.y};
+void set_ray_current_box(t_ray *ray, t_player *player) {
+	ray->box.x = (int)player->pos.x;
+	ray->box.y = (int)player->pos.y;
+}
+
+// jump to next map square in x-direction 
+void jump_to_next_x_side(t_ray *ray) {
+	ray->side_dist.x += ray->delta_dist.x;
+	ray->box.x += ray->step.dir.x;
+	if (ray->dir.x > 0)
+		ray->side = SO;
+	else
+		ray->side = NO;
+}
+
+// jump to next map square in y-direction 
+void jump_to_next_y_side(t_ray *ray) {
+	ray->side_dist.y += ray->delta_dist.y;
+	ray->box.y += ray->step.dir.y;
+	if (ray->dir.y > 0)
+		ray->side = EA;
+	else
+		ray->side = WE;
+}
+
+// jump to next map square
+void jump_to_next_square(t_ray *ray) {
+	if (ray->side_dist.x < ray->side_dist.y)
+		jump_to_next_x_side(ray);
+	else
+		jump_to_next_y_side(ray);
+}
+
+// Check if ray has hit a wall
+int is_a_wall_hit(int box) {
+	return box == 1;
+}
+
+// perform DDA: a loop that increments the ray with 1 square every time until a wall is hit
+void cast_ray(t_world *world, t_ray *ray) {
+	while (is_a_wall_hit(world->map[ray->box.x][ray->box.y]) == 0)
+		jump_to_next_square(ray);
+}
+
+void calc_ray_params(int x, t_ray *ray, t_data *params, t_player *player) {
+	set_ray_dir(x, ray, params);
+	set_ray_current_box(ray, player);
+	set_delta_dist(ray);
+	set_step_dir(ray);
+	set_side_dist(ray, player);
+}
+
+// Calculate perpendicular distance projected on camera direction (Euclidean distance will give fisheye effect!)
+void calc_perp_distance(t_ray *ray, t_player *player) {
+	if (ray->side % 2 == 0)
+		ray->perp_wall_dist = (ray->box.x - player->pos.x + (1.0 - ray->step.dir.x) / 2) / ray->dir.x;
+	else
+		ray->perp_wall_dist = (ray->box.y - player->pos.y + (1.0 - ray->step.dir.y) / 2) / ray->dir.y;
+}
+
+// Calculate height of line to draw on screen
+void calc_line_height(t_ray *ray, t_resolution *resolution) {
+	ray->line_height = (int)(resolution->height / ray->perp_wall_dist);
+}
+
+void calc_first_px_of_stripe(t_ray *ray, t_resolution *resolution) {
+	ray->draw_start = -ray->line_height / 2 + resolution->height / 2;
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+}
+
+void calc_last_px_of_stripe(t_ray *ray, t_resolution *resolution) {
+	ray->draw_end = ray->line_height / 2 + resolution->height / 2;
+	if (ray->draw_end >= resolution->height)
+		ray->draw_end = resolution->height - 1;
+}
+
+// calculate lowest and highest pixel to fill in current stripe
+void calc_both_ends_of_vertical_stripe(t_ray *ray, t_resolution *resolution) {
+	calc_first_px_of_stripe(ray, resolution);
+	calc_last_px_of_stripe(ray, resolution);
+}
+
+// calculate value of wall_x (where exactly the wall was hit)
+//  The value wallX represents the exact value where the wall was hit, not just the integer coordinates of the wall.
+//  This is required to know which x-coordinate of the texture we have to use.
+//  This is calculated by first calculating the exact x or y coordinate in the world,
+//  and then substracting the integer value of the wall off it. Note that even if it's called wallX,
+//  it's actually an y-coordinate of the wall if side==1, but it's always the x-coordinate of the texture.
+void calc_wall_x(t_ray *ray, t_player *player) {
+	if (ray->side % 2 == 0)
+		ray->wall_x = player->pos.y + ray->perp_wall_dist * ray->dir.y;
+	else
+		ray->wall_x = player->pos.x + ray->perp_wall_dist * ray->dir.x;
+	ray->wall_x -= floor(ray->wall_x);
+}
+
+// calculate the x-coordinate on the texture
+// TEX_SIZE is width and height in texels of the textures
+void calc_texture_x(t_ray *ray) {
+	ray->tex_x = (int)(ray->wall_x * (double)TEX_SIZE);
+	if (ray->side % 2 == 0 && ray->dir.x > 0)
+		ray->tex_x = TEX_SIZE - ray->tex_x - 1;
+	if (ray->side % 2 == 1 && ray->dir.y < 0)
+		ray->tex_x = TEX_SIZE - ray->tex_x - 1;
+}
+
+// how much to increase the texture coordinate per screen pixel
+void set_texture_step(t_ray *ray) {
+	ray->tex_step = 1.0 * TEX_SIZE / ray->line_height;
 }
 
 /**
@@ -140,36 +279,14 @@ int			draw_frame(t_data *params)
 	t_img_data	*img;
 	t_player	*player;
 	t_world		*world;
+	t_resolution *resolution;
 	t_ray		ray;
-	t_delta_dist delta_dist;
-	t_step step;
-	t_side_dist	side_dist;
-	double		perp_wall_dist;
-	int			line_height;
-	int			draw_start;
-	int			draw_end;
-	int			tex_x;
-	double		tex_step;
-	int			tex_y;
 	int			color;
-	char		*output_pos_x;
-	char		*output_pos_y;
-	char		*output_dir_x;
-	char		*output_dir_y;
-	int			tex_num;
-	double		wall_x;
-	char		*output_keystrokes_f;
-	char		*output_keystrokes_b;
-	char		*output_keystrokes_r;
-	char		*output_keystrokes_l;
 	int			draw_start_y;
 	int			draw_end_y;
 	int			sprite_width;
 	int			draw_start_x;
 	int			draw_end_x;
-	char		*output_keystrokes_d;
-	char		*output_keystrokes_a;
-	t_resolution *resolution;
 
 	mlx = &params->mlx;
 	img = &params->img;
@@ -179,103 +296,38 @@ int			draw_frame(t_data *params)
 
 	draw_background(params);
 
-	// here starts the wall raycasting loop
+	// WALL CASTING LOOP
 	for (int x = 0; x < resolution->width; x++)
 	{
-		ray.dir = calculate_ray_dir(x, params);
-		ray.box = get_ray_current_box(player);
-		delta_dist = calc_delta_dist(ray);
-		step.dir = get_step_dir(ray);
-		side_dist = calc_side_dist(ray, delta_dist, player);
+		calc_ray_params(x, &ray, params, player);
+		cast_ray(world, &ray);
+		calc_perp_distance(&ray, player);
+		calc_line_height(&ray, resolution);
+		calc_both_ends_of_vertical_stripe(&ray, resolution);
+		calc_wall_x(&ray, player);
+		calc_texture_x(&ray);
+		set_texture_step(&ray);
 
-		// perform DDA
-		// a loop that increments the ray with 1 square every time until a wall is hit
-		int side;    // was a NS or a EW wall hit?
-		int hit = 0; // was there a wall hit?
-		while (hit == 0)
-		{
-			// jump to next map square, OR in x-direction, OR in y-direction
-			if (side_dist.x < side_dist.y)
-			{
-				side_dist.x += delta_dist.x;
-				ray.box.x += step.dir.x;
-				if (ray.dir.x > 0)
-					side = SO;
-				else
-					side = NO;
-			}
-			else
-			{
-				side_dist.y += delta_dist.y;
-				ray.box.y += step.dir.y;
-				if (ray.dir.y > 0)
-					side = EA;
-				else
-					side = WE;
-			}
-			// Check if ray has hit a wall
-			if (world->map[ray.box.x][ray.box.y] == 1)
-				hit = 1;
-		}
-		tex_num = side;
-		// Calculate distance projected on camera direction (Euclidean distance will give fisheye effect!)
-		if (side % 2 == 0)
-			perp_wall_dist = (ray.box.x - player->pos.x + (1.0 - step.dir.x) / 2) / ray.dir.x;
-		else
-			perp_wall_dist = (ray.box.y - player->pos.y + (1.0 - step.dir.y) / 2) / ray.dir.y;
-		// Calculate height of line to draw on screen
-		line_height = (int)(resolution->height / perp_wall_dist);
-		// calculate lowest and highest pixel to fill in current stripe
-		draw_start = -line_height / 2 + resolution->height / 2;
-		if (draw_start < 0)
-			draw_start = 0;
-		draw_end = line_height / 2 + resolution->height / 2;
-		if (draw_end >= resolution->height)
-			draw_end = resolution->height - 1;
-		// texturing calculations
-		/*
-		tex_num =
-			world->map[ray.box.x][ray.box.y] - 1; 	// 1 subtracted from it so that
-										// texture 0 can be used!
-		*/
-		// calculate value of wall_x (where exactly the wall was hit)
-		if (side % 2 == 0)
-			wall_x = player->pos.y + perp_wall_dist * ray.dir.y;
-		else
-			wall_x = player->pos.x + perp_wall_dist * ray.dir.x;
-		wall_x -= floor(wall_x);
-		// x coordinate on the texture
-		// TEX_SIZE and TEX_SIZE are width and height in texels of the textures
-		tex_x = (int)(wall_x * (double)TEX_SIZE);
-		if (side % 2 == 0 && ray.dir.x > 0)
-			tex_x = TEX_SIZE - tex_x - 1;
-		if (side % 2 == 1 && ray.dir.y < 0)
-			tex_x = TEX_SIZE - tex_x - 1;
-		// how much to increase the texture coordinate per screen pixel
-		tex_step = 1.0 * TEX_SIZE / line_height;
 		// starting texture coordinate
 		double tex_pos =
-			(draw_start - resolution->height / 2.0 + line_height / 2.0) * tex_step;
-		for (int y = draw_start; y <= draw_end; y++)
+			(ray.draw_start - resolution->height / 2.0 + ray.line_height / 2.0) * ray.tex_step;
+		for (int y = ray.draw_start; y < ray.draw_end; y++)
 		{
 			// Cast the texture coordinate to integer, and mask with (TEX_SIZE - 1) in case of overflow
-			tex_y = (int)tex_pos & (TEX_SIZE - 1);
-			tex_pos += tex_step;
+			ray.tex_y = (int)tex_pos & (TEX_SIZE - 1);
+			tex_pos += ray.tex_step;
 			color =
-				world->textures[tex_num].texture_img_data.addr[TEX_SIZE * tex_y + tex_x];
-			// make color darker for y-sides: R, G and B byte each divided
-			// through two with a "shift" and an "and"
-			/*
-			if (side % 2 == 1)
-				color = (color >> 1) & 8355711;
-			*/
-			if ((color & 0x00FFFFFF) != 0)
+				world->textures[ray.side].addr[TEX_SIZE * ray.tex_y + ray.tex_x];
+
+			if ((color & 0x00FFFFFF) != 0) // paint pixel if it isn't black, black is the invisible color
 				world->buffer[y][x] =
 					color; // y-coordinate first because it works per scanline
 		}
+
 		// SET THE ZBUFFER FOR THE SPRITE CASTING
-		world->z_buffer[x] = perp_wall_dist; // perpendicular distance is used
+		world->z_buffer[x] = ray.perp_wall_dist; // perpendicular distance is used
 	}
+
 	// SPRITE CASTING
 	// sort sprites from far to close
 	for (int i = 0; i < world->num_sprites; i++)
@@ -350,12 +402,8 @@ int			draw_frame(t_data *params)
 				{
 					int d = (y)*256 - resolution->height * 128 +
 						sprite_height * 128; // 256 and 128 factors to avoid floats
-					tex_y = ((d * TEX_SIZE) / sprite_height) / 256;
-					uint32_t color =
-						world->textures[SPRITE_INDEX]
-							.texture_img_data
-							.addr[TEX_SIZE * tex_y +
-									tex_x]; // get current color from the sprite texture
+					int tex_y = ((d * TEX_SIZE) / sprite_height) / 256;
+					uint32_t color = world->textures[SPRITE_INDEX].addr[TEX_SIZE * tex_y + tex_x]; // get current color from the sprite texture
 					if ((color & 0x00FFFFFF) != 0)
 						world->buffer[y][stripe] =
 							color; // paint pixel if it isn't black, black is the invisible color
@@ -367,37 +415,9 @@ int			draw_frame(t_data *params)
 		for (int y = 0; y < resolution->height; y++)
 			ft_mlx_pixel_put(img, x, y, world->buffer[y][x]);
 	mlx_put_image_to_window(mlx->ptr, mlx->win, img->img, 0, 0);
-	// show real-time values for cetain variables on screen
-	output_pos_x = (char *)malloc(20 * sizeof(char));
-	output_pos_y = (char *)malloc(20 * sizeof(char));
-	output_dir_x = (char *)malloc(20 * sizeof(char));
-	output_dir_y = (char *)malloc(20 * sizeof(char));
-	output_keystrokes_f = (char *)malloc(20 * sizeof(char));
-	output_keystrokes_b = (char *)malloc(20 * sizeof(char));
-	output_keystrokes_r = (char *)malloc(20 * sizeof(char));
-	output_keystrokes_l = (char *)malloc(20 * sizeof(char));
-	output_keystrokes_d = (char *)malloc(20 * sizeof(char));
-	output_keystrokes_a = (char *)malloc(20 * sizeof(char));
-	sprintf(output_pos_x, "pos_x: %f", player->pos.x);
-	sprintf(output_pos_y, "pos_y: %f", player->pos.y);
-	sprintf(output_dir_x, "dir_x: %f", player->dir.x);
-	sprintf(output_dir_y, "dir_y: %f", player->dir.y);
-	sprintf(output_keystrokes_f, "key_w: %d", params->keystrokes[13]);
-	sprintf(output_keystrokes_b, "key_s: %d", params->keystrokes[1]);
-	sprintf(output_keystrokes_r, "key_r: %d", params->keystrokes[124]);
-	sprintf(output_keystrokes_l, "key_l: %d", params->keystrokes[123]);
-	sprintf(output_keystrokes_d, "key_d: %d", params->keystrokes[2]);
-	sprintf(output_keystrokes_a, "key_a: %d", params->keystrokes[0]);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 0, 0x00FFFFFF, output_pos_x);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 20, 0x00FFFFFF, output_pos_y);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 40, 0x00FFFFFF, output_dir_x);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 60, 0x00FFFFFF, output_dir_y);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 80, 0x00FFFFFF, output_keystrokes_f);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 100, 0x00FFFFFF, output_keystrokes_b);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 120, 0x00FFFFFF, output_keystrokes_r);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 140, 0x00FFFFFF, output_keystrokes_l);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 160, 0x00FFFFFF, output_keystrokes_d);
-	mlx_string_put(mlx->ptr, mlx->win, 0, 180, 0x00FFFFFF, output_keystrokes_a);
+
+	print_info(player, params);
+
 	return (0);
 }
 
@@ -414,41 +434,41 @@ int			read_keys(t_data *params)
 	if (params->keystrokes[W_KEY]) // Key W
 	{
 		if (world->map[(int)(player->pos.x + player->dir.x * player->speed.move_speed)]
-					[(int)(player->pos.y)] == 0 /*0 enum*/)
+					[(int)(player->pos.y)] % 2 == 0 /*0 enum*/)
 			// collision detection: won't move if it ain't 0 (a wall)
 			player->pos.x += player->dir.x * player->speed.move_speed;
 		if (world->map[(int)(player->pos.x)]
-					[(int)(player->pos.y + player->dir.y * player->speed.move_speed)] == 0)
+					[(int)(player->pos.y + player->dir.y * player->speed.move_speed)] % 2 == 0)
 			player->pos.y += player->dir.y * player->speed.move_speed;
 	}
 	// move backwards if no wall behind you
 	if (params->keystrokes[S_KEY]) // Key S
 	{
 		if (world->map[(int)(player->pos.x - player->dir.x * player->speed.move_speed)]
-					[(int)(player->pos.y)] == 0)
+					[(int)(player->pos.y)] % 2 == 0)
 			player->pos.x -= player->dir.x * player->speed.move_speed;
 		if (world->map[(int)(player->pos.x)]
-					[(int)(player->pos.y - player->dir.y * player->speed.move_speed)] == 0)
+					[(int)(player->pos.y - player->dir.y * player->speed.move_speed)] % 2 == 0)
 			player->pos.y -= player->dir.y * player->speed.move_speed;
 	}
 	// move to the right if no wall is on the right
 	if (params->keystrokes[D_KEY]) // Key D
 	{
 		if (world->map[(int)(player->pos.x + player->plane.x * player->speed.move_speed)]
-					[(int)(player->pos.y)] == 0 /*0 enum*/)
+					[(int)(player->pos.y)] % 2 == 0 /*0 enum*/)
 			player->pos.x += player->plane.x * player->speed.move_speed;
 		if (world->map[(int)(player->pos.x)][(
-				int)(player->pos.y + player->plane.y * player->speed.move_speed)] == 0)
+				int)(player->pos.y + player->plane.y * player->speed.move_speed)] % 2 == 0)
 			player->pos.y += player->plane.y * player->speed.move_speed;
 	}
 	// move to the left if no wall is on the left
 	if (params->keystrokes[A_KEY]) // Key A
 	{
 		if (world->map[(int)(player->pos.x - player->plane.x * player->speed.move_speed)]
-					[(int)(player->pos.y)] == 0 /*0 enum*/)
+					[(int)(player->pos.y)] % 2 == 0 /*0 enum*/)
 			player->pos.x -= player->plane.x * player->speed.move_speed;
 		if (world->map[(int)(player->pos.x)][(
-				int)(player->pos.y - player->plane.y * player->speed.move_speed)] == 0)
+				int)(player->pos.y - player->plane.y * player->speed.move_speed)] % 2 == 0)
 			player->pos.y -= player->plane.y * player->speed.move_speed;
 	}
 	// rotate to the right
@@ -521,25 +541,25 @@ void initiliaze_keystrokes(int *keystrokes) {
 		keystrokes[i] = 0;
 }
 
-t_texture	load_image(char *path, t_data *params)
+t_img_data	load_image(char *path, t_data *params)
 {
-	t_texture	texture_buffer;
+	t_img_data	texture_buffer;
 	t_mlx		*mlx;
 
 	mlx = &params->mlx;
-	texture_buffer.texture_img_data.img = mlx_xpm_file_to_image(
+	texture_buffer.img = mlx_xpm_file_to_image(
 		mlx->ptr, path, &texture_buffer.width, &texture_buffer.height);
-	if (texture_buffer.texture_img_data.img == NULL ||
+	if (texture_buffer.img == NULL ||
 		texture_buffer.width != TEX_SIZE || texture_buffer.height != TEX_SIZE)
 	{
 		ft_putstr_fd("Error\n Invalid texture", 2);
 		exit_game(params, EXIT_SUCCESS);
 	}
-	texture_buffer.texture_img_data.addr =
-		(int *)mlx_get_data_addr(texture_buffer.texture_img_data.img,
-									&texture_buffer.texture_img_data.bits_per_pixel,
-									&texture_buffer.texture_img_data.line_length,
-									&texture_buffer.texture_img_data.endian);
+	texture_buffer.addr =
+		(int *)mlx_get_data_addr(texture_buffer.img,
+									&texture_buffer.bits_per_pixel,
+									&texture_buffer.line_length,
+									&texture_buffer.endian);
 	return (texture_buffer);
 }
 

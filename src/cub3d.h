@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/09 17:20:10 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/10 17:52:46 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,9 @@ typedef struct	s_img_data
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
-}				t_img_data;
-
-typedef struct	s_texture
-{
-	t_img_data	texture_img_data;
 	int			width;
 	int			height;
-}				t_texture;
+}				t_img_data;
 
 typedef struct	s_mlx
 {
@@ -98,19 +93,49 @@ typedef struct	s_side_dist {
 	double		y;
 }				t_side_dist;
 
+typedef struct	s_box {
+	int			x;
+	int			y;
+}				t_box;
+
 typedef struct	s_step {
 	t_dir		dir;
 }				t_step;
+
+typedef struct	s_ray
+{
+	int			side;
+	int			hit;
+	t_dir		dir;
+	t_box		box;
+	t_delta_dist delta_dist;
+	t_side_dist	side_dist;
+	t_step		step;
+	double		perp_wall_dist;
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
+	double		wall_x;
+	int			tex_x;
+	int			tex_y;
+	double		tex_step;
+}				t_ray;
+
+/*
+typedef	struct	s_frame {
+	t_ray			ray;	
+	t_delta_dist 	delta_dist;
+	t_side_dist		side_dist;
+	int				side;
+	int				hit;
+	t_step			step;
+}				t_frame;
+*/
 
 typedef	struct	s_speed {
 	double		move_speed;
 	double		rot_speed;
 }				t_speed;
-
-typedef struct	s_box {
-	int			x;
-	int			y;
-}				t_box;
 
 typedef struct	s_player
 {
@@ -119,12 +144,6 @@ typedef struct	s_player
 	t_plane		plane;
 	t_speed		speed;
 }				t_player;
-
-typedef struct	s_ray
-{
-	t_dir		dir;
-	t_box		box;
-}				t_ray;
 
 typedef struct	s_sprite
 {
@@ -149,7 +168,7 @@ typedef	struct	s_texture_paths
 typedef struct	s_world
 {
 	int				**map;
-	t_texture		textures[7];
+	t_img_data		textures[7];
 	int				**buffer;
 	t_texture_paths texture_paths;
 	t_sprite		*sprites;
