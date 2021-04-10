@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/10 17:52:46 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/10 18:20:30 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct	s_ray
 	int			tex_x;
 	int			tex_y;
 	double		tex_step;
+	double		tex_pos;
 }				t_ray;
 
 /*
