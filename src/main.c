@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/11 15:28:03 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/11 21:46:07 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void print_info(t_player *player, t_data *params) {
 	sprintf(output_pos_y, "pos_y: %f", player->pos.y);
 	sprintf(output_dir_x, "dir_x: %f", player->dir.x);
 	sprintf(output_dir_y, "dir_y: %f", player->dir.y);
-	sprintf(output_keystrokes_f, "key_w: %d", params->keystrokes[13]);
-	sprintf(output_keystrokes_b, "key_s: %d", params->keystrokes[1]);
-	sprintf(output_keystrokes_r, "key_r: %d", params->keystrokes[124]);
-	sprintf(output_keystrokes_l, "key_l: %d", params->keystrokes[123]);
-	sprintf(output_keystrokes_d, "key_d: %d", params->keystrokes[2]);
-	sprintf(output_keystrokes_a, "key_a: %d", params->keystrokes[0]);
+	sprintf(output_keystrokes_f, "key_w: %d", params->keystrokes[W_KEY]);
+	sprintf(output_keystrokes_b, "key_s: %d", params->keystrokes[S_KEY]);
+	sprintf(output_keystrokes_r, "key_r: %d", params->keystrokes[RIGHT_KEY]);
+	sprintf(output_keystrokes_l, "key_l: %d", params->keystrokes[LEFT_KEY]);
+	sprintf(output_keystrokes_d, "key_d: %d", params->keystrokes[D_KEY]);
+	sprintf(output_keystrokes_a, "key_a: %d", params->keystrokes[A_KEY]);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 0, 0x00FFFFFF, output_pos_x);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 20, 0x00FFFFFF, output_pos_y);
 	mlx_string_put(mlx->ptr, mlx->win, 0, 40, 0x00FFFFFF, output_dir_x);
@@ -422,7 +422,7 @@ int			draw_frame(t_data *params)
 					int d = (y)*256 - resolution->height * 128 +
 						sprite_height * 128; // 256 and 128 factors to avoid floats
 					int tex_y = ((d * TEX_SIZE) / sprite_height) / 256;
-					uint32_t color = world->textures[SPRITE_INDEX].addr[TEX_SIZE * tex_y + tex_x]; // get current color from the sprite texture
+					int color = world->textures[SPRITE_INDEX].addr[TEX_SIZE * tex_y + tex_x]; // get current color from the sprite texture
 					if ((color & 0x00FFFFFF) != 0)
 						world->buffer[y][stripe] =
 							color; // paint pixel if it isn't black, black is the invisible color
@@ -589,8 +589,8 @@ int			key_release(int keycode, t_data *params)
 /**
  * initiliaze all keystrokes to zero
  */
-void initiliaze_keystrokes(int *keystrokes) {
-	for (int i = 0; i < 127; i++)
+void initialize_keystrokes(int *keystrokes) {
+	for (int i = 0; i < 65400; i++)
 		keystrokes[i] = 0;
 }
 
@@ -732,7 +732,7 @@ void load_game(t_data *params) {
 	setup_buffers(params);
 	setup_sprites(params);
 	load_textures(params);
-	initiliaze_keystrokes(&params->keystrokes[0]);
+	initialize_keystrokes(&params->keystrokes[0]);
 }
 
 void load_mlx(t_data *params) {

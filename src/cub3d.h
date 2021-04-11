@@ -6,14 +6,14 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/11 15:27:06 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/11 21:43:17 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "mlx/mlx.h"
+# include "minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -32,13 +32,13 @@ enum			e_directions
 
 enum			e_keycodes
 {
-	W_KEY = 13,
-	S_KEY = 1,
-	D_KEY = 2,
-	A_KEY = 0,
-	RIGHT_KEY = 124,
-	LEFT_KEY = 123,
-	ESC_KEY = 53
+	W_KEY = 119,
+	S_KEY = 115,
+	D_KEY = 68,
+	A_KEY = 100,
+	RIGHT_KEY = 65363,
+	LEFT_KEY = 65361,
+	ESC_KEY = 65307
 };
 
 typedef struct	s_resolution {
@@ -191,7 +191,7 @@ typedef struct	s_data
 	t_world		world;
 	t_resolution	resolution;
 	t_map_size	map_size;
-	int			keystrokes[127];
+	int			keystrokes[65400];
 }				t_data;
 
 void			ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
