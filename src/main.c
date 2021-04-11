@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/11 14:30:01 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/11 15:28:03 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,27 +291,10 @@ void draw_vertical_stripe(int x, t_ray *ray, t_world *world) {
 	}
 }
 
-/**
- * this is the function that draws a whole frame every time a control key is pressed
- */
-int			draw_frame(t_data *params)
-{
-	t_mlx		*mlx;
-	t_img_data	*img;
-	t_player	*player;
-	t_world		*world;
-	t_resolution *resolution;
-	t_ray		ray;
+// WALL CASTING LOOP
+void cast_walls(t_resolution *resolution, t_player *player, t_world *world, t_data *params) {
+	t_ray ray;
 
-	mlx = &params->mlx;
-	img = &params->img;
-	player = &params->player;
-	world = &params->world;
-	resolution = &params->resolution;
-
-	draw_background(params);
-
-	// WALL CASTING LOOP
 	for (int x = 0; x < resolution->width; x++)
 	{
 		calc_ray_params(x, &ray, params, player);
@@ -328,47 +311,80 @@ int			draw_frame(t_data *params)
 		// SET THE ZBUFFER FOR THE SPRITE CASTING
 		world->z_buffer[x] = ray.perp_wall_dist; // perpendicular distance is used
 	}
+}
 
-	// SPRITE CASTING
-	// sort sprites from far to close
+// sort sprites from far to close
+void set_sprites_distance(t_world *world, t_player *player) {
 	for (int i = 0; i < world->num_sprites; i++)
 	{
 		world->sprite_order[i] = i;
 		world->sprite_distance[i] =
 			((player->pos.x - world->sprites[i].pos.x) *
-					(player->pos.x - world->sprites[i].pos.x) +
-				(player->pos.y - world->sprites[i].pos.y) *
-					(player->pos.y - world->sprites[i].pos.y)); // sqrt not taken, unneeded
+			 (player->pos.x - world->sprites[i].pos.x) +
+			 (player->pos.y - world->sprites[i].pos.y) *
+			 (player->pos.y - world->sprites[i].pos.y)); // sqrt not taken, unneeded
 	}
+}
+
+// translate sprite position to relative to camera
+void make_sprite_pos_relative_to_camera(int sprite_num, t_sprite *sprite, t_world *world, t_player *player) {
+	sprite->pos.x = world->sprites[world->sprite_order[sprite_num]].pos.x - player->pos.x;
+	sprite->pos.y = world->sprites[world->sprite_order[sprite_num]].pos.y - player->pos.y;
+}
+
+// transform sprite with the inverse camera matrix
+// [planeX dirX] -1                                 [dirY     -dirX]
+// [           ]    = 1/(planeX*dirY-dirX*planeY) * [              ]
+// [planeY dirY]                                    [-planeY planeX]
+void transform_sprite_with_inverse_camera_matrix(t_sprite *sprite, t_resolution *resolution, t_player *player) {
+	double inv_det = 1.0 /
+		(player->plane.x * player->dir.y -
+		 player->dir.x * player->plane.y); // required for correct matrix multiplication
+	sprite->transform.x =
+		inv_det * (player->dir.y * sprite->pos.x - player->dir.x * sprite->pos.y);
+	sprite->transform.y = inv_det *
+		(-player->plane.y * sprite->pos.x + player->plane.x *
+		 sprite->pos.y); // this is actually the depth inside the screen, that what z is in 3D
+	sprite->screen_x =
+		(int)(((double)resolution->width / 2) * (1 + sprite->transform.x / sprite->transform.y));
+}
+
+/**
+ * this is the function that draws a whole frame every time a control key is pressed
+ */
+int			draw_frame(t_data *params)
+{
+	t_mlx		*mlx;
+	t_img_data	*img;
+	t_player	*player;
+	t_world		*world;
+	t_resolution *resolution;
+
+	mlx = &params->mlx;
+	img = &params->img;
+	player = &params->player;
+	world = &params->world;
+	resolution = &params->resolution;
+
+	draw_background(params);
+	cast_walls(resolution, player, world, params);
+
+	// SPRITE CASTING
+	set_sprites_distance(world, player);
 	sort_sprites(world->sprite_order, world->sprite_distance, world->num_sprites);
+
 	// after sorting the sprites, do the projection and draw them
-	double sprite_x, sprite_y;
+	t_sprite sprite;
 	for (int i = 0; i < world->num_sprites; i++)
 	{
-		// translate sprite position to relative to camera
-		sprite_x = world->sprites[world->sprite_order[i]].pos.x - player->pos.x;
-		sprite_y = world->sprites[world->sprite_order[i]].pos.y - player->pos.y;
-		// transform sprite with the inverse camera matrix
-		// [ plane_x   dir_x ] -1                                       [ dir_y
-		// -dir_x ] [               ]       =  1/(plane_x*dir_y-dir_x*plane_y) *   [
-		// ] [ plane_y   dir_y ]                                          [
-		// -plane_y  plane_x ]
-		double inv_det = 1.0 /
-			(player->plane.x * player->dir.y -
-				player->dir.x *
-					player->plane.y); // required for correct matrix multiplication
-		double transform_x =
-			inv_det * (player->dir.y * sprite_x - player->dir.x * sprite_y);
-		double transform_y = inv_det *
-			(-player->plane.y * sprite_x +
-				player->plane.x *
-					sprite_y); // this is actually the depth inside the screen, that what z is in 3D
-		int sprite_screen_x =
-			(int)(((double)resolution->width / 2) * (1 + transform_x / transform_y));
+		make_sprite_pos_relative_to_camera(i, &sprite, world, player);
+		transform_sprite_with_inverse_camera_matrix(&sprite, resolution, player);
+
 		// calculate height of the sprite on screen
 		int sprite_height = abs(
-			(int)(resolution->height / transform_y)); // using 'transform_y' instead of
+			(int)(resolution->height / sprite.transform.y)); // using 'transform_y' instead of
 												// the real distance prevents fisheye
+												//
 		// calculate lowest and highest pixel to fill in current stripe
 		int draw_start_y = -sprite_height / 2 + resolution->height / 2;
 		if (draw_start_y < 0)
@@ -376,18 +392,20 @@ int			draw_frame(t_data *params)
 		int draw_end_y = sprite_height / 2 + resolution->height / 2;
 		if (draw_end_y >= resolution->height)
 			draw_end_y = resolution->height;
+
 		// calculate width of the sprite
-		int sprite_width = abs((int)(resolution->height / transform_y));
-		int draw_start_x = -sprite_width / 2 + sprite_screen_x;
+		int sprite_width = abs((int)(resolution->height / sprite.transform.y));
+		int draw_start_x = -sprite_width / 2 + sprite.screen_x;
 		if (draw_start_x < 0)
 			draw_start_x = 0;
-		int draw_end_x = sprite_width / 2 + sprite_screen_x;
+		int draw_end_x = sprite_width / 2 + sprite.screen_x;
 		if (draw_end_x >= resolution->width)
 			draw_end_x = resolution->width;
+
 		// loop through every vertical stripe of the sprite on screen
 		for (int stripe = draw_start_x; stripe < draw_end_x; stripe++)
 		{
-			int tex_x = (int)(256 * (stripe - (-sprite_width / 2 + sprite_screen_x)) *
+			int tex_x = (int)(256 * (stripe - (-sprite_width / 2 + sprite.screen_x)) *
 								TEX_SIZE / sprite_width) /
 				256;
 			// the conditions in the if are:
@@ -395,8 +413,8 @@ int			draw_frame(t_data *params)
 			// 2) it's on the screen (left)
 			// 3) it's on the screen (right)
 			// 4) z_buffer, with perpendicular distance
-			if (transform_y > 0 && stripe > 0 && stripe < resolution->width &&
-				transform_y < world->z_buffer[stripe])
+			if (sprite.transform.y > 0 && stripe > 0 && stripe < resolution->width &&
+				sprite.transform.y < world->z_buffer[stripe])
 			{
 				for (int y = draw_start_y; y < draw_end_y;
 						y++) // for every pixel of the current stripe
@@ -733,6 +751,7 @@ void load_mlx(t_data *params) {
 /**
  * temporary function before parsing the map
  */
+/*
 void generate_world_map(t_data *params) {
 	t_world *world;
 	
@@ -786,8 +805,8 @@ void generate_world_map(t_data *params) {
 		printf("\b\b\"\n");
 	}
 }
+*/
 
-/*
 void generate_world_map(t_data *params) {
 	t_world *world;
 	
@@ -842,7 +861,6 @@ void generate_world_map(t_data *params) {
 		printf("\b\b\"\n");
 	}
 }
-*/
 
 
 void set_map_size(t_data *params) {

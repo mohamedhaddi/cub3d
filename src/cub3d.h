@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/10 18:20:30 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/11 15:27:06 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,8 @@ typedef struct	s_player
 typedef struct	s_sprite
 {
 	t_pos		pos;
+	t_pos		transform;
+	int			screen_x;
 }				t_sprite;
 
 typedef struct	s_pair
