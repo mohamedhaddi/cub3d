@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/10 19:22:12 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/11 14:30:01 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,7 +375,7 @@ int			draw_frame(t_data *params)
 			draw_start_y = 0;
 		int draw_end_y = sprite_height / 2 + resolution->height / 2;
 		if (draw_end_y >= resolution->height)
-			draw_end_y = resolution->height - 1;
+			draw_end_y = resolution->height;
 		// calculate width of the sprite
 		int sprite_width = abs((int)(resolution->height / transform_y));
 		int draw_start_x = -sprite_width / 2 + sprite_screen_x;
@@ -383,7 +383,7 @@ int			draw_frame(t_data *params)
 			draw_start_x = 0;
 		int draw_end_x = sprite_width / 2 + sprite_screen_x;
 		if (draw_end_x >= resolution->width)
-			draw_end_x = resolution->width - 1;
+			draw_end_x = resolution->width;
 		// loop through every vertical stripe of the sprite on screen
 		for (int stripe = draw_start_x; stripe < draw_end_x; stripe++)
 		{
