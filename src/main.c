@@ -6,12 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/11 21:46:07 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/11 23:12:08 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <time.h>
 #include "cub3d.h"
+#include "minilibx-linux/mlx.h"
 
 void print_info(t_player *player, t_data *params) {
 	char		*output_pos_x;
@@ -506,10 +507,8 @@ void rotate_right(t_data *params) {
 	double		old_dir_x;
 	double		old_plane_x;
 	t_player	*player;
-	t_world		*world;
 
 	player = &params->player;
-	world = &params->world;
 	// both camera direction and camera plane must be rotated
 	old_dir_x = player->dir.x;
 	player->dir.x = player->dir.x * cos(-player->speed.rot_speed) -
@@ -528,10 +527,8 @@ void rotate_left(t_data *params) {
 	double		old_dir_x;
 	double		old_plane_x;
 	t_player	*player;
-	t_world		*world;
 
 	player = &params->player;
-	world = &params->world;
 	// both camera direction and camera plane must be rotated
 	old_dir_x = player->dir.x;
 	player->dir.x = player->dir.x * cos(player->speed.rot_speed) -
@@ -877,11 +874,8 @@ int			main()
 {
 	t_data		params;
 	t_mlx		*mlx;
-	t_img_data	*img;
 
 	mlx = &params.mlx;
-	img = &params.img;
-
 	srand(time(NULL));
 	set_screen_resolution(&params);
 	set_map_size(&params);
@@ -890,8 +884,8 @@ int			main()
 	load_game(&params);
 	draw_frame(&params);
 	mlx_loop_hook(mlx->ptr, read_keys, &params);
-	mlx_hook(mlx->win, 2, 0, key_press, &params);
-	mlx_hook(mlx->win, 3, 0, key_release, &params);
-	mlx_hook(mlx->win, 17, 0, red_cross_press, &params);
+	mlx_hook(mlx->win, 2, 1L, key_press, &params);
+	mlx_hook(mlx->win, 3, 2L, key_release, &params);
+	// mlx_hook(mlx->win, 17, 1L, red_cross_press, &params);
 	mlx_loop(mlx->ptr);
 }

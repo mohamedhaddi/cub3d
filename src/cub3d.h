@@ -32,12 +32,12 @@ enum			e_directions
 
 enum			e_keycodes
 {
+	A_KEY = 97,
 	W_KEY = 119,
 	S_KEY = 115,
-	D_KEY = 68,
-	A_KEY = 100,
-	RIGHT_KEY = 65363,
+	D_KEY = 100,
 	LEFT_KEY = 65361,
+	RIGHT_KEY = 65363,
 	ESC_KEY = 65307
 };
 
