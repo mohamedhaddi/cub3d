@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/11 21:43:17 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/04/12 02:15:21 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ typedef	struct	s_texture_paths
 typedef struct	s_world
 {
 	int				**map;
-	t_img_data		textures[7];
+	t_img_data		*textures;
 	int				**buffer;
 	t_texture_paths texture_paths;
 	t_sprite		*sprites;
