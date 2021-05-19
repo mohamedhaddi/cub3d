@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 12:36:57 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 15:56:46 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,12 @@ typedef struct	s_strings {
 
 t_strings strings;
 
+/**
+ * show real-time values for cetain variables on screen
+ * to-remove later (because forbidden function sprintf)
+ */
 void print_info(t_player *player, t_data *params) {
 	t_mlx *mlx = &params->mlx;
-	// show real-time values for cetain variables on screen
 	sprintf(strings.output_pos_x, "pos_x: %f", player->pos.x);
 	sprintf(strings.output_pos_y, "pos_y: %f", player->pos.y);
 	sprintf(strings.output_dir_x, "dir_x: %f", player->dir.x);
@@ -66,23 +69,10 @@ void alloc_strings() {
 	strings.output_keystrokes_a = (char *)malloc(20 * sizeof(char));
 }
 
-/**
- * test
- */
-
 void		exit_game(t_data *params, int status)
 {
 	int	i;
 
-	/*
-	i = 0;
-	while (game->world->map[i])
-	{
-		free(game->world->map[i]);
-		i++;
-	}
-	free(game->world->map);
-	*/
 	i = 0;
 	while (i < TEX_NUM)
 	{
@@ -91,6 +81,7 @@ void		exit_game(t_data *params, int status)
 								params->world.textures[i].img);
 		i++;
 	}
+
 	mlx_destroy_image(params->mlx.ptr, params->img.img);
 	mlx_destroy_window(params->mlx.ptr, params->mlx.win);
 	exit(status);
@@ -102,7 +93,9 @@ int			red_cross_press(t_data *params)
 	return (0);
 }
 
-// calculate ray position and direction
+/** calculate ray position and direction:
+ *  - camera_x is x-coordinate in camera space
+ */
 void set_ray_dir(int x, t_ray *ray, t_data *params) {
 	t_resolution *resolution;
 	t_player *player;
@@ -110,12 +103,14 @@ void set_ray_dir(int x, t_ray *ray, t_data *params) {
 
 	resolution = &params->resolution;
 	player = &params->player;
-	camera_x = ((2 * x) / (double)resolution->width) - 1; // x-coordinate in camera space
+	camera_x = ((2 * x) / (double)resolution->width) - 1;
 	ray->dir.x = player->dir.x + player->plane.x * camera_x;
 	ray->dir.y = player->dir.y + player->plane.y * camera_x;
 }
 
-// clear buffer (by setting floor and ceiling colors)
+/**
+ * clear buffer (by setting floor and ceiling colors)
+ */
 void draw_background(t_data *params) {
 	t_world *world;
 	t_resolution *resolution;
@@ -138,7 +133,9 @@ void draw_background(t_data *params) {
 	}
 }
 
-// what direction to step in x or y-direction (either +1 or -1)
+/**
+ * what direction to step in x or y-direction (either +1 or -1)
+ */
 void set_step_dir(t_ray *ray) {
 	if (ray->dir.x < 0)
 		ray->step.dir.x = -1;
@@ -150,7 +147,9 @@ void set_step_dir(t_ray *ray) {
 		ray->step.dir.y = 1;
 }
 
-// calculate initial side_dist
+/**
+ * calculate initial side_dist
+ */
 void set_side_dist(t_ray *ray, t_player *player) {
 	if (ray->dir.x < 0)
 		ray->side_dist.x = (player->pos.x - ray->box.x) * ray->delta_dist.x;
@@ -162,19 +161,25 @@ void set_side_dist(t_ray *ray, t_player *player) {
 		ray->side_dist.y = (ray->box.y + 1.0 - player->pos.y) * ray->delta_dist.y;
 }
 
-// length of ray from current position to next x or y-side
+/**
+ * length of ray from current position to next x or y-side
+ */
 void set_delta_dist(t_ray *ray) {
 	ray->delta_dist.x = fabs(1 / ray->dir.x);
 	ray->delta_dist.y = fabs(1 / ray->dir.y);
 }
 
-// which box of the map we're in
+/**
+ * which box of the map we're in
+ */
 void set_ray_current_box(t_ray *ray, t_player *player) {
 	ray->box.x = (int)player->pos.x;
 	ray->box.y = (int)player->pos.y;
 }
 
-// jump to next map square in x-direction 
+/**
+ * jump to next map square in x-direction 
+ */
 void jump_to_next_x_side(t_ray *ray) {
 	ray->side_dist.x += ray->delta_dist.x;
 	ray->box.x += ray->step.dir.x;
@@ -184,7 +189,9 @@ void jump_to_next_x_side(t_ray *ray) {
 		ray->side = NO;
 }
 
-// jump to next map square in y-direction 
+/**
+ * jump to next map square in y-direction 
+ */
 void jump_to_next_y_side(t_ray *ray) {
 	ray->side_dist.y += ray->delta_dist.y;
 	ray->box.y += ray->step.dir.y;
@@ -194,7 +201,9 @@ void jump_to_next_y_side(t_ray *ray) {
 		ray->side = WE;
 }
 
-// jump to next map square
+/**
+ * jump to next map square
+ */
 void jump_to_next_square(t_ray *ray) {
 	if (ray->side_dist.x < ray->side_dist.y)
 		jump_to_next_x_side(ray);
@@ -202,12 +211,16 @@ void jump_to_next_square(t_ray *ray) {
 		jump_to_next_y_side(ray);
 }
 
-// Check if ray has hit a wall
+/**
+ * Check if ray has hit a wall
+ */
 int is_a_wall_hit(int box) {
 	return box == 1;
 }
 
-// perform DDA: a loop that increments the ray with 1 square every time until a wall is hit
+/**
+ * perform DDA: a loop that increments the ray with 1 square every time until a wall is hit
+ */
 void cast_ray(t_world *world, t_ray *ray) {
 	while (is_a_wall_hit(world->map[ray->box.x][ray->box.y]) == 0)
 		jump_to_next_square(ray);
@@ -221,7 +234,9 @@ void calc_ray_params(int x, t_ray *ray, t_data *params, t_player *player) {
 	set_side_dist(ray, player);
 }
 
-// Calculate perpendicular distance projected on camera direction (Euclidean distance will give fisheye effect!)
+/**
+ * Calculate perpendicular distance projected on camera direction (Euclidean distance will give fisheye effect!)
+ */
 void calc_perp_distance(t_ray *ray, t_player *player) {
 	if (ray->side % 2 == 0)
 		ray->perp_wall_dist = (ray->box.x - player->pos.x + (1.0 - ray->step.dir.x) / 2) / ray->dir.x;
@@ -229,7 +244,9 @@ void calc_perp_distance(t_ray *ray, t_player *player) {
 		ray->perp_wall_dist = (ray->box.y - player->pos.y + (1.0 - ray->step.dir.y) / 2) / ray->dir.y;
 }
 
-// Calculate height of line to draw on screen
+/**
+ * Calculate height of line to draw on screen
+ */
 void calc_line_height(t_ray *ray, t_resolution *resolution) {
 	ray->line_height = (int)(resolution->height / ray->perp_wall_dist);
 }
@@ -246,18 +263,22 @@ void calc_last_px_of_stripe(t_ray *ray, t_resolution *resolution) {
 		ray->draw_end = resolution->height;
 }
 
-// calculate lowest and highest pixel to fill in current stripe
+/**
+ * calculate lowest and highest pixel to fill in current stripe
+ */
 void calc_both_ends_of_vertical_stripe(t_ray *ray, t_resolution *resolution) {
 	calc_first_px_of_stripe(ray, resolution);
 	calc_last_px_of_stripe(ray, resolution);
 }
 
-// calculate value of wall_x (where exactly the wall was hit)
-//  The value wallX represents the exact value where the wall was hit, not just the integer coordinates of the wall.
-//  This is required to know which x-coordinate of the texture we have to use.
-//  This is calculated by first calculating the exact x or y coordinate in the world,
-//  and then substracting the integer value of the wall off it. Note that even if it's called wallX,
-//  it's actually an y-coordinate of the wall if side==1, but it's always the x-coordinate of the texture.
+/**
+ * calculate value of wall_x (where exactly the wall was hit)
+ * The value wallX represents the exact value where the wall was hit, not just the integer coordinates of the wall.
+ * This is required to know which x-coordinate of the texture we have to use.
+ * This is calculated by first calculating the exact x or y coordinate in the world,
+ * and then substracting the integer value of the wall off it. Note that even if it's called wallX,
+ * it's actually an y-coordinate of the wall if side==1, but it's always the x-coordinate of the texture.
+ */
 void calc_wall_x(t_ray *ray, t_player *player) {
 	if (ray->side % 2 == 0)
 		ray->wall_x = player->pos.y + ray->perp_wall_dist * ray->dir.y;
@@ -266,8 +287,10 @@ void calc_wall_x(t_ray *ray, t_player *player) {
 	ray->wall_x -= floor(ray->wall_x);
 }
 
-// calculate the x-coordinate on the texture
-// TEX_SIZE is width and height in texels of the textures
+/**
+ * calculate the x-coordinate on the texture
+ * TEX_SIZE is width and height in texels of the textures
+ */
 void calc_texture_x(t_ray *ray) {
 	ray->tex_x = (int)(ray->wall_x * (double)TEX_SIZE);
 	if (ray->side % 2 == 0 && ray->dir.x > 0)
@@ -276,35 +299,53 @@ void calc_texture_x(t_ray *ray) {
 		ray->tex_x = TEX_SIZE - ray->tex_x - 1;
 }
 
-// set how much to increase the texture coordinate per screen pixel
+/**
+ * set how much to increase the texture coordinate per screen pixel
+ */
 void set_texture_coordinate_step(t_ray *ray) {
 	ray->tex_step = 1.0 * TEX_SIZE / ray->line_height;
 }
 
-// set starting texture coordinate
+/**
+ * set starting texture coordinate
+ */
 void set_starting_texture_coordinate(t_ray *ray, t_resolution *resolution) {
 	ray->tex_pos =
 		(ray->draw_start - resolution->height / 2.0 + ray->line_height / 2.0) * ray->tex_step;
 }
 
+/**
+ * draw a vertical stripe of a wall:
+ * - `ray->tex_y = ...` -> Cast the texture coordinate to integer, and mask with (TEX_SIZE - 1) in case of overflow
+ * - `if ((color & 0x00FFFFFF) != 0) ...` -> paint pixel if it isn't black, black is the invisible color
+ * - y-coordinate is first in buffer because it works per scanline
+ */
 void draw_wall_vertical_stripe(int x, t_ray *ray, t_world *world) {
 	int y = ray->draw_start; 
 	while (y < ray->draw_end)
 	{
-		// Cast the texture coordinate to integer, and mask with (TEX_SIZE - 1) in case of overflow
 		ray->tex_y = (int)ray->tex_pos & (TEX_SIZE - 1);
 		ray->tex_pos += ray->tex_step;
 		int color =
 			world->textures[ray->side].addr[TEX_SIZE * ray->tex_y + ray->tex_x];
 
-		if ((color & 0x00FFFFFF) != 0) // paint pixel if it isn't black, black is the invisible color
+		if ((color & 0x00FFFFFF) != 0)
 			world->buffer[y][x] =
-				color; // y-coordinate first because it works per scanline
+				color;
 		y++;
 	}
 }
 
-// WALL CASTING LOOP
+/**
+ * SET THE ZBUFFER FOR THE SPRITE CASTING
+ */
+void set_zbuffer(int x, t_ray *ray, t_world *world) {
+	world->z_buffer[x] = ray->perp_wall_dist; // perpendicular distance is used
+}
+
+/**
+ * WALL CASTING LOOP
+ */
 void cast_walls(t_resolution *resolution, t_player *player, t_world *world, t_data *params) {
 	t_ray ray;
 
@@ -321,14 +362,14 @@ void cast_walls(t_resolution *resolution, t_player *player, t_world *world, t_da
 		set_texture_coordinate_step(&ray);
 		set_starting_texture_coordinate(&ray, resolution);
 		draw_wall_vertical_stripe(x, &ray, world);
-
-		// SET THE ZBUFFER FOR THE SPRITE CASTING
-		world->z_buffer[x] = ray.perp_wall_dist; // perpendicular distance is used
+		set_zbuffer(x, &ray, world);
 		x++; 
 	}
 }
 
-// sort sprites from far to close
+/**
+ * sort sprites from far to close
+ */
 void set_sprites_distance(t_world *world, t_player *player) {
 	int i = 0; 
 	while (i < world->num_sprites)
@@ -338,36 +379,44 @@ void set_sprites_distance(t_world *world, t_player *player) {
 			((player->pos.x - world->sprites[i].pos.x) *
 			 (player->pos.x - world->sprites[i].pos.x) +
 			 (player->pos.y - world->sprites[i].pos.y) *
-			 (player->pos.y - world->sprites[i].pos.y)); // sqrt not taken, unneeded
+			 (player->pos.y - world->sprites[i].pos.y));
 		i++; 
 	}
 }
 
-// translate sprite position to relative to camera
+/**
+ * translate sprite position to relative to camera
+ */
 void make_sprite_pos_relative_to_camera(int sprite_num, t_sprite *sprite, t_world *world, t_player *player) {
 	sprite->pos.x = world->sprites[world->sprite_order[sprite_num]].pos.x - player->pos.x;
 	sprite->pos.y = world->sprites[world->sprite_order[sprite_num]].pos.y - player->pos.y;
 }
 
-// transform sprite with the inverse camera matrix
-// [planeX dirX] -1                                 [dirY     -dirX]
-// [           ]    = 1/(planeX*dirY-dirX*planeY) * [              ]
-// [planeY dirY]                                    [-planeY planeX]
+/**
+ * transform sprite with the inverse camera matrix
+ * [planeX dirX] -1                                 [dirY     -dirX]
+ * [           ]    = 1/(planeX*dirY-dirX*planeY) * [              ]
+ * [planeY dirY]                                    [-planeY planeX]
+ * - `inv_det` required for correct matrix multiplication
+ * - `sprite->transform.y` is actually the depth inside the screen, that what z is in 3D
+ */
 void transform_sprite_with_inverse_camera_matrix(t_sprite *sprite, t_resolution *resolution, t_player *player) {
 	double inv_det = 1.0 /
 		(player->plane.x * player->dir.y -
-		 player->dir.x * player->plane.y); // required for correct matrix multiplication
+		 player->dir.x * player->plane.y);
 	sprite->transform.x =
 		inv_det * (player->dir.y * sprite->pos.x - player->dir.x * sprite->pos.y);
 	sprite->transform.y = inv_det *
 		(-player->plane.y * sprite->pos.x + player->plane.x *
-		 sprite->pos.y); // this is actually the depth inside the screen, that what z is in 3D
+		 sprite->pos.y);
 	sprite->screen_x =
 		(int)(((double)resolution->width / 2) * (1 + sprite->transform.x / sprite->transform.y));
 }
 
-// calculate height of the sprite on screen
-// using 'transform_y' instead of the real distance prevents fisheye
+/**
+ * calculate height of the sprite on screen
+ * using 'transform_y' instead of the real distance prevents fisheye
+ */
 void calc_sprite_height(t_sprite *sprite, t_resolution *resolution) {
 	sprite->height = abs((int)(resolution->height / sprite->transform.y));
 }
@@ -391,20 +440,25 @@ void calc_sprite_width(t_sprite *sprite, t_resolution *resolution) {
 			sprite->draw_end_x = resolution->width;
 }
 
+/**
+ * - 256 and 128 factors to avoid floats
+ * - `color` -> gets current color from the sprite texture
+ * - `if ((color & 0x00FFFFFF) != 0) ...` -> paint pixel if it isn't black, black is the invisible color
+ */
 void draw_sprite_vertical_stripe(int stripe, int tex_x, t_sprite *sprite, t_data *params) {
 	t_world *world = &params->world;
 	t_resolution *resolution = &params->resolution;
 
 	int y = sprite->draw_start_y; 
-	while (y < sprite->draw_end_y) // for every pixel of the current stripe
+	while (y < sprite->draw_end_y)
 	{
 		int d = (y)*256 - resolution->height * 128 +
-			sprite->height * 128; // 256 and 128 factors to avoid floats
+			sprite->height * 128;
 		int tex_y = ((d * TEX_SIZE) / sprite->height) / 256;
-		int color = world->textures[SPRITE_INDEX].addr[TEX_SIZE * tex_y + tex_x]; // get current color from the sprite texture
+		int color = world->textures[SPRITE_INDEX].addr[TEX_SIZE * tex_y + tex_x];
 		if ((color & 0x00FFFFFF) != 0)
 			world->buffer[y][stripe] =
-				color; // paint pixel if it isn't black, black is the invisible color
+				color;
 		y++; 
 	}
 }
@@ -696,8 +750,8 @@ void calc_num_of_sprites(t_world *world, t_data *params) {
 		while (y < params->map_size.height)
 		{
 			if (world->map[x][y] == 2)
-				world->num_sprites += 1;	
- 			y++;
+				world->num_sprites += 1;
+			y++;
 		}
 		x++; 
 	}
