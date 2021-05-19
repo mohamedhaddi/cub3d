@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/04/11 15:27:06 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 09:19:11 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 
 # define TEX_SIZE 64
+# define TEX_NUM 5
 # define SPRITE_INDEX 4
 
 enum			e_directions
@@ -151,6 +152,12 @@ typedef struct	s_sprite
 	t_pos		pos;
 	t_pos		transform;
 	int			screen_x;
+	int			height;
+	int			width;
+	int			draw_start_x;
+	int			draw_start_y;
+	int			draw_end_x;
+	int			draw_end_y;
 }				t_sprite;
 
 typedef struct	s_pair
@@ -171,7 +178,7 @@ typedef	struct	s_texture_paths
 typedef struct	s_world
 {
 	int				**map;
-	t_img_data		textures[7];
+	t_img_data		*textures;
 	int				**buffer;
 	t_texture_paths texture_paths;
 	t_sprite		*sprites;
