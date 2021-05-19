@@ -13,7 +13,7 @@
 #include "cub3d.h"
 #include <time.h>
 
-int	main()
+int	main(void)
 {
 	t_data		params;
 	t_mlx		*mlx;

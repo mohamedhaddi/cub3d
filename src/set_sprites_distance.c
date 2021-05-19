@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:32:43 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:31:33 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 22:46:45 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@ void	set_sprites_distance(t_world *world, t_player *player)
 	while (i < world->num_sprites)
 	{
 		world->sprite_order[i] = i;
-		world->sprite_distance[i] =
-			((player->pos.x - world->sprites[i].pos.x) *
-					(player->pos.x - world->sprites[i].pos.x) +
-				(player->pos.y - world->sprites[i].pos.y) *
-					(player->pos.y - world->sprites[i].pos.y));
+		world->sprite_distance[i] = ((player->pos.x - world->sprites[i].pos.x)
+				* (player->pos.x - world->sprites[i].pos.x)
+				+ (player->pos.y - world->sprites[i].pos.y)
+				* (player->pos.y - world->sprites[i].pos.y));
 		i++;
 	}
 }

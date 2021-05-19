@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:23:08 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:30:08 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 22:32:03 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ void	move_backward(t_data *params)
 
 	player = &params->player;
 	world = &params->world;
-	if (world->map[(int)(player->pos.x - player->dir.x * player->speed.move_speed)]
-					[(int)(player->pos.y)] %
-			2 ==
-		0)
+	if (world->map[(int)(player->pos.x
+			- player->dir.x
+			* player->speed.move_speed)][(int)(player->pos.y)]
+			% 2 == 0)
 		player->pos.x -= player->dir.x * player->speed.move_speed;
-	if (world->map[(int)(player->pos.x)][(
-			int)(player->pos.y - player->dir.y * player->speed.move_speed)] %
-			2 ==
-		0)
+	if (world->map[(int)(player->pos.x)][(int)(player->pos.y
+			- player->dir.y
+			* player->speed.move_speed)]
+			% 2 == 0)
 		player->pos.y -= player->dir.y * player->speed.move_speed;
 }

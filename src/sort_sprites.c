@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 15:05:38 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:32:00 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 22:50:44 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,12 @@ static void	pair_sort(t_pair arr[], int n)
 	}
 }
 
-/*
-** initializes an array of two pairs with distance as the first pair then order
-** as the second one the sorts that collection of pairs in reverse order so we
-** can draw sprites from farthest to nearest
-*/
-
-void		sort_sprites(int *order, double *dist, int amount)
+/**
+ * initializes an array of two pairs with distance as the first pair then order
+ * as the second one the sorts that collection of pairs in reverse order so we
+ * can draw sprites from farthest to nearest
+ */
+void	sort_sprites(int *order, double *dist, int amount)
 {
 	t_pair	*sprites;
 	int		i;
