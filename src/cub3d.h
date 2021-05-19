@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 17:47:44 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:02:00 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,5 +230,73 @@ void			calc_num_of_sprites(t_world *world, t_data *params);
 void			load_textures(t_data *params);
 t_img_data		load_image(char *path, t_data *params);
 void			initiliaze_keystrokes(int *keystrokes);
+int				key_release(int keycode, t_data *params);
+int				key_press(int keycode, t_data *params);
+int				is_control_key(int keycode);
+int				read_keys(t_data *params);
+void			rotate_left(t_data *params);
+void			rotate_right(t_data *params);
+void			move_left(t_data *params);
+void			move_right(t_data *params);
+void			move_backward(t_data *params);
+void			move_forward(t_data *params);
+int				draw_frame(t_data *params);
+void			cast_sprites(t_world *world,
+					t_player *player,
+					t_resolution *resolution,
+					t_data *params);
+void			draw_buffer(t_resolution *resolution,
+					t_world *world,
+					t_img_data *img,
+					t_mlx *mlx);
+void			draw_sprites(t_world *world,
+					t_player *player,
+					t_resolution *resolution,
+					t_data *params);
+void			loop_through_sprite_stripes(t_sprite *sprite,
+									t_resolution *resolution,
+									t_world *world,
+									t_data *params);
+void			draw_sprite_vertical_stripe(int stripe,
+									int tex_x,
+									t_sprite *sprite,
+									t_data *params);
+void			calc_sprite_width(t_sprite *sprite, t_resolution *resolution);
+void			calc_start_end_of_stripe(t_sprite *sprite, t_resolution *resolution);
+void			calc_sprite_height(t_sprite *sprite, t_resolution *resolution);
+void			transform_sprite_with_inverse_camera_matrix(t_sprite *sprite,
+													t_resolution *resolution,
+													t_player *player);
+void			make_sprite_pos_relative_to_camera(int sprite_num,
+										t_sprite *sprite,
+										t_world *world,
+										t_player *player);
+void			set_sprites_distance(t_world *world, t_player *player);
+void			cast_walls(t_resolution *resolution,
+				t_player *player,
+				t_world *world,
+				t_data *params);
+void			draw_wall_vertical_stripe(int x, t_ray *ray, t_world *world);
+void			set_starting_texture_coordinate(t_ray *ray, t_resolution *resolution);
+void			set_texture_coordinate_step(t_ray *ray);
+void			calc_texture_x(t_ray *ray);
+void			calc_wall_x(t_ray *ray, t_player *player);
+void			calc_both_ends_of_vertical_stripe(t_ray *ray, t_resolution *resolution);
+void			calc_last_px_of_stripe(t_ray *ray, t_resolution *resolution);
+void			calc_first_px_of_stripe(t_ray *ray, t_resolution *resolution);
+void			calc_line_height(t_ray *ray, t_resolution *resolution);
+void			calc_perp_distance(t_ray *ray, t_player *player);
+void			calc_ray_params(int x, t_ray *ray, t_data *params, t_player *player);
+void			cast_ray(t_world *world, t_ray *ray);
+int				is_a_wall_hit(int box);
+void			jump_to_next_square(t_ray *ray);
+void			jump_to_next_y_side(t_ray *ray);
+void			jump_to_next_x_side(t_ray *ray);
+void			set_ray_current_box(t_ray *ray, t_player *player);
+void			set_delta_dist(t_ray *ray);
+void			set_side_dist(t_ray *ray, t_player *player);
+void			set_step_dir(t_ray *ray);
+void			draw_background(t_data *params);
+void			set_ray_dir(int x, t_ray *ray, t_data *params);
 
 #endif
