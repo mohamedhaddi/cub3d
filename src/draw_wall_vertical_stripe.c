@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:34:56 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:33:28 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:52:32 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,15 @@
 void	draw_wall_vertical_stripe(int x, t_ray *ray, t_world *world)
 {
 	int	y;
+	int	color;
 
 	y = ray->draw_start;
 	while (y < ray->draw_end)
 	{
 		ray->tex_y = (int)ray->tex_pos & (TEX_SIZE - 1);
 		ray->tex_pos += ray->tex_step;
-		int color =
-			world->textures[ray->side].addr[TEX_SIZE * ray->tex_y + ray->tex_x];
+		color = world->textures[ray->side]
+			.addr[TEX_SIZE * ray->tex_y + ray->tex_x];
 		if ((color & 0x00FFFFFF) != 0)
 			world->buffer[y][x] = color;
 		y++;
