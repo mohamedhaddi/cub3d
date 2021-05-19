@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:23:37 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:23:45 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:30:10 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * move forward if no wall in front of you
  * - `if (...) ...` -> collision detection: won't move if it ain't 0 (a wall)
  */
-void			move_forward(t_data *params)
+void	move_forward(t_data *params)
 {
 	t_player	*player;
 	t_world		*world;

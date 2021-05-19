@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:28:41 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:29:07 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:32:41 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * calculate width of the sprite
  */
-void			calc_sprite_width(t_sprite *sprite, t_resolution *resolution)
+void	calc_sprite_width(t_sprite *sprite, t_resolution *resolution)
 {
 	sprite->width = abs((int)(resolution->height / sprite->transform.y));
 	sprite->draw_start_x = -sprite->width / 2 + sprite->screen_x;

@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:27:15 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:27:23 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:29:50 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * 3) it's on the screen (right)
  * 4) z_buffer, with perpendicular distance
  */
-void			loop_through_sprite_stripes(t_sprite *sprite,
+void	loop_through_sprite_stripes(t_sprite *sprite,
 									t_resolution *resolution,
 									t_world *world,
 									t_data *params)
@@ -40,4 +40,3 @@ void			loop_through_sprite_stripes(t_sprite *sprite,
 		stripe++;
 	}
 }
-

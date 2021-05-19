@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:31:19 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:31:34 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:32:08 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * - `inv_det` required for correct matrix multiplication
  * - `sprite->transform.y` is actually the depth inside the screen, that what z is in 3D
  */
-void			transform_sprite_with_inverse_camera_matrix(t_sprite *sprite,
+void	transform_sprite_with_inverse_camera_matrix(t_sprite *sprite,
 													t_resolution *resolution,
 													t_player *player)
 {

@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:26:27 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:26:46 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:49:17 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * after sorting the sprites, do the projection and draw them
  */
-void			draw_sprites(t_world *world,
+void	draw_sprites(t_world *world,
 					t_player *player,
 					t_resolution *resolution,
 					t_data *params)
@@ -27,7 +27,9 @@ void			draw_sprites(t_world *world,
 	while (i < world->num_sprites)
 	{
 		make_sprite_pos_relative_to_camera(i, &sprite, world, player);
-		transform_sprite_with_inverse_camera_matrix(&sprite, resolution, player);
+		transform_sprite_with_inverse_camera_matrix(&sprite,
+			resolution,
+			player);
 		calc_sprite_height(&sprite, resolution);
 		calc_start_end_of_stripe(&sprite, resolution);
 		calc_sprite_width(&sprite, resolution);

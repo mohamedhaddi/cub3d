@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:20:33 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:20:42 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:30:48 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * rotate to the right:
  * - both camera direction and camera plane must be rotated
  */
-void			rotate_right(t_data *params)
+void	rotate_right(t_data *params)
 {
 	double		old_dir_x;
 	double		old_plane_x;

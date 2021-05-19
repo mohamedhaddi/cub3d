@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 19:00:59 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:00:59 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:33:08 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * clear buffer (by setting floor and ceiling colors)
  */
-void			draw_background(t_data *params)
+void	draw_background(t_data *params)
 {
 	t_world			*world;
 	t_resolution	*resolution;

@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:18:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:19:01 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:30:33 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int				read_keys(t_data *params)
+int	read_keys(t_data *params)
 {
 	if (params->keystrokes[W_KEY])
 		move_forward(params);

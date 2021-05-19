@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:46:15 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 17:46:22 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:29:46 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void			load_textures(t_data *params)
+void	load_textures(t_data *params)
 {
 	t_world	*world;
 

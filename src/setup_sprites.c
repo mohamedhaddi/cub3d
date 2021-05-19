@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:44:10 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 17:44:15 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:31:53 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * and their positions
  * and allocates the sorting arrays
  */
-void			setup_sprites(t_data *params)
+void	setup_sprites(t_data *params)
 {
 	t_world	*world;
 

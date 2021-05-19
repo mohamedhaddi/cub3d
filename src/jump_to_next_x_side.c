@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:57:36 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:57:44 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:29:19 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * jump to next map square in x-direction
  */
-void			jump_to_next_x_side(t_ray *ray)
+void	jump_to_next_x_side(t_ray *ray)
 {
 	ray->side_dist.x += ray->delta_dist.x;
 	ray->box.x += ray->step.dir.x;

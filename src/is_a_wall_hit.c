@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:53:49 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:54:01 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:29:08 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * Check if ray has hit a wall
  */
-int				is_a_wall_hit(int box)
+int	is_a_wall_hit(int box)
 {
 	return (box == 1);
 }

@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:33:24 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:34:18 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:33:03 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 /**
  * SET THE ZBUFFER FOR THE SPRITE CASTING
+ * perpendicular distance is used
  */
-void			set_zbuffer(int x, t_ray *ray, t_world *world)
+void	set_zbuffer(int x, t_ray *ray, t_world *world)
 {
-	world->z_buffer[x] = ray->perp_wall_dist; // perpendicular distance is used
+	world->z_buffer[x] = ray->perp_wall_dist;
 }
 
 /**
  * WALL CASTING LOOP
  */
-void			cast_walls(t_resolution *resolution,
+void	cast_walls(t_resolution *resolution,
 				t_player *player,
 				t_world *world,
 				t_data *params)

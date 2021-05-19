@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:32:43 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:32:51 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:31:33 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * sort sprites from far to close
  */
-void			set_sprites_distance(t_world *world, t_player *player)
+void	set_sprites_distance(t_world *world, t_player *player)
 {
 	int	i;
 
@@ -31,4 +31,3 @@ void			set_sprites_distance(t_world *world, t_player *player)
 		i++;
 	}
 }
-

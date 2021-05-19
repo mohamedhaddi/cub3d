@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:19:40 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:19:45 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:30:43 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * rotate to the left:
  * - both camera direction and camera plane must be rotated
  */
-void			rotate_left(t_data *params)
+void	rotate_left(t_data *params)
 {
 	double		old_dir_x;
 	double		old_plane_x;

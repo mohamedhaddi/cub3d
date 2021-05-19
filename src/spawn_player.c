@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:39:45 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 17:39:54 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:32:04 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * set player's position and spawning orientation in map
  * set the position of each sprite
  */
-void			spawn_player(t_data *params)
+void	spawn_player(t_data *params)
 {
 	t_player	*player;
 	t_world		*world;
@@ -61,4 +61,3 @@ void			spawn_player(t_data *params)
 		x++;
 	}
 }
-

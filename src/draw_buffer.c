@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:25:43 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:25:47 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:33:11 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void			draw_buffer(t_resolution *resolution,
+void	draw_buffer(t_resolution *resolution,
 					t_world *world,
 					t_img_data *img,
 					t_mlx *mlx)

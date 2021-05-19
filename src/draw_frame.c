@@ -6,16 +6,17 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:24:19 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:24:24 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:44:32 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 /**
- * this is the function that draws a whole frame every time a control key is pressed
+ * this is the function that draws a whole frame
+ * every time a control key is pressed
  */
-int				draw_frame(t_data *params)
+int	draw_frame(t_data *params)
 {
 	t_mlx			*mlx;
 	t_img_data		*img;
@@ -35,4 +36,3 @@ int				draw_frame(t_data *params)
 	print_info(player, params);
 	return (0);
 }
-

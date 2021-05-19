@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 19:01:51 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:02:01 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:31:23 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /** calculate ray position and direction:
  *  - camera_x is x-coordinate in camera space
  */
-void			set_ray_dir(int x, t_ray *ray, t_data *params)
+void	set_ray_dir(int x, t_ray *ray, t_data *params)
 {
 	t_resolution	*resolution;
 	t_player		*player;

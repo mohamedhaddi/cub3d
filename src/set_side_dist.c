@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:59:43 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:59:50 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:31:29 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * calculate initial side_dist
  */
-void			set_side_dist(t_ray *ray, t_player *player)
+void	set_side_dist(t_ray *ray, t_player *player)
 {
 	if (ray->dir.x < 0)
 		ray->side_dist.x = (player->pos.x - ray->box.x) * ray->delta_dist.x;

@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:22:15 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:22:21 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:30:24 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * move to the right if no wall is on the right
  * - `if (...) ...` -> collision detection: won't move if it ain't 0 (a wall)
  */
-void			move_right(t_data *params)
+void	move_right(t_data *params)
 {
 	t_player	*player;
 	t_world		*world;

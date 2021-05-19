@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:38:29 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 17:38:41 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:29:34 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void			load_game(t_data *params)
+void	load_game(t_data *params)
 {
 	t_player	*player;
 	t_world		*world;

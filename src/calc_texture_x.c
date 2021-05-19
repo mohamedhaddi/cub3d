@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:37:07 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:37:14 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:32:49 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * calculate the x-coordinate on the texture
  * TEX_SIZE is width and height in texels of the textures
  */
-void			calc_texture_x(t_ray *ray)
+void	calc_texture_x(t_ray *ray)
 {
 	ray->tex_x = (int)(ray->wall_x * (double)TEX_SIZE);
 	if (ray->side % 2 == 0 && ray->dir.x > 0)

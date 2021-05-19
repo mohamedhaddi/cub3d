@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:43:40 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 17:43:46 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:31:50 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void			setup_buffers(t_data *params)
+void	setup_buffers(t_data *params)
 {
 	t_world	*world;
 	int		i;

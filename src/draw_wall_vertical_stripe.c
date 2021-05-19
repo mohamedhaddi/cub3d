@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:34:56 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 18:46:59 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 19:33:28 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * black is the invisible color
  * - y-coordinate is first in buffer because it works per scanline
  */
-void			draw_wall_vertical_stripe(int x, t_ray *ray, t_world *world)
+void	draw_wall_vertical_stripe(int x, t_ray *ray, t_world *world)
 {
 	int	y;
 
