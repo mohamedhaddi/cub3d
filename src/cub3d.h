@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 09:19:11 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 16:38:16 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@
 # define TEX_SIZE 64
 # define TEX_NUM 5
 # define SPRITE_INDEX 4
+
+enum e_squares
+{
+	FLOOR,
+	WALL
+};
 
 enum			e_directions
 {

@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 15:56:46 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 16:43:14 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -421,6 +421,9 @@ void calc_sprite_height(t_sprite *sprite, t_resolution *resolution) {
 	sprite->height = abs((int)(resolution->height / sprite->transform.y));
 }
 
+/**
+ * calculate lowest and highest pixel to fill in current stripe
+ */
 void calc_start_end_of_stripe(t_sprite *sprite, t_resolution *resolution) {
 		sprite->draw_start_y = -sprite->height / 2 + resolution->height / 2;
 		if (sprite->draw_start_y < 0)
@@ -430,6 +433,9 @@ void calc_start_end_of_stripe(t_sprite *sprite, t_resolution *resolution) {
 			sprite->draw_end_y = resolution->height;
 }
 
+/**
+ * calculate width of the sprite
+ */
 void calc_sprite_width(t_sprite *sprite, t_resolution *resolution) {
 		sprite->width = abs((int)(resolution->height / sprite->transform.y));
 		sprite->draw_start_x = -sprite->width / 2 + sprite->screen_x;
@@ -463,6 +469,14 @@ void draw_sprite_vertical_stripe(int stripe, int tex_x, t_sprite *sprite, t_data
 	}
 }
 
+/**
+ * loop through every vertical stripe of the sprite on screen
+ * the conditions in the if are:
+ * 1) it's in front of camera plane so you don't see things behind you
+ * 2) it's on the screen (left)
+ * 3) it's on the screen (right)
+ * 4) z_buffer, with perpendicular distance
+ */
 void loop_through_sprite_stripes(t_sprite *sprite, t_resolution *resolution, t_world *world, t_data *params) {
 	int stripe = sprite->draw_start_x; 
 	while (stripe < sprite->draw_end_x)
@@ -470,11 +484,6 @@ void loop_through_sprite_stripes(t_sprite *sprite, t_resolution *resolution, t_w
 		int tex_x = (int)(256 * (stripe - (-sprite->width / 2 + sprite->screen_x)) *
 				TEX_SIZE / sprite->width) /
 			256;
-		// the conditions in the if are:
-		// 1) it's in front of camera plane so you don't see things behind you
-		// 2) it's on the screen (left)
-		// 3) it's on the screen (right)
-		// 4) z_buffer, with perpendicular distance
 		if (sprite->transform.y > 0 && stripe > 0 && stripe < resolution->width &&
 				sprite->transform.y < world->z_buffer[stripe])
 			draw_sprite_vertical_stripe(stripe, tex_x, sprite, params);
@@ -482,6 +491,9 @@ void loop_through_sprite_stripes(t_sprite *sprite, t_resolution *resolution, t_w
 	}
 }
 
+/**
+ * after sorting the sprites, do the projection and draw them
+ */
 void draw_sprites(t_world *world, t_player *player, t_resolution *resolution, t_data *params) {
 	t_sprite sprite;
 	int i = 0; 
@@ -490,14 +502,8 @@ void draw_sprites(t_world *world, t_player *player, t_resolution *resolution, t_
 		make_sprite_pos_relative_to_camera(i, &sprite, world, player);
 		transform_sprite_with_inverse_camera_matrix(&sprite, resolution, player);
 		calc_sprite_height(&sprite, resolution);
-
-		// calculate lowest and highest pixel to fill in current stripe
 		calc_start_end_of_stripe(&sprite, resolution);
-
-		// calculate width of the sprite
 		calc_sprite_width(&sprite, resolution);
-
-		// loop through every vertical stripe of the sprite on screen
 		loop_through_sprite_stripes(&sprite, resolution, world, params);
 		i++;
 	}
@@ -520,7 +526,6 @@ void draw_buffer(t_resolution *resolution, t_world *world, t_img_data *img, t_ml
 void cast_sprites(t_world *world, t_player *player, t_resolution *resolution, t_data *params) {
 	set_sprites_distance(world, player);
 	sort_sprites(world->sprite_order, world->sprite_distance, world->num_sprites);
-	// after sorting the sprites, do the projection and draw them
 	draw_sprites(world, player, resolution, params);
 }
 
@@ -544,14 +549,16 @@ int			draw_frame(t_data *params)
 	draw_background(params);
 	cast_walls(resolution, player, world, params);
 	cast_sprites(world, player, resolution, params);
-
 	draw_buffer(resolution, world, img, mlx);
 	print_info(player, params);
 
 	return (0);
 }
 
-// move forward if no wall in front of you
+/**
+ * move forward if no wall in front of you
+ * - `if (...) ...` -> collision detection: won't move if it ain't 0 (a wall)
+ */
 void move_forward(t_data *params) {
 	t_player	*player;
 	t_world		*world;
@@ -559,15 +566,17 @@ void move_forward(t_data *params) {
 	player = &params->player;
 	world = &params->world;
 	if (world->map[(int)(player->pos.x + player->dir.x * player->speed.move_speed)]
-			[(int)(player->pos.y)] % 2 == 0 /*0 enum*/)
-		// collision detection: won't move if it ain't 0 (a wall)
+			[(int)(player->pos.y)] % 2 == 0)
 		player->pos.x += player->dir.x * player->speed.move_speed;
 	if (world->map[(int)(player->pos.x)]
 			[(int)(player->pos.y + player->dir.y * player->speed.move_speed)] % 2 == 0)
 		player->pos.y += player->dir.y * player->speed.move_speed;
 }
 
-// move backwards if no wall behind you
+/**
+ * move backwards if no wall behind you
+ * - `if (...) ...` -> collision detection: won't move if it ain't 0 (a wall)
+ */
 void move_backward(t_data *params) {
 	t_player	*player;
 	t_world		*world;
@@ -582,7 +591,10 @@ void move_backward(t_data *params) {
 		player->pos.y -= player->dir.y * player->speed.move_speed;
 }
 
-// move to the right if no wall is on the right
+/**
+ * move to the right if no wall is on the right
+ * - `if (...) ...` -> collision detection: won't move if it ain't 0 (a wall)
+ */
 void move_right(t_data *params) {
 	t_player	*player;
 	t_world		*world;
@@ -590,14 +602,17 @@ void move_right(t_data *params) {
 	player = &params->player;
 	world = &params->world;
 	if (world->map[(int)(player->pos.x + player->plane.x * player->speed.move_speed)]
-			[(int)(player->pos.y)] % 2 == 0 /*0 enum*/)
+			[(int)(player->pos.y)] % 2 == 0)
 		player->pos.x += player->plane.x * player->speed.move_speed;
 	if (world->map[(int)(player->pos.x)][(
 				int)(player->pos.y + player->plane.y * player->speed.move_speed)] % 2 == 0)
 		player->pos.y += player->plane.y * player->speed.move_speed;
 }
 
-// move to the left if no wall is on the left
+/**
+ * move to the left if no wall is on the left
+ * - `if (...) ...` -> collision detection: won't move if it ain't 0 (a wall)
+ */
 void move_left(t_data *params) {
 	t_player	*player;
 	t_world		*world;
@@ -605,14 +620,17 @@ void move_left(t_data *params) {
 	player = &params->player;
 	world = &params->world;
 	if (world->map[(int)(player->pos.x - player->plane.x * player->speed.move_speed)]
-			[(int)(player->pos.y)] % 2 == 0 /*0 enum*/)
+			[(int)(player->pos.y)] % 2 == 0)
 		player->pos.x -= player->plane.x * player->speed.move_speed;
 	if (world->map[(int)(player->pos.x)][(
 				int)(player->pos.y - player->plane.y * player->speed.move_speed)] % 2 == 0)
 		player->pos.y -= player->plane.y * player->speed.move_speed;
 }
 
-// rotate to the right
+/**
+ * rotate to the right:
+ * - both camera direction and camera plane must be rotated
+ */
 void rotate_right(t_data *params) {
 	double		old_dir_x;
 	double		old_plane_x;
@@ -621,7 +639,7 @@ void rotate_right(t_data *params) {
 
 	player = &params->player;
 	world = &params->world;
-	// both camera direction and camera plane must be rotated
+
 	old_dir_x = player->dir.x;
 	player->dir.x = player->dir.x * cos(-player->speed.rot_speed) -
 		player->dir.y * sin(-player->speed.rot_speed);
@@ -634,7 +652,10 @@ void rotate_right(t_data *params) {
 		player->plane.y * cos(-player->speed.rot_speed);
 }
 
-// rotate to the left
+/**
+ * rotate to the left:
+ * - both camera direction and camera plane must be rotated
+ */
 void rotate_left(t_data *params) {
 	double		old_dir_x;
 	double		old_plane_x;
@@ -643,7 +664,6 @@ void rotate_left(t_data *params) {
 
 	player = &params->player;
 	world = &params->world;
-	// both camera direction and camera plane must be rotated
 	old_dir_x = player->dir.x;
 	player->dir.x = player->dir.x * cos(player->speed.rot_speed) -
 		player->dir.y * sin(player->speed.rot_speed);
@@ -659,19 +679,19 @@ void rotate_left(t_data *params) {
 int			read_keys(t_data *params)
 {
 
-	if (params->keystrokes[W_KEY]) // Key W
+	if (params->keystrokes[W_KEY])
 		move_forward(params);
-	if (params->keystrokes[S_KEY]) // Key S
+	if (params->keystrokes[S_KEY])
 		move_backward(params);
-	if (params->keystrokes[D_KEY]) // Key D
+	if (params->keystrokes[D_KEY])
 		move_right(params);
-	if (params->keystrokes[A_KEY]) // Key A
+	if (params->keystrokes[A_KEY])
 		move_left(params);
-	if (params->keystrokes[RIGHT_KEY]) // Key arrow right
+	if (params->keystrokes[RIGHT_KEY])
 		rotate_right(params);
-	if (params->keystrokes[LEFT_KEY]) // Key arrow left
+	if (params->keystrokes[LEFT_KEY])
 		rotate_left(params);
-	if (params->keystrokes[ESC_KEY]) // ESC key
+	if (params->keystrokes[ESC_KEY])
 		exit_game(params, EXIT_SUCCESS);
 	draw_frame(params);
 	return (0);
