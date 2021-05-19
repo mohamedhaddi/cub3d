@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 10:29:26 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/19 12:36:57 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,7 +430,8 @@ void loop_through_sprite_stripes(t_sprite *sprite, t_resolution *resolution, t_w
 
 void draw_sprites(t_world *world, t_player *player, t_resolution *resolution, t_data *params) {
 	t_sprite sprite;
-	for (int i = 0; i < world->num_sprites; i++)
+	int i = 0; 
+	while (i < world->num_sprites)
 	{
 		make_sprite_pos_relative_to_camera(i, &sprite, world, player);
 		transform_sprite_with_inverse_camera_matrix(&sprite, resolution, player);
@@ -444,13 +445,21 @@ void draw_sprites(t_world *world, t_player *player, t_resolution *resolution, t_
 
 		// loop through every vertical stripe of the sprite on screen
 		loop_through_sprite_stripes(&sprite, resolution, world, params);
+		i++;
 	}
 }
 
 void draw_buffer(t_resolution *resolution, t_world *world, t_img_data *img, t_mlx *mlx) {
-	for (int x = 0; x < resolution->width; x++)
-		for (int y = 0; y < resolution->height; y++)
+	int x = 0; 
+	while (x < resolution->width) {
+		int y = 0; 
+		while (y < resolution->height)
+		{
 			ft_mlx_pixel_put(img, x, y, world->buffer[y][x]);
+			y++; 
+		}
+		x++; 
+	}
 	mlx_put_image_to_window(mlx->ptr, mlx->win, img->img, 0, 0);
 }
 
@@ -638,8 +647,11 @@ int			key_release(int keycode, t_data *params)
  * initiliaze all keystrokes to zero
  */
 void initiliaze_keystrokes(int *keystrokes) {
-	for (int i = 0; i < 127; i++)
+	int i = 0; 
+	while (i < 127) {
 		keystrokes[i] = 0;
+		i++;
+	}
 }
 
 t_img_data	load_image(char *path, t_data *params)
@@ -676,12 +688,38 @@ void load_textures(t_data *params) {
 	world->textures[SPRITE_INDEX] = load_image(world->texture_paths.sprite, params);
 }
 
-void set_sprite_position(t_world *world, t_pos pos) {
-	world->num_sprites += 1;
-	// implement own realloc
-	world->sprites = realloc(
-			world->sprites, world->num_sprites * sizeof(*world->sprites));
-	world->sprites[world->num_sprites - 1].pos = pos;
+void calc_num_of_sprites(t_world *world, t_data *params) {
+	int x = 0; 
+	while (x < params->map_size.width)
+	{
+		int y = 0; 
+		while (y < params->map_size.height)
+		{
+			if (world->map[x][y] == 2)
+				world->num_sprites += 1;	
+ 			y++;
+		}
+		x++; 
+	}
+}
+
+void set_positions_of_sprites(t_world *world, t_data *params) {
+	int x = 0;
+	int i = 0;
+	while (x < params->map_size.width)
+	{
+		int y = 0; 
+		while (y < params->map_size.height)
+		{
+			if (world->map[x][y] == 2)
+			{
+				world->sprites[i].pos = (t_pos){x + 0.5, y + 0.5};
+				i += 1;
+			}
+ 			y++;
+		}
+		x++; 
+	}
 }
 
 /**
@@ -695,12 +733,11 @@ void setup_sprites(t_data *params) {
 	world = &params->world;
 	world->num_sprites = 0;
 	world->sprites = malloc(sizeof(*world->sprites));
-	for (int x = 0; x < params->map_size.width; x++)
-	{
-		for (int y = 0; y < params->map_size.height; y++)
-			if (world->map[x][y] == 2)
-				set_sprite_position(world, (t_pos){x + 0.5, y + 0.5});
-	}
+
+	calc_num_of_sprites(world, params);
+	world->sprites = malloc(world->num_sprites * sizeof(*world->sprites));
+	set_positions_of_sprites(world, params);
+
 	world->sprite_order = malloc(sizeof(*world->sprite_order) * world->num_sprites);
 	world->sprite_distance =
 		malloc(sizeof(*world->sprite_distance) * world->num_sprites);
@@ -711,8 +748,12 @@ void setup_buffers(t_data *params) {
 
 	world = &params->world;
 	world->buffer = malloc(sizeof(*world->buffer) * params->resolution.height);
-	for (int i = 0; i < params->resolution.height; i++)
+	int i = 0; 
+	while (i < params->resolution.height)
+	{
 		world->buffer[i] = malloc(sizeof(*world->buffer[i]) * params->resolution.width);
+		i++; 
+	}
 	world->z_buffer = malloc(sizeof(*world->z_buffer) * params->resolution.width);
 }
 
@@ -751,8 +792,11 @@ void spawn_player(t_data *params) {
 
 	player = &params->player;
 	world = &params->world;
-	for (int x = 0; x < params->map_size.width; x++)
-		for (int y = 0; y < params->map_size.height; y++)
+	int x = 0; 
+	while (x < params->map_size.width)
+	{
+		int y = 0; 
+		while (y < params->map_size.height)
 		{
 			cur_pos = world->map[x][y];
 			if (cur_pos == 'N' || cur_pos == 'S' || cur_pos == 'E' || cur_pos == 'W')
@@ -765,7 +809,10 @@ void spawn_player(t_data *params) {
 				set_player_init_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, 1}, (t_plane){0.66, 0});
 			else if (cur_pos == 'W')
 				set_player_init_position(player, (t_pos){x + 0.5, y + 0.5}, (t_dir){0, -1}, (t_plane){-0.66, 0});
+			y++; 
 		}
+		x++; 
+	}
 }
 
 void load_game(t_data *params) {
@@ -806,10 +853,12 @@ void generate_world_map(t_data *params) {
 	world = &params->world;
 	world->map = malloc(sizeof(world->map) * params->map_size.width);
 
-	for (int i = 0; i < params->map_size.width; i++)
+	int i = 0; 
+	while (i < params->map_size.width)
 	{
 		world->map[i] = malloc(sizeof(*world->map) * params->map_size.height);
-		for (int j = 0; j < params->map_size.height; j++) {
+		int j = 0; 
+		while (j < params->map_size.height) {
 			if ((i == 0) ||
 				(j == 0) ||
 				(i == params->map_size.width - 1) ||
@@ -825,7 +874,9 @@ void generate_world_map(t_data *params) {
 				if (world->map[i][j] == 3)
 					world->map[i][j] = 1;
 			}
+			j++; 
 		}
+		i++; 
 	}
 
 	char dirs[4] = {'N', 'S', 'E', 'W'};
@@ -840,17 +891,21 @@ void generate_world_map(t_data *params) {
 	}
 	world->map[new_x_pos][new_y_pos] = dirs[new_dir];
 
-	for (int i = 0; i < params->map_size.width; i++)
+	i = 0; 
+	while (i < params->map_size.width)
 	{
 		printf("\x1B[37m\"");
-		for (int j = 0; j < params->map_size.height; j++)
+		int j = 0; 
+		while (j < params->map_size.height)
 		{
 			if (world->map[i][j] > 2)
 				printf("\x1B[31m%c, ", world->map[i][j]);
 			else
 				printf("\x1B[37m%d, ", world->map[i][j]);
+			j++; 
 		}
 		printf("\b\b\"\n");
+		i++; 
 	}
 }
 
