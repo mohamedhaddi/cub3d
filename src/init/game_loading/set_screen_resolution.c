@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_background_color.c                             :+:      :+:    :+:   */
+/*   set_screen_resolution.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:43:13 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:30:50 by mhaddi           ###   ########.fr       */
+/*   Created: 2021/05/19 17:35:41 by mhaddi            #+#    #+#             */
+/*   Updated: 2021/05/19 19:31:26 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
-void	set_background_colors(t_world *world)
+void	set_screen_resolution(t_data *params)
 {
-	world->ceiling_color = 0xD1F1F2;
-	world->floor_color = 0xF7EDD9;
+	params->resolution.width = 640;
+	params->resolution.height = 480;
 }

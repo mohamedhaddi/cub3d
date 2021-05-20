@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:29:57 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/20 18:48:21 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ int	main(void)
 	img = &params.img;
 	srand(time(NULL));
 	alloc_strings();
-	set_screen_resolution(&params);
-	set_map_size(&params);
-	generate_world_map(&params);
-	load_mlx(&params);
 	load_game(&params);
 	draw_frame(&params);
 	mlx_loop_hook(mlx->ptr, read_keys, &params);

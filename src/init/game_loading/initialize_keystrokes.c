@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   setup_buffers.c                                    :+:      :+:    :+:   */
+/*   initialize_keystrokes.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:43:40 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 22:48:41 by mhaddi           ###   ########.fr       */
+/*   Created: 2021/05/19 17:47:24 by mhaddi            #+#    #+#             */
+/*   Updated: 2021/05/19 19:29:04 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
-void	setup_buffers(t_data *params)
+/**
+ * initiliaze all keystrokes to zero
+ */
+void	initiliaze_keystrokes(int *keystrokes)
 {
-	t_world	*world;
-	int		i;
+	int	i;
 
-	world = &params->world;
-	world->buffer = malloc(sizeof(*world->buffer)
-			* params->resolution.height);
 	i = 0;
-	while (i < params->resolution.height)
+	while (i < 127)
 	{
-		world->buffer[i] = malloc(sizeof(*world->buffer[i])
-				* params->resolution.width);
+		keystrokes[i] = 0;
 		i++;
 	}
-	world->z_buffer = malloc(sizeof(*world->z_buffer)
-			* params->resolution.width);
 }

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_map_size.c                                     :+:      :+:    :+:   */
+/*   set_player_speed.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:35:16 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:30:56 by mhaddi           ###   ########.fr       */
+/*   Created: 2021/05/19 17:41:47 by mhaddi            #+#    #+#             */
+/*   Updated: 2021/05/19 19:31:02 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
-void	set_map_size(t_data *params)
+void	set_player_speed(t_player *player)
 {
-	params->map_size.width = 24;
-	params->map_size.height = 24;
+	player->speed.move_speed = 0.07;
+	player->speed.rot_speed = 0.03;
 }
