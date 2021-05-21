@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_screen_resolution.c                            :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:35:41 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 15:54:25 by mhaddi           ###   ########.fr       */
+/*   Created: 2019/10/17 21:45:00 by mhaddi            #+#    #+#             */
+/*   Updated: 2019/10/25 19:23:02 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "libft.h"
 
-void	set_screen_resolution(t_data *params, t_config *config)
+int	ft_isalnum(int c)
 {
-	params->resolution.width = config->res.width;
-	params->resolution.height = config->res.height;
+	return (ft_isalpha(c) || ft_isdigit(c)) ? 1 : 0;
 }

@@ -1,19 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_screen_resolution.c                            :+:      :+:    :+:   */
+/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:35:41 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 15:54:25 by mhaddi           ###   ########.fr       */
+/*   Created: 2019/11/02 00:22:02 by mhaddi            #+#    #+#             */
+/*   Updated: 2019/11/05 05:50:09 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "libft.h"
 
-void	set_screen_resolution(t_data *params, t_config *config)
+void	ft_lstadd_front(t_list **alst, t_list *new)
 {
-	params->resolution.width = config->res.width;
-	params->resolution.height = config->res.height;
+	t_list *temp;
+
+	if (new)
+	{
+		temp = *alst;
+		*alst = new;
+		(*alst)->next = temp;
+	}
+	else
+		*alst = new;
 }

@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_screen_resolution.c                            :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:35:41 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 15:54:25 by mhaddi           ###   ########.fr       */
+/*   Created: 2021/05/21 17:18:56 by mhaddi            #+#    #+#             */
+/*   Updated: 2021/05/21 17:19:04 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
-
-void	set_screen_resolution(t_data *params, t_config *config)
+int		ft_strcmp(const char *x, const char *y)
 {
-	params->resolution.width = config->res.width;
-	params->resolution.height = config->res.height;
+	while (*x)
+	{
+		if (*x != *y)
+			break ;
+		x++;
+		y++;
+	}
+	return (*(const unsigned char*)x - *(const unsigned char*)y);
 }

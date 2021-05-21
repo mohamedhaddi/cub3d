@@ -13,7 +13,7 @@
 #include "cub3d.h"
 #include <time.h>
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_data		params;
 	t_mlx		*mlx;
@@ -23,7 +23,7 @@ int	main(void)
 	img = &params.img;
 	srand(time(NULL));
 	alloc_strings();
-	load_game(&params);
+	load_game(&params, argc, argv);
 	draw_frame(&params);
 	mlx_loop_hook(mlx->ptr, read_keys, &params);
 	mlx_hook(mlx->win, 2, 1L, key_press, &params);

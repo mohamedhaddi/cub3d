@@ -1,19 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_screen_resolution.c                            :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:35:41 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 15:54:25 by mhaddi           ###   ########.fr       */
+/*   Created: 2021/05/21 17:13:00 by mhaddi            #+#    #+#             */
+/*   Updated: 2021/05/21 17:13:01 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../parser.h"
 
-void	set_screen_resolution(t_data *params, t_config *config)
+void		*ft_char_calloc(size_t count)
 {
-	params->resolution.width = config->res.width;
-	params->resolution.height = config->res.height;
+	void	*ptr;
+	int		i;
+
+	i = 0;
+	ptr = malloc(count);
+	if (ptr)
+	{
+		while ((int)(count) > i)
+		{
+			*(char*)(ptr + i) = 0;
+			i++;
+		}
+		return (ptr);
+	}
+	return (0);
 }

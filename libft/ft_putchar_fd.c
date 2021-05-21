@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_map_size.c                                     :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:35:16 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:30:56 by mhaddi           ###   ########.fr       */
+/*   Created: 2019/10/23 15:41:34 by mhaddi            #+#    #+#             */
+/*   Updated: 2019/10/31 21:29:47 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "libft.h"
 
-void	set_map_size(t_data *params)
+void	ft_putchar_fd(char c, int fd)
 {
-	params->map_size.width = 24;
-	params->map_size.height = 24;
+	write(fd, &c, 1);
 }

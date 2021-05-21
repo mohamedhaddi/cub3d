@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/20 01:40:43 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/21 17:04:50 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CUB3D_H
 
 # include "../mlx/mlx.h"
+# include "../parser/parser.h"
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -47,12 +48,6 @@ enum				e_keycodes
 	LEFT_KEY = 123,
 	ESC_KEY = 53
 };
-
-typedef struct s_resolution
-{
-	int				width;
-	int				height;
-}					t_resolution;
 
 typedef struct s_map_size
 {
@@ -182,7 +177,7 @@ typedef struct s_texture_paths
 
 typedef struct s_world
 {
-	int				**map;
+	char			**map;
 	t_img_data		*textures;
 	int				**buffer;
 	t_texture_paths	texture_paths;
@@ -203,10 +198,11 @@ typedef struct s_data
 	t_world			world;
 	t_resolution	resolution;
 	t_map_size		map_size;
+	bool			is_save;
 	int				keystrokes[127];
 }					t_data;
 
-void				generate_world_map(t_data *params);
+// void				generate_world_map(t_data *params, t_config *config);
 void				print_info(t_player *player, t_data *params);
 void				alloc_strings(void);
 void				ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
@@ -214,15 +210,15 @@ void				ft_putstr_fd(char *s, int fd);
 void				exit_game(t_data *params, int status);
 int					red_cross_press(t_data *params);
 void				load_mlx(t_data *params);
-void				set_map_size(t_data *params);
-void				set_screen_resolution(t_data *params);
-void				load_game(t_data *params);
-void				spawn_player(t_data *params);
+// void				set_map_size(t_data *params, t_config *config);
+void				set_screen_resolution(t_data *params, t_config *config);
+void				load_game(t_data *params, int argc, char **argv);
+void				spawn_player(t_data *params, t_config *config);
 void				set_player_speed(t_player *player);
-void				set_texture_paths(t_world *world);
-void				set_background_colors(t_world *world);
+void				set_texture_paths(t_world *world, t_config *config);
+void				set_background_colors(t_world *world, t_config *config);
 void				setup_buffers(t_data *params);
-void				setup_sprites(t_data *params);
+void				setup_sprites(t_data *params, t_config *config);
 void				load_textures(t_data *params);
 void				initiliaze_keystrokes(int *keystrokes);
 int					key_release(int keycode, t_data *params);

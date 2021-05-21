@@ -1,19 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_screen_resolution.c                            :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/19 17:35:41 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 15:54:25 by mhaddi           ###   ########.fr       */
+/*   Created: 2019/10/15 14:14:13 by mhaddi            #+#    #+#             */
+/*   Updated: 2019/11/04 17:46:43 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "libft.h"
 
-void	set_screen_resolution(t_data *params, t_config *config)
+char	*ft_strchr(const char *s, int c)
 {
-	params->resolution.width = config->res.width;
-	params->resolution.height = config->res.height;
+	size_t len;
+
+	len = ft_strlen(s) + 1;
+	while (len)
+	{
+		if (*s == (char)c)
+			return (char *)s;
+		s++;
+		len--;
+	}
+	return (NULL);
 }

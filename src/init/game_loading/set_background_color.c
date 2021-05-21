@@ -6,14 +6,14 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:43:13 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:30:50 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/21 16:29:54 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-void	set_background_colors(t_world *world)
+void	set_background_colors(t_world *world, t_config *config)
 {
-	world->ceiling_color = 0xD1F1F2;
-	world->floor_color = 0xF7EDD9;
+	world->ceiling_color = config->colors.ceiling;
+	world->floor_color = config->colors.floor;
 }

@@ -2,4 +2,5 @@
 a.out*
 *.a
 *.o
+*.gch
 cub3d
