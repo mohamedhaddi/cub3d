@@ -16,7 +16,7 @@ CC			= clang
 RM			= rm -f
 CFLAGS		= -O3 -Wall -Wextra -Werror -I.
 DFLAGS		= -g -fsanitize=address
-LIBS		= -L ./mlx/ -lmlx -framework OpenGL -framework AppKit
+LDFLAGS		= -L ./mlx/ -lmlx -L ./libft/ -lft -L ./parser/ -lparser -framework OpenGL -framework AppKit
 MLX			= libmlx.a
 LFT			= libft.a
 PRS			= libparser.a
@@ -25,7 +25,7 @@ NAME		= cub3d
 all:		$(NAME)
 
 $(NAME):	$(MLX) $(LFT) $(PRS) $(OBJS)
-			$(CC) ${DFLAGS} -o ${NAME} ${OBJS} ${LIBS}
+			$(CC) ${DFLAGS} -o ${NAME} ${OBJS} ${LDFLAGS}
 
 $(MLX):
 			@$(MAKE) -C ./mlx/
