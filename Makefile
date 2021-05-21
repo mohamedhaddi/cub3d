@@ -1,48 +1,28 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/05/20 19:41:16 by mhaddi            #+#    #+#              #
-#    Updated: 2021/05/20 19:59:05 by mhaddi           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+SRCS		= $(shell find ./src/. -name '*.c')
+OBJS		= $(SRCS:.c=.o)
+CC			= clang
+RM			= rm -f
+CFLAGS		= -O3 -Wall -Wextra -Werror -I.
+DFLAGS		= -g -fsanitize=address
+LIBS		= -L ./mlx/ -lmlx -framework OpenGL -framework AppKit
+MLX			= libmlx.a
+NAME		= cub3d
 
-NAME = cub3d
-CC = clang
-FLAGS = -Wall -Wextra -Werror
-DFLAGS = -g -fsanitize=address
-SRCS = $(find ./src/. -name '*.c')
-MLX = ./mlx/libmlx.a
+all:		$(NAME)
 
-all: $(NAME)
+$(NAME):	$(MLX) $(OBJS)
+			$(CC) ${DFLAGS} -o ${NAME} ${OBJS} ${LIBS}
 
 $(MLX):
-	$(MAKE) -C ./mlx/
-	cp $(MLX)
-
-$(NAME): $(SRCS)
-	make -C ./mlx/
-	CC $(DFLAGS) -c $(SRCS) -L ./mlx/ -lmlx -framework OpenGL -framework AppKit -o $(NAME)
-	# make -C ./libft/
-	# make -C ./parser/
-	# CC $(SRCS) -g -L ./libft -lft -L ./parser -lparser -L ./mlx/ -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+			@$(MAKE) -C ./mlx/
 
 clean:
-	make -C ./mlx/ clean
-	# make -C ./parser/ clean
-	# make -C ./libft/ clean
+			@$(MAKE) -C ./mlx/ clean
+			$(RM) $(OBJS)
 
-fclean:
-	make -C ./mlx/ clean
-	rm cub3d
-	# make -C ./parser/ fclean
-	# make -C ./libft/ fclean
+fclean:		clean
+			$(RM) $(NAME) $(MLX)
 
-re: fclean all
+re:			fclean all
 
-bonus: all
-
-.PHONY: all clean fclean re bonus
+.PHONY:		all clean fclean re
