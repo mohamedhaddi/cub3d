@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:39:45 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 16:26:49 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/22 19:00:18 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,11 @@ void	set_player_init_position(t_player *player,
 void	spawn_player(t_data *params, t_config *config)
 {
 	t_player	*player;
-	t_world		*world;
 	char		cur_pos;
 	int			x;
 	int			y;
 
 	player = &params->player;
-	world = &params->world;
 	cur_pos = config->player.dir;
 	x = config->player.pos_x;
 	y = config->player.pos_y;

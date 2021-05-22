@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:38:29 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/22 16:55:00 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/22 18:56:31 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@ void	load_game(t_data *params, int argc, char **argv)
 	world = &params->world;
 	config = parse_file(argc, argv);
 	params->is_save = config.is_save;
-	// set_map_size(params, &config);
-	// generate_world_map(params, &config);
-	// world->map = config.map;
 	set_screen_resolution(params, &config);
 	set_world_map(params, &config);
 	load_mlx(params);
