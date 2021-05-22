@@ -1,11 +1,11 @@
 R 1000 700
-NO ./assets/bluestone.xpm
-WE ./assets/eagle.xpm
-SO ./assets/mossy.xpm
-EA ./assets/greystone.XPM
+NO ./assets/textures/gold.xpm
+WE ./assets/textures/iron.xpm
+SO ./assets/textures/water.xpm
+EA ./assets/textures/grass.XPM
 
 
-S ./assets/pillar.xpm
+S ./assets/textures/sprite.xpm
 F 49,100,0
 C 135,206,235
 

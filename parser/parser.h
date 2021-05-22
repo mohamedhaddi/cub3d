@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:11:17 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:11:25 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/22 17:02:26 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct	s_presence
 typedef struct	s_config
 {
 	char				**map;
+	int					rows_num;
 	t_resolution		res;
 	t_textures_paths	tex;
 	t_colors			colors;

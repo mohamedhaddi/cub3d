@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:43 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:13:45 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/22 17:03:26 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char		**parse_map(t_config *config, int fd, char *line)
 		i += 1;
 		map = ft_reallocate(map, i);
 	}
+	config->rows_num = i;
 	config->map = map;
 	map_error(config);
 	return (map);

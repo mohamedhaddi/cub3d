@@ -1,8 +1,8 @@
-NO        ./assets/mossy.xpm
-SO  ./assets/bluestone.xpm
-WE  ./assets/greystone.xpm
-EA  ./assets/redbrick.xpm
-S       ./assets/barrel.xpm
+NO        ./assets/textures/water.xpm
+SO  ./assets/textures/gold.xpm
+WE  ./assets/textures/grass.xpm
+EA  ./assets/textures/iron.xpm
+S       ./assets/textures/sprite.xpm
 C   10,10,10
 
 

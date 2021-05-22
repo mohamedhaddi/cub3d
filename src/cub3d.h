@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:04:50 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/22 16:54:55 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ typedef struct s_texture_paths
 
 typedef struct s_world
 {
-	char			**map;
+	int				**map;
 	t_img_data		*textures;
 	int				**buffer;
 	t_texture_paths	texture_paths;
@@ -287,5 +287,6 @@ void				set_side_dist(t_ray *ray, t_player *player);
 void				set_step_dir(t_ray *ray);
 void				draw_background(t_data *params);
 void				set_ray_dir(int x, t_ray *ray, t_data *params);
+void				set_world_map(t_data *params, t_config *config);
 
 #endif

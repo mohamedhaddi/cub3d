@@ -4,3 +4,4 @@ a.out*
 *.o
 *.gch
 cub3d
+*.dSYM
