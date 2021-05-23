@@ -6,14 +6,17 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:34 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:13:36 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:18:55 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-static void		check_presence(t_presence is_present)
+static t_config	check_presence(t_config config)
 {
+	t_presence	is_present;
+
+	is_present = config.is_present;
 	if (is_present.resolution == false)
 		ft_error(NULL, "Error\n Missing resolution");
 	if (is_present.no_tex == false)
@@ -30,6 +33,7 @@ static void		check_presence(t_presence is_present)
 		ft_error(NULL, "Error\n Missing floor color");
 	if (is_present.ceiling == false)
 		ft_error(NULL, "Error\n Missing ceiling color");
+	return (config);
 }
 
 static t_args	get_args(int c, char **v)
@@ -56,7 +60,7 @@ static t_args	get_args(int c, char **v)
 	return (args);
 }
 
-static int		get_elements(t_config *config, int fd, char *line)
+static int	get_elements(t_config *config, int fd, char *line)
 {
 	char	**element;
 	int		i;
@@ -91,14 +95,14 @@ static t_config	init_config(t_args args)
 	config.player = (t_player_pos){0, 0, '\0'};
 	config.res = (t_resolution){0, 0};
 	config.tex = (t_textures_paths){NULL, NULL, NULL, NULL, NULL};
-	config.colors = (t_colors) {0, 0};
+	config.colors = (t_colors){0, 0};
 	config.sprite_count = 0;
 	config.is_present = (t_presence){false, false, false, false,
-									false, false, false, false};
+		false, false, false, false};
 	return (config);
 }
 
-t_config		parse_file(int argc, char **argv)
+t_config	parse_file(int argc, char **argv)
 {
 	int			fd;
 	char		*line;
@@ -112,14 +116,13 @@ t_config		parse_file(int argc, char **argv)
 	fd = open(args.file, O_RDONLY);
 	if (fd > 0)
 	{
-		while ((status = get_next_line(fd, &line)))
+		status = get_next_line(fd, &line);
+		while (status)
 		{
 			if (get_elements(&config, fd, line) == 1)
-			{
-				check_presence(config.is_present);
-				return (config);
-			}
+				return (check_presence(config));
 			free(line);
+			status = get_next_line(fd, &line);
 		}
 		ft_error(config.map, "Error\nInvalid file");
 	}

@@ -6,15 +6,15 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:12:00 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:12:03 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 18:46:15 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-void		check_element(t_config *config, char **element)
+void	check_element(t_config *config, char **element)
 {
-	t_presence *is_present;
+	t_presence	*is_present;
 
 	is_present = &config->is_present;
 	if (ft_strcmp(element[0], "R") == 0)

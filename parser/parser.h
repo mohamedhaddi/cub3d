@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:11:17 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/22 17:02:26 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 18:45:13 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-typedef struct	s_args
+typedef struct s_args
 {
 	char	*file;
 	bool	is_save;
 }				t_args;
 
-typedef struct	s_resolution
+typedef struct s_resolution
 {
 	int	height;
 	int	width;
 }				t_resolution;
 
-typedef struct	s_textures_paths
+typedef struct s_textures_paths
 {
 	char	*no;
 	char	*so;
@@ -41,26 +41,26 @@ typedef struct	s_textures_paths
 	char	*sp;
 }				t_textures_paths;
 
-typedef struct	s_colors
+typedef struct s_colors
 {
 	int	ceiling;
 	int	floor;
 }				t_colors;
 
-typedef struct	s_player_pos
+typedef struct s_player_pos
 {
 	double	pos_x;
 	double	pos_y;
 	char	dir;
 }				t_player_pos;
 
-typedef struct	s_coordinate
+typedef struct s_coordinate
 {
 	double	x;
 	double	y;
 }				t_coordinate;
 
-typedef struct	s_presence
+typedef struct s_presence
 {
 	bool	resolution;
 	bool	no_tex;
@@ -72,7 +72,7 @@ typedef struct	s_presence
 	bool	ceiling;
 }				t_presence;
 
-typedef struct	s_config
+typedef struct s_config
 {
 	char				**map;
 	int					rows_num;
@@ -85,7 +85,7 @@ typedef struct	s_config
 	t_coordinate		sprites[200];
 	t_presence			is_present;
 }				t_config;
-typedef struct	s_point
+typedef struct s_point
 {
 	int	i;
 	int	j;

@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:14:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:14:15 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:23:33 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-static int		check_resolution_error(char **resolution, int i)
+static int	check_resolution_error(char **resolution, int i)
 {
 	int	j;
 
@@ -34,23 +34,25 @@ static int		check_resolution_error(char **resolution, int i)
 	return (0);
 }
 
-static int		get_width(char *resolution)
+static int	get_width(char *resolution)
 {
 	int	width;
 
 	width = ft_atoi(resolution);
-	width = width > 2560 ? 2560 : width;
+	if (width > 2560)
+		width = 2560;
 	if (width < 0)
 		ft_error(NULL, "Error\nIncorrect resolution");
 	return (width);
 }
 
-static int		get_height(char *resolution)
+static int	get_height(char *resolution)
 {
 	int	height;
 
 	height = ft_atoi(resolution);
-	height = height > 1440 ? 1440 : height;
+	if (height > 1440)
+		height = 1440;
 	if (height < 0)
 		ft_error(NULL, "Error\nIncorrect resolution");
 	return (height);

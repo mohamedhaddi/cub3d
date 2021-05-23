@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:12:31 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:12:32 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 18:46:43 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_double_pointer(char **ptr)
 	free(ptr);
 }
 
-int		free_memory(char **map, int status)
+int	free_memory(char **map, int status)
 {
 	if (map)
 		free_double_pointer(map);

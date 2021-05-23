@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:14:02 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:14:03 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:22:10 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-static void		get_player_pos_map(t_config *config, int i, int j)
+static void	get_player_pos_map(t_config *config, int i, int j)
 {
 	char			**map;
 	t_player_pos	*player;
@@ -25,13 +25,13 @@ static void		get_player_pos_map(t_config *config, int i, int j)
 	map[i][j] = '0';
 }
 
-int				is_player(t_config *config, int i, int j)
+int	is_player(t_config *config, int i, int j)
 {
 	char	**map;
 
 	map = config->map;
-	if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' ||
-		map[i][j] == 'W')
+	if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
+			|| map[i][j] == 'W')
 	{
 		if (g_player_num > 0)
 			ft_error(config->map, "Error\nDuplicated player");

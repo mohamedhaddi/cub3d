@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:14:24 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:14:25 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:23:48 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	get_sprite_pos(t_config *config, int i, int j)
 	config->sprite_count++;
 }
 
-int			is_sprite(t_config *config, int i, int j)
+int	is_sprite(t_config *config, int i, int j)
 {
 	char	**map;
 

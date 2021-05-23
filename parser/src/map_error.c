@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:18 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:13:19 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:05:46 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-static void		check_surrounding(char **map, int i, int j, char c)
+static void	check_surrounding(char **map, int i, int j, char c)
 {
 	int	curr_len;
 
@@ -32,7 +32,7 @@ static void		check_surrounding(char **map, int i, int j, char c)
 	check_prev_row(map, (t_point){i, j}, c, curr_len);
 }
 
-static void		check_error(char **map, int i, int j)
+static void	check_error(char **map, int i, int j)
 {
 	if (map[i][j] != '1')
 	{
@@ -46,7 +46,7 @@ static void		check_error(char **map, int i, int j)
 	}
 }
 
-void			map_error(t_config *config)
+void	map_error(t_config *config)
 {
 	char	**map;
 	int		i;

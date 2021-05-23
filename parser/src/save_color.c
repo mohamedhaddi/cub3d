@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:51 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:13:52 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:21:12 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	count_element(char **element)
 {
-	int el_count;
+	int	el_count;
 
 	el_count = 0;
 	while (element[el_count])
@@ -49,7 +49,7 @@ static void	check_every_token(char *element)
 		ft_error(NULL, "Error\nInvalid number of colors");
 }
 
-int			save_color(char **element, bool *presence)
+int	save_color(char **element, bool *presence)
 {
 	int			color;
 	char		**color_char;
@@ -66,7 +66,8 @@ int			save_color(char **element, bool *presence)
 	color_char = ft_split(element[1], ',');
 	count_element(color_char);
 	color = create_rgb(
-		ft_atoi(color_char[0]), ft_atoi(color_char[1]), ft_atoi(color_char[2]));
+			ft_atoi(
+				color_char[0]), ft_atoi(color_char[1]), ft_atoi(color_char[2]));
 	free_double_pointer(color_char);
 	free_double_pointer(element);
 	*presence = true;

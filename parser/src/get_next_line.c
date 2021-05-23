@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:14:44 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:14:45 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 18:56:51 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-int		ft_check_new_line(char *line)
+int	ft_check_new_line(char *line)
 {
 	if (!line)
 		return (0);
@@ -31,7 +31,7 @@ void	ft_free(char **str)
 	*str = NULL;
 }
 
-int		ft_final_line(char **str, char **line)
+int	ft_final_line(char **str, char **line)
 {
 	int		i;
 	char	*tmp;
@@ -51,22 +51,29 @@ int		ft_final_line(char **str, char **line)
 	return (1);
 }
 
-int		get_next_line(int fd, char **line)
+static void	init(int *state, char **str)
 {
-	static char *str;
+	*state = 1;
+	if (!*str)
+		*str = ft_char_calloc(1);
+}
+
+int	get_next_line(int fd, char **line)
+{
+	static char	*str;
 	int			state;
 	char		*tmp;
 
-	state = 1;
-	if (!str)
-		str = ft_char_calloc(1);
+	init(&state, &str);
 	if (BUFFER_SIZE <= 0 || BUFFER_SIZE > MAXINT || !line)
 		return (-1);
-	if (!(*line = malloc(BUFFER_SIZE + 1)))
+	*line = malloc(BUFFER_SIZE + 1);
+	if (!(*line))
 		return (-1);
 	while (state > 0 && !ft_check_new_line(str))
 	{
-		if ((state = read(fd, *line, BUFFER_SIZE)) < 0)
+		state = read(fd, *line, BUFFER_SIZE);
+		if (state < 0)
 			return (-1);
 		*(*line + state) = '\0';
 		str = ft_strjoin(str, *line);

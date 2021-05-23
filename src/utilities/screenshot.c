@@ -6,20 +6,19 @@
 /*   By: ael-hach <ael-hach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 15:18:07 by ael-hach          #+#    #+#             */
-/*   Updated: 2021/05/23 15:11:44 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 18:15:44 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static char		*make_bmp_header(t_bitmapheader *header, t_resolution res)
+static char	*make_bmp_header(t_bitmapheader *header, t_resolution res)
 {
 	char	*buf;
 
 	buf = ft_calloc(54, 1);
 	header->bit_count = 24;
-	header->width_in_bytes = ((res.width * header->bit_count + 31)
-	/ 32) * 4;
+	header->width_in_bytes = ((res.width * header->bit_count + 31) / 32) * 4;
 	header->image_size = header->width_in_bytes * res.height;
 	header->size = 54 + header->image_size;
 	header->off_bits = 54;
@@ -39,18 +38,18 @@ static char		*make_bmp_header(t_bitmapheader *header, t_resolution res)
 	return (buf);
 }
 
-static int		*get_colors(int color)
+static int	*get_colors(int color)
 {
-	int *colors;
+	int	*colors;
 
 	colors = malloc(3 * sizeof(int));
 	colors[0] = ((color >> 16) & 0xFF);
 	colors[1] = ((color >> 8) & 0xFF);
-	colors[2] = ((color) & 0xFF);
+	colors[2] = (color & 0xFF);
 	return (colors);
 }
 
-static char		*make_img_buff(t_bitmapheader *header, t_data *params)
+static char	*make_img_buff(t_bitmapheader *header, t_data *params)
 {
 	char	*buf;
 	int		i;
@@ -64,8 +63,8 @@ static char		*make_img_buff(t_bitmapheader *header, t_data *params)
 		j = 0;
 		while (j < header->width)
 		{
-			colors = get_colors(params->img.addr[((params->resolution.height - i)
-			* params->resolution.width) + j]);
+			colors = get_colors(params->img.addr[((params->resolution.height
+							- i) * params->resolution.width) + j]);
 			buf[i * header->width_in_bytes + j * 3 + 2] = colors[0];
 			buf[i * header->width_in_bytes + j * 3 + 1] = colors[1];
 			buf[i * header->width_in_bytes + j * 3 + 0] = colors[2];
@@ -77,7 +76,7 @@ static char		*make_img_buff(t_bitmapheader *header, t_data *params)
 	return (buf);
 }
 
-void			take_screenshot(t_data *params)
+void	take_screenshot(t_data *params)
 {
 	t_bitmapheader	header;
 	char			*header_str;

@@ -6,13 +6,13 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:25 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:13:26 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:06:05 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-void		check_if_valid(t_config *config, int i, int j)
+void	check_if_valid(t_config *config, int i, int j)
 {
 	char	**map;
 
@@ -24,7 +24,7 @@ void		check_if_valid(t_config *config, int i, int j)
 		raise_map_error(config->map, i, j);
 }
 
-void		check_next_row(char **map, t_point point, char c, int curr_len)
+void	check_next_row(char **map, t_point point, char c, int curr_len)
 {
 	int	next_len;
 	int	i;
@@ -44,7 +44,7 @@ void		check_next_row(char **map, t_point point, char c, int curr_len)
 		raise_map_error(map, i, j);
 }
 
-void		check_prev_row(char **map, t_point point, char c, int curr_len)
+void	check_prev_row(char **map, t_point point, char c, int curr_len)
 {
 	int	i;
 	int	j;

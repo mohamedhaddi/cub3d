@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:43 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/22 17:03:26 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 19:20:10 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	**ft_reallocate(char **old_map, int i)
 	return (new_map);
 }
 
-char		**parse_map(t_config *config, int fd, char *line)
+char	**parse_map(t_config *config, int fd, char *line)
 {
 	int		i;
 	int		j;
