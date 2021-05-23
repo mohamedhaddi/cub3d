@@ -6,13 +6,71 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 18:32:52 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/14 00:09:16 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 17:38:46 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	columns_counter(char const *s, char c)
+void	*free_and_return_null(void *row_len);
+void	*free_twodim_str_and_return_null(char **arr, size_t size);
+void	ternary_rep_for_lencalc(int condition, size_t *len_calc);
+void	ternary_rep_for_rowlen(
+			int condition, size_t i, size_t *row_len, size_t *len_calc);
+
+char	**arrays_filler(
+		char const *s, size_t *indxs, size_t *row_len, size_t clmns)
+{
+	size_t	i;
+	size_t	j;
+	size_t	k;
+	char	**arr;
+
+	i = 0;
+	arr = malloc(sizeof(char *) * (clmns + 1));
+	if (!arr)
+		return (NULL);
+	while (i < clmns)
+	{
+		j = 0;
+		arr[i] = malloc(sizeof(char) * row_len[i]);
+		if (!arr[i])
+			return (free_twodim_str_and_return_null(arr, i));
+		k = indxs[i];
+		while (j < row_len[i] - 1)
+			arr[i][j++] = s[k++];
+		arr[i++][j] = '\0';
+	}
+	arr[clmns] = NULL;
+	return (arr);
+}
+
+char	**edgecases(char const *s, char c)
+{
+	char	**empty_arr;
+
+	if (!c && *s)
+	{
+		empty_arr = malloc(sizeof(char *) * 2);
+		if (!empty_arr)
+			return (NULL);
+		empty_arr[1] = NULL;
+		empty_arr[0] = ft_strdup(s);
+		if (!empty_arr[0])
+		{
+			free(empty_arr);
+			return (NULL);
+		}
+		return (empty_arr);
+	}
+	empty_arr = malloc(sizeof(char *));
+	if (!empty_arr)
+		return (NULL);
+	empty_arr[0] = NULL;
+	return (empty_arr);
+}
+
+size_t	columns_counter(char const *s, char c)
 {
 	size_t	clmns;
 	size_t	j;
@@ -34,7 +92,7 @@ static size_t	columns_counter(char const *s, char c)
 	return (clmns);
 }
 
-static void		storers(char const *s, char c, size_t *indxs, size_t *row_len)
+void	storers(char const *s, char c, size_t *indxs, size_t *row_len)
 {
 	size_t	len_calc;
 	size_t	i;
@@ -57,65 +115,13 @@ static void		storers(char const *s, char c, size_t *indxs, size_t *row_len)
 			len_calc = 1;
 			i++;
 		}
-		len_calc = (s[j] != c && s[j + 1] != c) ? len_calc + 1 : len_calc;
+		ternary_rep_for_lencalc(s[j] != c && s[j + 1] != c, &len_calc);
 		j++;
 	}
-	row_len[i - 1] = (!s[j]) ? len_calc : len_calc + 1;
+	ternary_rep_for_rowlen(!s[j], i, row_len, &len_calc);
 }
 
-static char		**arrays_filler(char const *s, size_t *indxs,
-		size_t *row_len, size_t clmns)
-{
-	size_t	i;
-	size_t	j;
-	size_t	k;
-	char	**arr;
-
-	i = 0;
-	if (!(arr = malloc(sizeof(char *) * (clmns + 1))))
-		return (NULL);
-	while (i < clmns)
-	{
-		j = 0;
-		if (!(arr[i] = malloc(sizeof(char) * row_len[i])))
-		{
-			while (j < i)
-				free(arr[j++]);
-			free(arr);
-			return (NULL);
-		}
-		k = indxs[i];
-		while (j < row_len[i] - 1)
-			arr[i][j++] = s[k++];
-		arr[i++][j] = '\0';
-	}
-	arr[clmns] = NULL;
-	return (arr);
-}
-
-static char		**edgecases(char const *s, char c)
-{
-	char	**empty_arr;
-
-	if (!c && *s)
-	{
-		if (!(empty_arr = malloc(sizeof(char *) * 2)))
-			return (NULL);
-		empty_arr[1] = NULL;
-		if (!(empty_arr[0] = ft_strdup(s)))
-		{
-			free(empty_arr);
-			return (NULL);
-		}
-		return (empty_arr);
-	}
-	if (!(empty_arr = malloc(sizeof(char *))))
-		return (NULL);
-	empty_arr[0] = NULL;
-	return (empty_arr);
-}
-
-char			**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	size_t	clmns;
 	size_t	*indxs;
@@ -124,15 +130,15 @@ char			**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	if (!c || !(clmns = columns_counter(s, c)))
+	clmns = columns_counter(s, c);
+	if (!c || !clmns)
 		return (edgecases(s, c));
-	if (!(row_len = malloc(sizeof(size_t) * clmns)))
+	row_len = malloc(sizeof(size_t) * clmns);
+	if (!row_len)
 		return (NULL);
-	if (!(indxs = malloc(sizeof(size_t) * clmns)))
-	{
-		free(row_len);
-		return (NULL);
-	}
+	indxs = malloc(sizeof(size_t) * clmns);
+	if (!indxs)
+		return (free_and_return_null(row_len));
 	storers(s, c, indxs, row_len);
 	arr = arrays_filler(s, indxs, row_len, clmns);
 	free(indxs);

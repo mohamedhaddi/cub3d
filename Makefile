@@ -6,14 +6,14 @@
 #    By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/21 07:20:17 by mhaddi            #+#    #+#              #
-#    Updated: 2021/05/23 15:15:43 by mhaddi           ###   ########.fr        #
+#    Updated: 2021/05/23 16:15:17 by mhaddi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS		= $(shell find ./src -name '*.c')
 CC			= clang
 RM			= rm -f
-CFLAGS		= -O3 -Wall -Wextra -Werror -I.
+CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -g -g3 -fsanitize=address
 LDFLAGS		= -L ./mlx/ -lmlx -L ./libft/ -lft -L ./parser/ -lparser -framework OpenGL -framework AppKit
 MLX			= libmlx.a
@@ -24,7 +24,7 @@ NAME		= cub3d
 all:		$(NAME)
 
 $(NAME):	$(MLX) $(LFT) $(PRS)
-			$(CC) $(DFLAGS) $(SRCS) $(LDFLAGS) -o $(NAME)
+			$(CC) $(CFLAGS) $(SRCS) $(LDFLAGS) -o $(NAME)
 
 $(MLX):
 			$(MAKE) -C ./mlx/

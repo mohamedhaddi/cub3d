@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:46:15 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/20 01:20:29 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 15:59:17 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_img_data	load_image(char *path, t_data *params)
 	if (texture_buffer.img == NULL || texture_buffer.width != TEX_SIZE
 		|| texture_buffer.height != TEX_SIZE)
 	{
-		ft_putstr_fd("Error\n Invalid texture", 2);
+		ft_error(NULL, "Error\n Invalid texture");
 		exit_game(params, EXIT_SUCCESS);
 	}
 	texture_buffer.addr = (int *)mlx_get_data_addr(texture_buffer.img,

@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 00:55:05 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/05 06:03:02 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 16:25:37 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_list	*ft_lstlast(t_list *lst)
 {
-	t_list *tmp;
+	t_list	*tmp;
 
 	if (!lst)
 		return (NULL);

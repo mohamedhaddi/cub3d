@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:15:13 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/13 21:55:11 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 17:54:25 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (start > slen || !len || !*s)
 		return (ft_strdup(""));
 	j = 0;
-	len = (len > slen - start) ? slen - start : len;
+	if (len > slen - start)
+		len = slen - start;
 	substr = malloc((sizeof(*substr) * len) + sizeof(*substr));
 	if (!substr)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 17:13:13 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/08 04:01:52 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 17:51:09 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@ static int	ft_strncmp_mod(const char *s1, const char *s2, size_t n)
 			return (*(unsigned char *)(s1 - 1) - *(unsigned char *)(s2 - 1));
 		n--;
 	}
-	return (!*s2) ? 0 : 1;
+	if (!*s2)
+		return (0);
+	else
+		return (1);
 }
 
-char		*ft_strnstr(const char *haystack, const char *needle, size_t len)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
 	const char	*hs;
 

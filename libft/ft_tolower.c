@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 22:47:46 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/10/25 21:04:42 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 17:56:58 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,8 @@
 
 int	ft_tolower(int c)
 {
-	return (ft_isupper(c)) ? c + 32 : c;
+	if (ft_isupper(c))
+		return (c + 32);
+	else
+		return (c);
 }

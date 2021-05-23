@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 15:50:30 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/04 23:03:08 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 17:48:26 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	isfullyoccupied(const char *s, size_t size)
 {
-	int itis;
+	int	itis;
 
 	itis = 1;
 	while (size--)
@@ -26,7 +26,21 @@ static int	isfullyoccupied(const char *s, size_t size)
 	return (itis);
 }
 
-size_t		ft_strlcat(char *dst, const char *src, size_t size)
+void	check_size(size_t *size, int *len, size_t dstlen, size_t srclen)
+{
+	if (*size >= dstlen)
+	{
+		*len = dstlen + srclen;
+		*size -= dstlen;
+	}
+	else
+	{
+		*len = srclen + *size;
+		*size = 0;
+	}
+}
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
 	int		len;
 	size_t	dstlen;
@@ -37,16 +51,8 @@ size_t		ft_strlcat(char *dst, const char *src, size_t size)
 		return (srclen);
 	if (isfullyoccupied(dst, size))
 		return (srclen + size);
-	if (size >= (dstlen = ft_strlen(dst)))
-	{
-		len = dstlen + srclen;
-		size -= dstlen;
-	}
-	else
-	{
-		len = srclen + size;
-		size = 0;
-	}
+	dstlen = ft_strlen(dst);
+	check_size(&size, &len, dstlen, srclen);
 	dst += dstlen;
 	*dst = '\0';
 	while (size-- > 1 && *src)

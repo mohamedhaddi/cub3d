@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 00:22:02 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/05 05:50:09 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 16:24:50 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_lstadd_front(t_list **alst, t_list *new)
 {
-	t_list *temp;
+	t_list	*temp;
 
 	if (new)
 	{

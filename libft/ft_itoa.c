@@ -6,52 +6,67 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/23 11:02:52 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/04 14:51:08 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 15:50:05 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	len_count(int n)
+char	*alloc_s(int count)
 {
-	int				i;
-	unsigned int	nb;
+	char	*s;
 
-	i = 0;
-	nb = (n >= 0) ? n : -n;
-	while (nb > 0)
+	s = (char *)malloc(count + 1);
+	if (!s)
+		return (0);
+	return (s);
+}
+
+static	int	ft_count(int n)
+{
+	unsigned int	nbr;
+	int				i;
+
+	i = 1;
+	if (n < 0)
 	{
-		nb = nb / 10;
+		nbr = -n;
 		i++;
+	}
+	else
+		nbr = n;
+	while (nbr / 10 > 0)
+	{
+		i++;
+		nbr = nbr / 10;
 	}
 	return (i);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
-	int				len;
-	char			*a;
-	unsigned int	nb;
+	unsigned int	nbr;
+	char			*s;
+	int				count;
 
-	len = (n > 0) ? len_count(n) + 1 : len_count(n) + 2;
-	if (!(a = malloc(sizeof(char) * len)))
-		return (NULL);
-	a[--len] = '\0';
-	if (n >= 0)
-		while (len-- > 0)
-		{
-			a[len] = n % 10 + '0';
-			n /= 10;
-		}
-	else
+	count = ft_count(n);
+	s = alloc_s(count);
+	if (n == 0)
+		*s = '0';
+	if (n < 0)
 	{
-		nb = -n;
-		while (len-- > 0)
-		{
-			a[len] = nb % 10 + '0';
-			nb /= 10;
-		}
-		a[0] = '-';
+		s[0] = '-';
+		nbr = -n;
 	}
-	return (a);
+	else
+		nbr = n;
+	s[count--] = '\0';
+	while (nbr > 0)
+	{
+		if (count == 0 && n < 0)
+			break ;
+		*(s + count--) = nbr % 10 + '0';
+		nbr = nbr / 10;
+	}
+	return (s);
 }

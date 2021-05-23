@@ -6,11 +6,11 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:18:56 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 17:19:04 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 17:43:26 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_strcmp(const char *x, const char *y)
+int	ft_strcmp(const char *x, const char *y)
 {
 	while (*x)
 	{
@@ -19,5 +19,5 @@ int		ft_strcmp(const char *x, const char *y)
 		x++;
 		y++;
 	}
-	return (*(const unsigned char*)x - *(const unsigned char*)y);
+	return (*(const unsigned char *) x - *(const unsigned char *) y);
 }

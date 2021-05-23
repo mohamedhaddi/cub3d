@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 06:09:39 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/05 06:26:01 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 16:25:01 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	t_list *tmp;
+	t_list	*tmp;
 
 	if (*lst && del)
 	{

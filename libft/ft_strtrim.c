@@ -6,7 +6,7 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 13:28:50 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/13 22:46:12 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 17:53:19 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static char	*end_trimmer(char *str2, char const *set)
 	return (str2);
 }
 
-char		*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*str1;
 	char	*str2;
@@ -73,12 +73,14 @@ char		*ft_strtrim(char const *s1, char const *set)
 	if (!set || !*set || !*s1)
 		return (ft_strdup(s1));
 	str1 = (char *)s1;
-	if (!*(str1 = bgn_trimmer(str1, set)))
+	str1 = bgn_trimmer(str1, set);
+	if (!*(str1))
 		return (ft_strdup(""));
 	str2 = (char *)s1 + ft_strlen(s1) - 1;
 	str2 = end_trimmer(str2, set);
 	len = str2 - str1 + 1;
-	if (!(str = malloc((sizeof(char) * len) + sizeof(char))))
+	str = malloc((sizeof(char) * len) + sizeof(char));
+	if (!str)
 		return (NULL);
 	i = 0;
 	while (i < len)

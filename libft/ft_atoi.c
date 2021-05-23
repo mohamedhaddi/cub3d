@@ -6,42 +6,35 @@
 /*   By: mhaddi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 15:43:31 by mhaddi            #+#    #+#             */
-/*   Updated: 2019/11/03 16:49:13 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 15:28:37 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	sign(int c)
+int	ft_atoi(const char *str)
 {
-	return (c == '+' || c == '-') ? 1 : 0;
-}
+	int				j;
+	unsigned long	res;
+	int				temp;
 
-int			ft_atoi(const char *str)
-{
-	unsigned long long	n;
-	int					negative;
-
-	n = 0;
-	negative = 0;
-	while (*str)
+	temp = 1;
+	j = 0;
+	res = 0;
+	while (*str > 0 && *str <= 32)
 	{
-		if (*str == '-' && ft_isdigit(*(str + 1)))
-			negative = 1;
-		else if (sign(*str) && !ft_isdigit(*(str + 1)))
+		if (*str == 27)
 			return (0);
-		else if (!ft_isdigit(*str) && !ft_iswhitespace(*str) && !sign(*str))
-			return (0);
-		else if (ft_isdigit(*str))
-		{
-			n = n * 10 + (*str - 48);
-			if (!ft_isdigit(*(str + 1)))
-				break ;
-		}
 		str++;
 	}
-	if (n > 9223372036854775807)
-		return (negative) ? 0 : -1;
-	else
-		return (negative) ? (n * -1) : (n);
+	if (*str == '-')
+	{
+		temp = -1;
+		str++;
+	}
+	else if (*str == '+')
+		str++;
+	while (*(str + j) >= 48 && *(str + j) <= 57)
+		res = res * 10 + *(str + j++) - '0';
+	return (res * temp);
 }
