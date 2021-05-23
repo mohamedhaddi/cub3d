@@ -6,3 +6,4 @@ a.out*
 cub3d
 *.dSYM
 screenshot.bmp
+.vscode
