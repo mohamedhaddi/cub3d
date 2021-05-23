@@ -6,7 +6,7 @@
 #    By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/21 07:20:17 by mhaddi            #+#    #+#              #
-#    Updated: 2021/05/22 16:09:16 by mhaddi           ###   ########.fr        #
+#    Updated: 2021/05/23 15:15:43 by mhaddi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ fclean:		clean
 			$(MAKE) -C ./parser/ fclean
 			$(RM) $(NAME)
 			$(RM) -rf $(NAME).dSYM
+			$(RM) screenshot.bmp
 
 re:			fclean all
 

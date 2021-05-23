@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/22 16:54:55 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/23 15:02:30 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,20 @@ typedef struct s_data
 	int				keystrokes[127];
 }					t_data;
 
-// void				generate_world_map(t_data *params, t_config *config);
+typedef struct s_bitmapheader{
+	uint32_t		file_size;
+	uint32_t		off_bits;
+	uint32_t		size;
+	uint32_t		info_size;
+	int32_t			width;
+	int32_t			height;
+	uint16_t		planes;
+	uint16_t		bit_count;
+	uint32_t		image_size;
+	int				width_in_bytes;
+	int				fd;
+}					t_bitmapheader;
+
 void				print_info(t_player *player, t_data *params);
 void				alloc_strings(void);
 void				ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
@@ -210,7 +223,6 @@ void				ft_putstr_fd(char *s, int fd);
 void				exit_game(t_data *params, int status);
 int					red_cross_press(t_data *params);
 void				load_mlx(t_data *params);
-// void				set_map_size(t_data *params, t_config *config);
 void				set_screen_resolution(t_data *params, t_config *config);
 void				load_game(t_data *params, int argc, char **argv);
 void				spawn_player(t_data *params, t_config *config);
@@ -288,5 +300,6 @@ void				set_step_dir(t_ray *ray);
 void				draw_background(t_data *params);
 void				set_ray_dir(int x, t_ray *ray, t_data *params);
 void				set_world_map(t_data *params, t_config *config);
+void				take_screenshot(t_data *params);
 
 #endif
