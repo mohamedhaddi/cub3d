@@ -6,12 +6,11 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 21:35:54 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/23 15:12:01 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/24 22:42:53 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <time.h>
 
 int	main(int argc, char **argv)
 {
@@ -21,8 +20,6 @@ int	main(int argc, char **argv)
 
 	mlx = &params.mlx;
 	img = &params.img;
-	srand(time(NULL));
-	alloc_strings();
 	load_game(&params, argc, argv);
 	draw_frame(&params);
 	if (params.is_save)

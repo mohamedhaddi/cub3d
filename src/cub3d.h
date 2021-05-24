@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 21:40:14 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/23 15:02:30 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/24 22:46:02 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,8 +216,6 @@ typedef struct s_bitmapheader{
 	int				fd;
 }					t_bitmapheader;
 
-void				print_info(t_player *player, t_data *params);
-void				alloc_strings(void);
 void				ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
 void				ft_putstr_fd(char *s, int fd);
 void				exit_game(t_data *params, int status);

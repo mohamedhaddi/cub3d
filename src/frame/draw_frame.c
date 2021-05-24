@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:24:19 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/19 19:44:32 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/24 22:46:21 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ int	draw_frame(t_data *params)
 	cast_walls(resolution, player, world, params);
 	cast_sprites(world, player, resolution, params);
 	draw_buffer(resolution, world, img, mlx);
-	print_info(player, params);
 	return (0);
 }
