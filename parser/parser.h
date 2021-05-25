@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:11:17 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/23 18:45:13 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/25 03:46:13 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ typedef struct s_config
 	t_player_pos		player;
 	int					sprite_count;
 	bool				is_save;
-	t_coordinate		sprites[200];
 	t_presence			is_present;
 }				t_config;
 typedef struct s_point

@@ -6,21 +6,33 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:44:10 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/21 16:45:57 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/25 03:51:03 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-void	set_positions_of_sprites(t_world *world, t_config *config)
+void	set_positions_of_sprites(t_world *world)
 {
 	int	i;
+	int	j;
+	int	c;
 
 	i = 0;
-	while (i < world->num_sprites)
+	c = 0;
+	while (world->map[i])
 	{
-		world->sprites[i].pos.x = config->sprites[i].x;
-		world->sprites[i].pos.y = config->sprites[i].y;
+		j = 0;
+		while (world->map[i][j])
+		{
+			if (world->map[i][j] == 2)
+			{
+				world->sprites[c].pos.x = i + 0.5;
+				world->sprites[c].pos.y = j + 0.5;
+				c++;
+			}
+			j++;
+		}
 		i++;
 	}
 }
@@ -35,11 +47,9 @@ void	setup_sprites(t_data *params, t_config *config)
 	t_world	*world;
 
 	world = &params->world;
-	world->num_sprites = 0;
-	world->sprites = malloc(sizeof(*world->sprites));
 	world->num_sprites = config->sprite_count;
 	world->sprites = malloc(world->num_sprites * sizeof(*world->sprites));
-	set_positions_of_sprites(world, config);
+	set_positions_of_sprites(world);
 	world->sprite_order = malloc(sizeof(*world->sprite_order)
 			* world->num_sprites);
 	world->sprite_distance = malloc(sizeof(*world->sprite_distance)
