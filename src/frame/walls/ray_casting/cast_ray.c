@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:53:20 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/22 16:44:38 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/25 05:33:44 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	jump_to_next_square(t_ray *ray)
 /**
  * Check if ray has hit a wall
  */
-int	is_a_wall_hit(int box)
+int	is_a_wall_hit(char box)
 {
-	return (box == 1);
+	return (box == '1');
 }
 
 /**

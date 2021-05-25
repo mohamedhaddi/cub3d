@@ -6,7 +6,7 @@
 #    By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/21 07:20:17 by mhaddi            #+#    #+#              #
-#    Updated: 2021/05/23 16:15:17 by mhaddi           ###   ########.fr        #
+#    Updated: 2021/05/25 05:16:23 by mhaddi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ SRCS		= $(shell find ./src -name '*.c')
 CC			= clang
 RM			= rm -f
 CFLAGS		= -Wall -Wextra -Werror
-DFLAGS		= -g -g3 -fsanitize=address
+DFLAGS		= -g -fsanitize=address
 LDFLAGS		= -L ./mlx/ -lmlx -L ./libft/ -lft -L ./parser/ -lparser -framework OpenGL -framework AppKit
 MLX			= libmlx.a
 LFT			= libft.a
