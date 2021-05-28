@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:14:02 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/23 19:22:10 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/28 18:32:50 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int	is_player(t_config *config, int i, int j)
 	if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
 			|| map[i][j] == 'W')
 	{
-		if (g_player_num > 0)
+		if (config->g_player_num > 0)
 			ft_error(config->map, "Error\nDuplicated player");
 		get_player_pos_map(config, i, j);
-		g_player_num++;
+		config->g_player_num++;
 		return (1);
 	}
 	return (0);

@@ -6,16 +6,18 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:18 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/23 19:05:46 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/28 18:35:16 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
 
-static void	check_surrounding(char **map, int i, int j, char c)
+static void	check_surrounding(t_config *config, int i, int j, char c)
 {
-	int	curr_len;
+	int		curr_len;
+	char	**map;
 
+	map = config->map;
 	curr_len = ft_strlen(map[i]);
 	if (j > 0 && map[i][j - 1] == c)
 		raise_map_error(map, i, j);
@@ -24,24 +26,27 @@ static void	check_surrounding(char **map, int i, int j, char c)
 			raise_map_error(map, i, j);
 	if (map[i][j + 1] == '\0')
 		raise_map_error(map, i, j);
-	if (j >= g_prev_len && i != 0 && map[i][j] != ' ')
+	if (j >= config->g_prev_len && i != 0 && map[i][j] != ' ')
 		raise_map_error(map, i, j);
 	if (j == 0 && map[i][j] != ' ')
 		raise_map_error(map, i, j);
-	check_next_row(map, (t_point){i, j}, c, curr_len);
-	check_prev_row(map, (t_point){i, j}, c, curr_len);
+	check_next_row(config, (t_point){i, j}, c, curr_len);
+	check_prev_row(config, (t_point){i, j}, c, curr_len);
 }
 
-static void	check_error(char **map, int i, int j)
+static void	check_error(t_config *config, int i, int j)
 {
+	char	**map;
+
+	map = config->map;
 	if (map[i][j] != '1')
 	{
 		if (map[i][j] != ' ')
-			check_surrounding(map, i, j, ' ');
+			check_surrounding(config, i, j, ' ');
 		else
 		{
-			check_surrounding(map, i, j, '0');
-			check_surrounding(map, i, j, '2');
+			check_surrounding(config, i, j, '0');
+			check_surrounding(config, i, j, '2');
 		}
 	}
 }
@@ -62,12 +67,12 @@ void	map_error(t_config *config)
 		while (map[i][j])
 		{
 			check_if_valid(config, i, j);
-			check_error(map, i, j);
+			check_error(config, i, j);
 			j++;
 		}
-		g_prev_len = j;
+		config->g_prev_len = j;
 		i++;
 	}
-	if (g_player_num == 0)
+	if (config->g_player_num == 0)
 		ft_error(map, "Error\nPlayer does not exist");
 }

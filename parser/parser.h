@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:11:17 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/25 03:46:13 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/28 18:37:11 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,15 @@ typedef struct s_config
 	int					sprite_count;
 	bool				is_save;
 	t_presence			is_present;
+	int					g_prev_len;
+	size_t				g_player_num;
 }				t_config;
+
 typedef struct s_point
 {
 	int	i;
 	int	j;
 }				t_point;
-
-int		g_prev_len;
-size_t	g_player_num;
 
 t_config		parse_file(int argc, char **argv);
 void			ft_error(char **map, char *error);
@@ -106,7 +106,13 @@ void			map_error(t_config *config);
 void			check_if_valid(t_config *config, int i, int j);
 int				is_player(t_config *config, int i, int j);
 int				is_sprite(t_config *config, int i, int j);
-void			check_next_row(char **map, t_point point, char c, int curr_len);
-void			check_prev_row(char **map, t_point point, char c, int curr_len);
+void			check_next_row(t_config *config,
+					t_point point,
+					char c,
+					int curr_len);
+void			check_prev_row(t_config *config,
+					t_point point,
+					char c,
+					int curr_len);
 int				free_memory(char **map, int status);
 #endif
