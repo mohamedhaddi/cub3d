@@ -6,7 +6,7 @@
 #    By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/21 07:20:17 by mhaddi            #+#    #+#              #
-#    Updated: 2021/05/25 05:16:23 by mhaddi           ###   ########.fr        #
+#    Updated: 2021/05/28 15:56:31 by mhaddi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,16 +15,16 @@ CC			= clang
 RM			= rm -f
 CFLAGS		= -Wall -Wextra -Werror
 DFLAGS		= -g -fsanitize=address
-LDFLAGS		= -L ./mlx/ -lmlx -L ./libft/ -lft -L ./parser/ -lparser -framework OpenGL -framework AppKit
-MLX			= libmlx.a
-LFT			= libft.a
-PRS			= libparser.a
+LDLIBS		= -L ./mlx/ -lmlx -L ./libft/ -lft -L ./parser/ -lparser -framework OpenGL -framework AppKit
+MLX			= mlx/libmlx.a
+LFT			= libft/libft.a
+PRS			= parser/libparser.a
 NAME		= cub3d
 
 all:		$(NAME)
 
 $(NAME):	$(MLX) $(LFT) $(PRS)
-			$(CC) $(CFLAGS) $(SRCS) $(LDFLAGS) -o $(NAME)
+			$(CC) $(CFLAGS) $(SRCS) $(LDLIBS) -o $(NAME)
 
 $(MLX):
 			$(MAKE) -C ./mlx/
@@ -45,7 +45,7 @@ fclean:		clean
 			$(MAKE) -C ./libft/ fclean
 			$(MAKE) -C ./parser/ fclean
 			$(RM) $(NAME)
-			$(RM) -rf $(NAME).dSYM
+			$(RM) -r *.dSYM
 			$(RM) screenshot.bmp
 
 re:			fclean all

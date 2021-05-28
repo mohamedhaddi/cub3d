@@ -36,14 +36,11 @@ $(NAME): $(SRCS) ./Makefile
 	ar rc $(NAME) *.o
 
 clean:
-	rm -rf *.o
+	rm -f *.o
 
 fclean: clean
-	rm $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
 
-test: all
-	gcc $(FLAGS) -g main.c cub-parser.a libft/libft.a -o parser
-
-.PHONY: all clean fclean test
+.PHONY: all clean fclean re
