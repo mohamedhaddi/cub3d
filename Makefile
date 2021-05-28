@@ -6,7 +6,7 @@
 #    By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/21 07:20:17 by mhaddi            #+#    #+#              #
-#    Updated: 2021/05/28 15:56:31 by mhaddi           ###   ########.fr        #
+#    Updated: 2021/05/28 16:11:02 by mhaddi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LDLIBS		= -L ./mlx/ -lmlx -L ./libft/ -lft -L ./parser/ -lparser -framework Open
 MLX			= mlx/libmlx.a
 LFT			= libft/libft.a
 PRS			= parser/libparser.a
-NAME		= cub3d
+NAME		= cub3D
 
 all:		$(NAME)
 
