@@ -53,7 +53,4 @@ void	load_textures(t_data *params)
 	world->textures[WE] = load_image(
 			world->texture_paths.walls_facing_east,
 			params);
-	world->textures[SPRITE_INDEX] = load_image(
-			world->texture_paths.sprite,
-			params);
 }

@@ -13,15 +13,6 @@
 #include "../../cub3d.h"
 
 /**
- * SET THE ZBUFFER FOR THE SPRITE CASTING
- * perpendicular distance is used
- */
-void	set_zbuffer(int x, t_ray *ray, t_world *world)
-{
-	world->z_buffer[x] = ray->perp_wall_dist;
-}
-
-/**
  * WALL CASTING LOOP
  */
 void	cast_walls(t_resolution *resolution,
@@ -45,7 +36,6 @@ void	cast_walls(t_resolution *resolution,
 		set_texture_coordinate_step(&ray);
 		set_starting_texture_coordinate(&ray, resolution);
 		draw_wall_vertical_stripe(x, &ray, world);
-		set_zbuffer(x, &ray, world);
 		x++;
 	}
 }

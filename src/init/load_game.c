@@ -29,7 +29,6 @@ void	load_game(t_data *params, int argc, char **argv)
 	set_texture_paths(world, &config);
 	set_background_colors(world, &config);
 	setup_buffers(params);
-	setup_sprites(params, &config);
 	load_textures(params);
 	initiliaze_keystrokes(&params->keystrokes[0]);
 }

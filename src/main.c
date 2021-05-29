@@ -22,11 +22,6 @@ int	main(int argc, char **argv)
 	img = &params.img;
 	load_game(&params, argc, argv);
 	draw_frame(&params);
-	if (params.is_save)
-	{
-		take_screenshot(&params);
-		exit_game(&params, EXIT_SUCCESS);
-	}
 	mlx_loop_hook(mlx->ptr, read_keys, &params);
 	mlx_hook(mlx->win, 2, 1L, key_press, &params);
 	mlx_hook(mlx->win, 3, 2L, key_release, &params);

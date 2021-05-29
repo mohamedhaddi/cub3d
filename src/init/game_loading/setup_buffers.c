@@ -27,6 +27,4 @@ void	setup_buffers(t_data *params)
 				* params->resolution.width);
 		i++;
 	}
-	world->z_buffer = malloc(sizeof(*world->z_buffer)
-			* params->resolution.width);
 }

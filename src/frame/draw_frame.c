@@ -31,7 +31,6 @@ int	draw_frame(t_data *params)
 	resolution = &params->resolution;
 	draw_background(params);
 	cast_walls(resolution, player, world, params);
-	cast_sprites(world, player, resolution, params);
 	draw_buffer(resolution, world, img, mlx);
 	return (0);
 }

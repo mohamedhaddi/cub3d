@@ -74,7 +74,7 @@ static int	get_elements(t_config *config, int fd, char *line)
 	return (0);
 }
 
-static t_config	init_config(t_args args)
+static t_config	init_config(void)
 {
 	t_config	config;
 
@@ -96,7 +96,7 @@ t_config	parse_file(int argc, char **argv)
 	t_args		args;
 
 	args = get_args(argc, argv);
-	config = init_config(args);
+	config = init_config();
 	status = 0;
 	fd = open(args.file, O_RDONLY);
 	if (fd > 0)

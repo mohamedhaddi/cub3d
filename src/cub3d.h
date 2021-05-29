@@ -199,7 +199,6 @@ void				set_player_speed(t_player *player);
 void				set_texture_paths(t_world *world, t_config *config);
 void				set_background_colors(t_world *world, t_config *config);
 void				setup_buffers(t_data *params);
-void				setup_sprites(t_data *params, t_config *config);
 void				load_textures(t_data *params);
 void				initiliaze_keystrokes(int *keystrokes);
 int					key_release(int keycode, t_data *params);
@@ -212,38 +211,10 @@ void				move_right(t_data *params);
 void				move_backward(t_data *params);
 void				move_forward(t_data *params);
 int					draw_frame(t_data *params);
-void				sort_sprites(int *order, double *dist, int amount);
-void				cast_sprites(t_world *world,
-						t_player *player,
-						t_resolution *resolution,
-						t_data *params);
 void				draw_buffer(t_resolution *resolution,
 						t_world *world,
 						t_img_data *img,
 						t_mlx *mlx);
-void				draw_sprites(t_world *world,
-						t_player *player,
-						t_resolution *resolution,
-						t_data *params);
-void				loop_through_sprite_stripes(t_sprite *sprite,
-						t_resolution *resolution,
-						t_world *world,
-						t_data *params);
-void				calc_sprite_width(t_sprite *sprite,
-						t_resolution *resolution);
-void				calc_start_end_of_stripe(t_sprite *sprite,
-						t_resolution *resolution);
-void				calc_sprite_height(t_sprite *sprite,
-						t_resolution *resolution);
-void				transform_sprite_with_inverse_camera_matrix(
-						t_sprite *sprite,
-						t_resolution *resolution,
-						t_player *player);
-void				make_sprite_pos_relative_to_camera(int sprite_num,
-						t_sprite *sprite,
-						t_world *world,
-						t_player *player);
-void				set_sprites_distance(t_world *world, t_player *player);
 void				cast_walls(t_resolution *resolution,
 						t_player *player,
 						t_world *world,
@@ -269,6 +240,5 @@ void				set_step_dir(t_ray *ray);
 void				draw_background(t_data *params);
 void				set_ray_dir(int x, t_ray *ray, t_data *params);
 void				set_world_map(t_data *params, t_config *config);
-void				take_screenshot(t_data *params);
 
 #endif

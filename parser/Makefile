@@ -6,7 +6,7 @@
 #    By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/21 17:11:07 by mhaddi            #+#    #+#              #
-#    Updated: 2021/05/21 17:11:09 by mhaddi           ###   ########.fr        #
+#    Updated: 2021/05/29 13:29:57 by mhaddi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,15 +18,13 @@ SRCS =	src/get_next_line.c \
 		src/parse_map.c \
 		src/save_color.c \
 		src/check_element.c \
-		src/save_resolution.c \
 		src/parse_file.c \
 		src/save_texture.c \
 		src/save_player.c \
 		src/free_memory.c \
 		src/ft_error.c \
 		src/map_error.c \
-		src/map_error_utils.c \
-		src/save_sprite.c
+		src/map_error_utils.c
 NAME = libparser.a
 
 all: $(NAME)

@@ -84,7 +84,6 @@ t_config		parse_file(int argc, char **argv);
 void			ft_error(char **map, char *error);
 void			raise_map_error(char **map, int i, int j);
 void			check_element(t_config *config, char **element);
-t_resolution	save_resolution(char **resolution, bool *presence);
 int				save_color(char **element, bool *presence);
 char			*save_texture(char **texture, bool *presence);
 char			**parse_map(t_config *config, int fd, char *line);
@@ -92,7 +91,6 @@ void			free_double_pointer(char **ptr);
 void			map_error(t_config *config);
 void			check_if_valid(t_config *config, int i, int j);
 int				is_player(t_config *config, int i, int j);
-int				is_sprite(t_config *config, int i, int j);
 void			check_next_row(t_config *config,
 					t_point point,
 					char c,
