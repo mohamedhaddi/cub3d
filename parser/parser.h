@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:11:17 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/28 18:37:11 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/29 10:22:41 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,5 @@ void			check_prev_row(t_config *config,
 					char c,
 					int curr_len);
 int				free_memory(char **map, int status);
+t_config		check_duplicate_texture_files(t_config config);
 #endif

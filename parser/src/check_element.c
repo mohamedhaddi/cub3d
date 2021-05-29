@@ -6,11 +6,32 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:12:00 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/29 09:37:15 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/29 10:23:12 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parser.h"
+
+t_config	check_duplicate_texture_files(t_config config)
+{
+	char	*no;
+	char	*so;
+	char	*ea;
+	char	*we;
+
+	no = config.tex.no;
+	so = config.tex.so;
+	ea = config.tex.ea;
+	we = config.tex.we;
+	if (ft_strcmp(no, ea) == 0
+		|| ft_strcmp(no, so) == 0
+		|| ft_strcmp(no, we) == 0
+		|| ft_strcmp(ea, so) == 0
+		|| ft_strcmp(ea, we) == 0
+		|| ft_strcmp(so, we) == 0)
+		ft_error(NULL, "Error\n Duplicate texture paths");
+	return (config);
+}
 
 void	check_element(t_config *config, char **element)
 {

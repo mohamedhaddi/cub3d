@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:34 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/29 09:44:06 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/29 10:22:02 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static t_config	check_presence(t_config config)
 		ft_error(NULL, "Error\n Missing floor color");
 	if (is_present.ceiling == false)
 		ft_error(NULL, "Error\n Missing ceiling color");
-	return (config);
+	return (check_duplicate_texture_files(config));
 }
 
 static t_args	get_args(int c, char **v)
