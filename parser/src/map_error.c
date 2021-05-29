@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:13:18 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/28 18:35:16 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/29 09:28:06 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,27 @@ static void	check_error(t_config *config, int i, int j)
 	}
 }
 
+char	*rstrip_space(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	i--;
+	while (i)
+	{
+		if (s[i] == ' ')
+		{
+			s[i] = '\0';
+			i--;
+		}
+		else
+			break ;
+	}
+	return (s);
+}
+
 void	map_error(t_config *config)
 {
 	char	**map;
@@ -61,6 +82,7 @@ void	map_error(t_config *config)
 	i = 0;
 	while (map[i])
 	{
+		map[i] = rstrip_space(map[i]);
 		j = 0;
 		if (map[i][j] == '\0')
 			raise_map_error(map, i, j);
