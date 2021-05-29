@@ -1,10 +1,9 @@
-R     1280 800
+
 
 NO        ./assets/textures/water.xpm
 SO ./assets/textures/gold.xpm
 WE ./assets/textures/grass.xpm
 EA ./assets/textures/iron.xpm
-S ./assets/textures/sprite.xpm
 F    224,224,224
 
 C       153,204,255
