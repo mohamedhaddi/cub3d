@@ -12,8 +12,8 @@
 
 #include "../../cub3d.h"
 
-void	set_screen_resolution(t_data *params, t_config *config)
+void	set_screen_resolution(t_data *params)
 {
-	params->resolution.width = config->res.width;
-	params->resolution.height = config->res.height;
+	params->resolution.width = 1600;
+	params->resolution.height = 900;
 }

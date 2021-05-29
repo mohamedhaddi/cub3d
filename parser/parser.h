@@ -23,14 +23,7 @@
 typedef struct s_args
 {
 	char	*file;
-	bool	is_save;
 }				t_args;
-
-typedef struct s_resolution
-{
-	int	height;
-	int	width;
-}				t_resolution;
 
 typedef struct s_textures_paths
 {
@@ -38,7 +31,6 @@ typedef struct s_textures_paths
 	char	*so;
 	char	*ea;
 	char	*we;
-	char	*sp;
 }				t_textures_paths;
 
 typedef struct s_colors
@@ -62,12 +54,10 @@ typedef struct s_coordinate
 
 typedef struct s_presence
 {
-	bool	resolution;
 	bool	no_tex;
 	bool	we_tex;
 	bool	so_tex;
 	bool	ea_tex;
-	bool	sp_tex;
 	bool	floor;
 	bool	ceiling;
 }				t_presence;
@@ -76,12 +66,9 @@ typedef struct s_config
 {
 	char				**map;
 	int					rows_num;
-	t_resolution		res;
 	t_textures_paths	tex;
 	t_colors			colors;
 	t_player_pos		player;
-	int					sprite_count;
-	bool				is_save;
 	t_presence			is_present;
 	int					g_prev_len;
 	size_t				g_player_num;

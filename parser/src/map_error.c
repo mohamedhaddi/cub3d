@@ -44,10 +44,7 @@ static void	check_error(t_config *config, int i, int j)
 		if (map[i][j] != ' ')
 			check_surrounding(config, i, j, ' ');
 		else
-		{
 			check_surrounding(config, i, j, '0');
-			check_surrounding(config, i, j, '2');
-		}
 	}
 }
 

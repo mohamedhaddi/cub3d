@@ -21,8 +21,7 @@
 # include <unistd.h>
 
 # define TEX_SIZE 64
-# define TEX_NUM 5
-# define SPRITE_INDEX 4
+# define TEX_NUM 4
 
 enum				e_squares
 {
@@ -147,19 +146,6 @@ typedef struct s_player
 	t_speed			speed;
 }					t_player;
 
-typedef struct s_sprite
-{
-	t_pos			pos;
-	t_pos			transform;
-	int				screen_x;
-	int				height;
-	int				width;
-	int				draw_start_x;
-	int				draw_start_y;
-	int				draw_end_x;
-	int				draw_end_y;
-}					t_sprite;
-
 typedef struct s_pair
 {
 	double			first;
@@ -172,7 +158,6 @@ typedef struct s_texture_paths
 	char			*walls_facing_south;
 	char			*walls_facing_east;
 	char			*walls_facing_west;
-	char			*sprite;
 }					t_texture_paths;
 
 typedef struct s_world
@@ -181,14 +166,15 @@ typedef struct s_world
 	t_img_data		*textures;
 	int				**buffer;
 	t_texture_paths	texture_paths;
-	t_sprite		*sprites;
-	int				num_sprites;
-	double			*z_buffer;
-	int				*sprite_order;
-	double			*sprite_distance;
 	int				ceiling_color;
 	int				floor_color;
 }					t_world;
+
+typedef struct s_resolution
+{
+	int				height;
+	int				width;
+}					t_resolution;
 
 typedef struct s_data
 {
@@ -198,30 +184,15 @@ typedef struct s_data
 	t_world			world;
 	t_resolution	resolution;
 	t_map_size		map_size;
-	bool			is_save;
 	int				keystrokes[127];
 }					t_data;
-
-typedef struct s_bitmapheader{
-	uint32_t		file_size;
-	uint32_t		off_bits;
-	uint32_t		size;
-	uint32_t		info_size;
-	int32_t			width;
-	int32_t			height;
-	uint16_t		planes;
-	uint16_t		bit_count;
-	uint32_t		image_size;
-	int				width_in_bytes;
-	int				fd;
-}					t_bitmapheader;
 
 void				ft_mlx_pixel_put(t_img_data *img, int x, int y, int color);
 void				ft_putstr_fd(char *s, int fd);
 void				exit_game(t_data *params, int status);
 int					red_cross_press(t_data *params);
 void				load_mlx(t_data *params);
-void				set_screen_resolution(t_data *params, t_config *config);
+void				set_screen_resolution(t_data *params);
 void				load_game(t_data *params, int argc, char **argv);
 void				spawn_player(t_data *params, t_config *config);
 void				set_player_speed(t_player *player);

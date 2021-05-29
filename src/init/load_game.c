@@ -21,8 +21,7 @@ void	load_game(t_data *params, int argc, char **argv)
 	player = &params->player;
 	world = &params->world;
 	config = parse_file(argc, argv);
-	params->is_save = config.is_save;
-	set_screen_resolution(params, &config);
+	set_screen_resolution(params);
 	set_world_map(params, &config);
 	load_mlx(params);
 	spawn_player(params, &config);
