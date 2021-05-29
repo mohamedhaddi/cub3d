@@ -79,6 +79,8 @@ t_resolution	save_resolution(char **resolution, bool *presence)
 		i++;
 	}
 	free_double_pointer(resolution);
+	if (i != 3)
+		ft_error(NULL, "Error\nResolution is invalid");
 	*presence = true;
 	return (res);
 }
