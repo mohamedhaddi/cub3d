@@ -24,7 +24,7 @@ void	load_mlx(t_data *params)
 			mlx->ptr,
 			params->resolution.width,
 			params->resolution.height,
-			"cub3d");
+			"cub3D");
 	img->img = mlx_new_image(
 			mlx->ptr,
 			params->resolution.width,
