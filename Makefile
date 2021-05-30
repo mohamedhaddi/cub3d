@@ -39,7 +39,6 @@ clean:
 			$(MAKE) -C ./mlx/ clean
 			$(MAKE) -C ./libft/ clean
 			$(MAKE) -C ./parser/ clean
-			$(RM) $(OBJS)
 
 fclean:		clean
 			$(MAKE) -C ./libft/ fclean
