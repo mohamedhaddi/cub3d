@@ -32,8 +32,8 @@ void	cast_walls(t_resolution *resolution,
 		calc_line_height(&ray, resolution);
 		calc_both_ends_of_vertical_stripe(&ray, resolution);
 		calc_wall_x(&ray, player);
-		calc_texture_x(&ray);
-		set_texture_coordinate_step(&ray);
+		calc_texture_x(&ray, world);
+		set_texture_coordinate_step(&ray, world);
 		set_starting_texture_coordinate(&ray, resolution);
 		draw_wall_vertical_stripe(x, &ray, world);
 		x++;

@@ -6,7 +6,7 @@
 /*   By: mhaddi <mhaddi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 17:46:15 by mhaddi            #+#    #+#             */
-/*   Updated: 2021/05/23 15:59:17 by mhaddi           ###   ########.fr       */
+/*   Updated: 2021/05/30 09:03:07 by mhaddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ t_img_data	load_image(char *path, t_data *params)
 			path,
 			&texture_buffer.width,
 			&texture_buffer.height);
-	if (texture_buffer.img == NULL || texture_buffer.width != TEX_SIZE
-		|| texture_buffer.height != TEX_SIZE)
+	if (texture_buffer.img == NULL
+		|| texture_buffer.width != texture_buffer.height)
 	{
-		ft_error(NULL, "Error\n Invalid texture");
+		ft_error(NULL, "Error\n Invalid texture. \
+				Note that your textures should have equal sides.");
 		exit_game(params, EXIT_SUCCESS);
 	}
 	texture_buffer.addr = (int *)mlx_get_data_addr(texture_buffer.img,

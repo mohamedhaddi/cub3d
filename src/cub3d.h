@@ -20,7 +20,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define TEX_SIZE 64
 # define TEX_NUM 4
 
 enum				e_squares
@@ -223,8 +222,8 @@ void				draw_wall_vertical_stripe(int x, t_ray *ray,
 						t_world *world);
 void				set_starting_texture_coordinate(t_ray *ray,
 						t_resolution *resolution);
-void				set_texture_coordinate_step(t_ray *ray);
-void				calc_texture_x(t_ray *ray);
+void				set_texture_coordinate_step(t_ray *ray, t_world *world);
+void				calc_texture_x(t_ray *ray, t_world *world);
 void				calc_wall_x(t_ray *ray, t_player *player);
 void				calc_both_ends_of_vertical_stripe(t_ray *ray,
 						t_resolution *resolution);
